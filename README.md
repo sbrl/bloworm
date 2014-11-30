@@ -11,6 +11,10 @@ This section contains a list o finteresting libraries I have found that may or m
 
  - http://www.shayanderson.com/php/php-qr-code-generator-class.htm - A qr code generator
 
+### Still to find
+ - website screenshot generator
+
+
 ## Notes
 This section contains a bunch of notes that I have made / will make while writing blow worm. Eventually, they will slowly disappear as the help pages are written properly or as I don't need them anymore.
 
