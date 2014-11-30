@@ -3,7 +3,6 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>{username} - Blow Worm</title>
-		<link rel="stylesheet" href="theme/main.css" />
 		{head_html}
 	</head>
 	<body>
@@ -15,7 +14,7 @@
 
 					<!-- todo make these do something -->
 					<ul>
-						<!-- todo add more links here... -->
+						<!-- todo add more links here -->
 						<li><a href="?action=import">Import...</a></li>
 						<li><a href="?action=export">Export...</a></li>
 					</ul>
@@ -26,10 +25,11 @@
 			</section>
 		</section>
 		<footer>
-			{footer}
+			Built by <a href="//starbeamrainbowlabs.com/">Starbeamrainbowlabs</a>. Source available <a href="//github.com/sbrl/blow-worm/">on github</a> - comtributions are always welcome :)
 		</footer>
 		
-		{js}
-		{css}
+		<link rel="stylesheet" href="theme/main.css" />
+		
+		<script src="js/main.js"></script>
 	</body>
 </html>
