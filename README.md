@@ -14,7 +14,13 @@ This section contains a list o finteresting libraries I have found that may or m
 ## Notes
 This section contains a bunch of notes that I have made / will make while writing blow worm. Eventually, they will slowly disappear as the help pages are written properly or as I don't need them anymore.
 
-### Structure
+### Folder Structure
+ - actions/ - folder that contains one php file for each action
+ - index.php - the main file
+ - README.md - this file
+ - .gitignore - file that tells git what to ignore
+
+### API Structure
 action
  - login
 	- user - the username
