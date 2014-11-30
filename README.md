@@ -2,6 +2,8 @@ Blow Worm
 =========
 This is going to be a bookmark storage system where you can tag your bookmarks, and share them with people. It will be self hosted - all you will need to do is clone this repository.
 
+You are welcome to fork this repository and help out.
+
 *Current Phase:* Planning
 
 ## Libraries
