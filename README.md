@@ -16,7 +16,11 @@ This section contains a bunch of notes that I have made / will make while writin
 
 ### Folder Structure
  - actions/ - folder that contains one php file for each action
+ - templates/ - folder containing template html that is used to construct pages
+	- main.html - the main template all the other templates will be based on
+	- ...
  - index.php - the main file
+ - settings.php - the file containing the settings. todo - add some kind of system so you can update your installation just by using `git clone`
  - README.md - this file
  - .gitignore - file that tells git what to ignore
 
