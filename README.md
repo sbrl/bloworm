@@ -4,7 +4,7 @@ This is going to be a bookmark storage system where you can tag your bookmarks, 
 
 You are welcome to fork this repository and help out.
 
-*Current Phase:* Planning
+**Current Phase:** Planning
 
 ## Libraries
 This section contains a list o finteresting libraries I have found that may or may not be useful when building this thing:
