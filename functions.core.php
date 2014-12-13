@@ -38,3 +38,23 @@ function senderror($api_error)
 	exit(json_encode($api_error, JSON_PRETTY_PRINT));
 }
 
+/*
+ * @summary Generates a brand new id, which can then be used to refer to a bookmark.
+ * 
+ * @returns A new id.
+ */
+function getid()
+{
+	return 0; //todo write this function
+}
+
+
+/*
+ * @summary Hashes a password.
+ * 
+ * @returns The hashed password.
+ */
+function hash_password($password)
+{
+	return password_hash($password, PASSWORD_DEFAULT, [ "cost" => $password_cost ]);
+}
