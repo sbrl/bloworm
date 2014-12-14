@@ -6,6 +6,12 @@ You are welcome to fork this repository and help out.
 
 **Current Phase:** Planning
 
+## Installation
+
+### Requirements
+Blow Worm requires the following PHP modules:
+* `openssl` - used to generate secure random numbers for login tokens
+
 ## Libraries
 This section contains a list of interesting libraries I have found that may or may not be useful when building this thing:
 
