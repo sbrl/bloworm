@@ -52,6 +52,8 @@ if(!file_exists("data/"))
 		senderror(507, 6, "Failed to set initial user's password.");
 	if(!file_put_contents("data/user/admin/bookmarks.json", "[]"))
 		senderror(507, 7, "Failed to create initial user's bookmark storage file.");
+	if(!file_put_contents("data/login_sessions", ""))
+		senderror(507, 8, "Failed to create login sessions file.");
 }
 
 //check the user's login here and set a variable telling the rest of the code whether the user is logged in
