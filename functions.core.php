@@ -35,7 +35,7 @@ function senderror($api_error)
 {
 	http_response_code($api_error->http_status);
 	header("content-type: application/json");
-	exit(json_encode($api_error, JSON_PRETTY_PRINT));
+	exit("Error #$api_error->code: $api_error->message"); //todo convert this to json
 }
 
 /*
@@ -57,4 +57,44 @@ function getid()
 function hash_password($password)
 {
 	return password_hash($password, PASSWORD_DEFAULT, [ "cost" => $password_cost ]);
+}
+
+/*
+ * @summary Fetches and decodes a json file.
+ * 
+ * @param $filename - The path to the json file.
+ * 
+ * @returns The decoded json.
+ */
+function getjson($filename) { return json_decode(file_get_contents($filename)); }
+
+/*
+ * @summary Save something to a file as json.
+ * 
+ * @param $filename - The path to the file that should be written to.
+ * @param $thing - The thing to save.
+ */
+function setjson($filename, $thing)
+{
+	if(!file_put_contents($filename, $thing))
+		senderror(new api_error(507, 10, "Failed to save json to file $filename."));
+}
+
+/*
+ * @summary Checks to see if a user exists.
+ * 
+ * @param $username - The username to check.
+ * 
+ * @returns Whether the user exists.
+ */
+function user_exists($user_to_check)
+{
+	global getjson;
+	$userlist = getjson("data/userlist.json");
+	foreach($userlist as $user_in_list)
+	{
+		if($user_to_check == $user_in_list)
+			return true;
+	}
+	return false;
 }

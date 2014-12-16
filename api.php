@@ -42,18 +42,34 @@ if(!isset($_GET["action"]))
 
 if(!file_exists("data/"))
 {
-	if(!mkdir("data/", 0700))
-		senderror(507, 3, "Failed to create the `data/` folder.");
-	if(!file_put_contents("data/next.id", 0))
-		senderror(507, 4, "Failed to create `data/next.id`.");
-	if(!mkdir("data/users/admin", 0700, true))
-		senderror(507, 5, "Failed to initialise first user");
-	if(!file_put_contents("data/users/admin/password", hash_password("blow-worm")))
-		senderror(507, 6, "Failed to set initial user's password.");
-	if(!file_put_contents("data/user/admin/bookmarks.json", "[]"))
-		senderror(507, 7, "Failed to create initial user's bookmark storage file.");
-	if(!file_put_contents("data/login_sessions", ""))
-		senderror(507, 8, "Failed to create login sessions file.");
+	$initial_structure = [
+		[ "type" => "folder", "path" => "data/" ],
+		[ "type" => "file", "path" => "data/next.id", "content" => 0 ],
+		[ "type" => "folder", "path" => "data/admin" ],
+		[ "type" => "file", "path" => "data/admin/password", "content" => hash_password("blow-worm") ],
+		[ "type" => "file", "path" => "data/user/admin/bookmarks.json", "content" => "[]" ],
+		[ "type" => "file", "path" => "data/login_sessions.json", "content" => "[]" ],
+		[ "type" => "file", "path" => "data/userlist.json", "content" => "[\"admin\"]"]
+	];
+	
+	foreach($initial_structure as $to_create)
+	{
+		switch($to_create)
+		{
+			case "folder":
+				if(!mkdir($to_create["path"], 0700, true))
+					senderror(new api_error(507, 3, "Failed to create directory: " . $to_create["path"]));
+				break;
+			
+			case "file":
+				if(!file_put_contents($to_create["path"], $to_create["content"]))
+					senderror(new api_error(507, 3, "Failed to create file: " . $to_create["path"]));
+				break;
+			
+			default:
+				senderror(new api_error(500, 4, "Unknown setup entry: " . $to_create["type"]));
+		}
+	}
 }
 
 //check the user's login here and set a variable telling the rest of the code whether the user is logged in
@@ -61,9 +77,64 @@ if(!file_exists("data/"))
 switch($_GET["action"])
 {
 	case "login":
+		
+		if(!isset($_GET["user"]) or !isset($_GET["pass"]))
+			senderror(new api_error(422, 5, "Not username or password was present in the request."));
+		
+		if(!user_exists($_GET["user"]))
+			senderror(new api_ error(401, 6, "The username and/or password given was/were incorrect."));
+		
+		try {
+			$user_pass_hash = file_get_contents("data/users/" . $_GET["user"] . "/password");
+		} catch(Exception $e)
+		{
+			senderror(500, 7, "Failed to read in password hash.");
+		}
+		
+		if(!password_verify($_GET["pass"], $user_pass_hash))
+			senderror(new api_ error(401, 6, "The username and/or password given was/were incorrect."));
+		
+		//by this point we have verified that the user's credientials are correct
+		
+		//todo rehash the password if necessary (use password_needs_rehash())
+		
+		$login_sessions = getjson("data/login_sessions.json");
+		$sessionkey = hash("sha256", openssl_random_pseudo_bytes($session_key_length));
+		$login_sessions[] = [
+			"user" => $_GET["user"],
+			"key" => $sessionkey,
+			"expires" => time() * $session_key_valid_time
+		];
+		
+		setcookie("blow-worm-user", $_GET["user"], time() * $session_key_valid_time);
+		setcookie("blow-worm-session", $sessionkey, time() * $session_key_valid_time);
+		http_response_code(200);
+		exit("Login successful."); //todo convert this to json
+		var_dump($sessionkey);
+		
+		exit();
 		break;
 	
 	case "logout":
+		if(!isset($_COOKIE["blow-worm-session"]))
+			senderror(new api_error(412, 8, "Failed to find session key cookie (you must already be logged out)."));
+		
+		if(!isset($_COOKIE["blow-worm-user"]))
+			senderror(new api_error(412, 9, "Failed to find username in cookie (you *may* already be logged out)."));
+		
+		$sessions = getjson("data/login_sessions.json");
+		for($i = 0; $i < count($sessions); $i++)
+		{
+			if($sessions[$i]["key"] == $_COOKIE["blow-worm-session"] and
+			  $sessions[$i]["user"] == $_COOKIE["blow-worm-user"])
+			{
+				unset($sessions[$i]); //remove the session key
+				$sessions = array_values($sessions); //reset all the values
+				setjson("data/login_sessions.json", $sessions); //save the sessions back to disk
+				exit("Log out completed."); //todo convert this to json
+			}
+		}
+		senderror(new api_error(422, 11, "Failed to log out - Either your session key or username were invalid."));
 		break;
 	
 	case "create":
