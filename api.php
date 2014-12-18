@@ -91,15 +91,15 @@ if(!file_exists("data/"))
 
 //todo check the user's login here and set a variable telling the rest of the code whether the user is logged in
 $logged_in = false;
-if(isset($_COOKIE["blow-worm-session"]) and isset($_COOKIE["bloe-worm-user"]))
+if(isset($_COOKIE[$cookie_names["session"]]) and isset($_COOKIE[$cookie_names["user"]]))
 {
 	//the user might be loggged in
 	$sessions = getjson($paths["sessionkeys"]);
 	$i = 0;
 	foreach($sessions as $session)
 	{
-		if($session->key == $_COOKIE["blow-worm-session"] and
-		   $session->user == $_COOKIE["blow-worm-user"])
+		if($session->key == $_COOKIE[$cookie_names["session"]] and
+		   $session->user == $_COOKIE[$cookie_names["user"]])
 		{
 			if($session->expires <= time())
 			{
@@ -164,17 +164,17 @@ switch($_GET["action"])
 		break;
 	
 	case "logout":
-		if(!isset($_COOKIE["blow-worm-session"]))
+		if(!isset($_COOKIE[$cookie_names["session"]]))
 			senderror(new api_error(412, 8, "Failed to find session key cookie (you must already be logged out)."));
 		
-		if(!isset($_COOKIE["blow-worm-user"]))
+		if(!isset($_COOKIE[$cookie_names["user"]]))
 			senderror(new api_error(412, 9, "Failed to find username in cookie (you *may* already be logged out)."));
 		
 		$sessions = getjson($paths["sessionkeys"]);
 		for($i = 0; $i < count($sessions); $i++)
 		{
-			if($sessions[$i]["key"] == $_COOKIE["blow-worm-session"] and
-			  $sessions[$i]["user"] == $_COOKIE["blow-worm-user"])
+			if($sessions[$i]["key"] == $_COOKIE[$cookie_names["session"]] and
+			  $sessions[$i]["user"] == $_COOKIE[$cookie_names["user"]])
 			{
 				unset($sessions[$i]); //remove the session key
 				$sessions = array_values($sessions); //reset all the values
