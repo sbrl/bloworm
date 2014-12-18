@@ -34,12 +34,28 @@
 		* value
  */
 
+////////////////////////////////////////////////////////
+///////////////////// Requirements /////////////////////
+////////////////////////////////////////////////////////
 require("settings.php");
 require("functions.core.php");
 
+/////////////////////////////////////////////////////////
+///////////////////////// Paths /////////////////////////
+/////////////////////////////////////////////////////////
+$paths = [
+	"sessionkeys" => "data/login_sessions.json"
+];
+
+////////////////////////////////////////////////////////
+/////////////////// Input Validation ///////////////////
+////////////////////////////////////////////////////////
 if(!isset($_GET["action"]))
 	senderror(422, "No action was specified.");
 
+///////////////////////////////////////////////////////
+//////////////////// Initial Setup ////////////////////
+///////////////////////////////////////////////////////
 if(!file_exists("data/"))
 {
 	$initial_structure = [
@@ -48,7 +64,7 @@ if(!file_exists("data/"))
 		[ "type" => "folder", "path" => "data/admin" ],
 		[ "type" => "file", "path" => "data/admin/password", "content" => hash_password("blow-worm") ],
 		[ "type" => "file", "path" => "data/user/admin/bookmarks.json", "content" => "[]" ],
-		[ "type" => "file", "path" => "data/login_sessions.json", "content" => "[]" ],
+		[ "type" => "file", "path" => $paths["sessionkeys"], "content" => "[]" ],
 		[ "type" => "file", "path" => "data/userlist.json", "content" => "[\"admin\"]"]
 	];
 	
@@ -71,8 +87,40 @@ if(!file_exists("data/"))
 		}
 	}
 }
+///////////////////////////////////////////////////////////////////
 
-//check the user's login here and set a variable telling the rest of the code whether the user is logged in
+//todo check the user's login here and set a variable telling the rest of the code whether the user is logged in
+$logged_in = false;
+if(isset($_COOKIE["blow-worm-session"]) and isset($_COOKIE["bloe-worm-user"]))
+{
+	//the user might be loggged in
+	$sessions = getjson($paths["sessionkeys"]);
+	$i = 0;
+	foreach($sessions as $session)
+	{
+		if($session->key == $_COOKIE["blow-worm-session"] and
+		   $session->user == $_COOKIE["blow-worm-user"])
+		{
+			if($session->expires <= time())
+			{
+				//the session key has expired, delete it from the list
+				unset($sessions[$i]);
+				$sessions = array_values($sessions); //reset the array keys
+				setjson($paths["sessionkeys"], $sessions); //save the session keys to disk
+				senderror(new api_error(419, 12, "Your session has expired. Please try logging in again."));
+			}
+			/* by this point we have verified:
+				* The session key is ok
+				* The session key has not expired
+				* The session key belongs to the requesting user */
+			
+			$logged_in = true;
+			break; //no need to loop over the rest of the session keys
+		}
+		$i++;
+	}
+}
+
 //todo split this into 2 switches: one for those who are logged in, and one of those who are not.
 switch($_GET["action"])
 {
@@ -98,7 +146,7 @@ switch($_GET["action"])
 		
 		//todo rehash the password if necessary (use password_needs_rehash())
 		
-		$login_sessions = getjson("data/login_sessions.json");
+		$login_sessions = getjson($paths["sessionkeys"]);
 		$sessionkey = hash("sha256", openssl_random_pseudo_bytes($session_key_length));
 		$login_sessions[] = [
 			"user" => $_GET["user"],
@@ -122,7 +170,7 @@ switch($_GET["action"])
 		if(!isset($_COOKIE["blow-worm-user"]))
 			senderror(new api_error(412, 9, "Failed to find username in cookie (you *may* already be logged out)."));
 		
-		$sessions = getjson("data/login_sessions.json");
+		$sessions = getjson($paths["sessionkeys"]);
 		for($i = 0; $i < count($sessions); $i++)
 		{
 			if($sessions[$i]["key"] == $_COOKIE["blow-worm-session"] and
@@ -130,7 +178,7 @@ switch($_GET["action"])
 			{
 				unset($sessions[$i]); //remove the session key
 				$sessions = array_values($sessions); //reset all the values
-				setjson("data/login_sessions.json", $sessions); //save the sessions back to disk
+				setjson($paths["sessionkeys"], $sessions); //save the sessions back to disk
 				exit("Log out completed."); //todo convert this to json
 			}
 		}
