@@ -222,6 +222,6 @@ switch($_GET["action"])
 		break;
 	
 	default:
-		senderror(new api_error(404, "That `action` was not recognised."));
+		senderror(new api_error(404, 14, "That `action` was not recognised."));
 }
 ?>
