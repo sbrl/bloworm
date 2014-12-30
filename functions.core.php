@@ -45,7 +45,7 @@ function senderror($api_error)
  */
 function getid()
 {
-	return 0; //todo write this function
+	return hash("sha256", uniqid("", true)); //todo write this function
 }
 
 

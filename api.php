@@ -88,8 +88,9 @@ if(!file_exists("data/"))
 	}
 }
 ///////////////////////////////////////////////////////////////////
-
-//todo check the user's login here and set a variable telling the rest of the code whether the user is logged in
+///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////// Login Checker //////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
 $logged_in = false;
 if(isset($_COOKIE[$cookie_names["session"]]) and isset($_COOKIE[$cookie_names["user"]]))
 {
@@ -120,14 +121,15 @@ if(isset($_COOKIE[$cookie_names["session"]]) and isset($_COOKIE[$cookie_names["u
 		$i++;
 	}
 }
+///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
 
 //todo split this into 2 switches: one for those who are logged in, and one of those who are not.
 switch($_GET["action"])
 {
 	case "login":
-		
 		if(!isset($_GET["user"]) or !isset($_GET["pass"]))
-			senderror(new api_error(422, 5, "Not username or password was present in the request."));
+			senderror(new api_error(422, 5, "No username or password was present in the request."));
 		
 		if(!user_exists($_GET["user"]))
 			senderror(new api_ error(401, 6, "The username and/or password given was/were incorrect."));
@@ -163,6 +165,24 @@ switch($_GET["action"])
 		exit();
 		break;
 	
+	case "search":
+		break;
+
+	case "view":
+		break;
+
+	case "share":
+		break;
+
+}
+
+if(!$isloggedin)
+{
+	senderror(new api_error(401, 13, "You need to log in to perform that action."));
+}
+
+switch($_GET["action"])
+{
 	case "logout":
 		if(!isset($_COOKIE[$cookie_names["session"]]))
 			senderror(new api_error(412, 8, "Failed to find session key cookie (you must already be logged out)."));
@@ -193,26 +213,15 @@ switch($_GET["action"])
 	
 	case "update":
 		break;
-	
-	case "search":
-		break;
-	
-	case "view":
-		break;
-	
-	case "share":
-		break;
-	
+
 	case "usermod":
 		if(!isset($_GET["key"]))
-			senderror(422, 1, "No key was specified.");
+			senderror(new api_error(422, 1, "No key was specified."));
 		if(!isser($_GET["value"]))
-			senderror(422, 2, "No value was specified.");
-		
-		
+			senderror(new api_error(422, 2, "No value was specified."));
 		break;
 	
 	default:
-		senderror(404, "That `action` was not recognised.");
+		senderror(new api_error(404, "That `action` was not recognised."));
 }
 ?>
