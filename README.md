@@ -24,3 +24,14 @@ This section contains a list of interesting libraries I have found that may or m
 ## Notes
 This section contains a bunch of notes that I have made / will make while writing blow worm. Eventually, they will slowly disappear as the help pages are written properly or as I don't need them anymore.
 
+### File Structure
+- functions.core.php - The core fnctions for the server side API
+- api.php - The server side API
+- password_cost_finder.php - A simple script to find the cost for password hashing that is right for your server.
+- settings.php - A file full of configurable settings that you can change.
+- data/
+	- sessionkeys.json - A json file full of active session keys
+	- userlist.json - A json file that lists all the user accounts
+	- &lt;username&gt;/
+		- password - a hashed version of the user's password
+		- bookmarks.json - A json file full of bookmarks
