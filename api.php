@@ -254,7 +254,7 @@ switch($_GET["action"])
 		http_response_code(201);
 		header("x-new-bookmark-id: $id");
 		header("x-new-bookmark-name: $name");
-		exit("New bookmark added successfully.\nid: $id");
+		exit("New bookmark added successfully.\nid: $id\n");
 
 		break;
 	

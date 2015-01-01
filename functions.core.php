@@ -35,7 +35,12 @@ function senderror($api_error)
 {
 	http_response_code($api_error->http_status);
 	header("content-type: application/json");
-	exit("Error #$api_error->code: $api_error->message"); //todo convert this to json
+	$response = [
+		"http_status" => $api_error->http_status,
+		"code" => $api_error->code,
+		"message" => $api_error->message
+	];
+	exit(json_encode($response, JSON_PRETTY_PRINT)); //todo convert this to json
 }
 
 /*
