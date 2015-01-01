@@ -15,4 +15,11 @@ $cookie_names = [
 	"session" => "blow-worm-session", //stores the session key
 	"user" => "blow-worm-user" //stores the username
 ];
+
+// the default name for bookmarks that don't have a name.
+$default_bookmark_name = "(untitled)";
+
+// The maximum size that blow worm will download when downloading
+// any kind of file in bytes.
+$max_download_size = 204800; //200kb
 ?>

@@ -39,6 +39,7 @@
 ////////////////////////////////////////////////////////
 require("settings.php");
 require("functions.core.php");
+require("funtions.network.php");
 
 /////////////////////////////////////////////////////////
 ///////////////////////// Paths /////////////////////////
@@ -206,6 +207,22 @@ switch($_GET["action"])
 		break;
 	
 	case "create":
+		//url[, name, faviconurl, tags]
+		if(!isset($_GET["url"]))
+			senderror(new api_error(400, 15, "You did not specify a url to add."));
+
+		$url = $_GET["url"];
+
+		if(isset($_GET["name"]))
+			$name = $_GET["name"];
+		else
+			$name = auto_find_name($url);
+
+		if(isset($_GET["faviconurl"]))
+			$faviconurl = $_GET["faviconurl"];
+		else
+			$faviconurl = auto_find_favicon_url($url);
+
 		break;
 	
 	case "delete":
