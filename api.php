@@ -169,12 +169,18 @@ switch($_GET["action"])
 		break;
 	
 	case "search":
+		http_response_code(501);
+		exit();
 		break;
 	
 	case "view":
+		http_response_code(501);
+		exit();
 		break;
 	
 	case "share":
+		http_response_code(501);
+		exit();
 		break;
 
 }
@@ -253,9 +259,13 @@ switch($_GET["action"])
 		break;
 	
 	case "delete":
+		http_response_code(501);
+		exit();
 		break;
 	
 	case "update":
+		http_response_code(501);
+		exit();
 		break;
 	
 	case "usermod":
@@ -263,6 +273,10 @@ switch($_GET["action"])
 			senderror(new api_error(422, 1, "No key was specified."));
 		if(!isser($_GET["value"]))
 			senderror(new api_error(422, 2, "No value was specified."));
+		
+		http_response_code(501);
+		exit();
+		
 		break;
 	
 	default:
