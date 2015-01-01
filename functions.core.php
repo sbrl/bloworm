@@ -46,7 +46,7 @@ function senderror($api_error)
 function getid()
 {
 	//todo use `data/next.id`
-	return hash("sha256", uniqid("", true)); //todo write this function
+	return utf8_encode(hash("sha256", uniqid("", true))); //todo write this function
 }
 
 

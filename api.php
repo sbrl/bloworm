@@ -89,6 +89,7 @@ if(!file_exists("data/"))
 	}
 }
 ///////////////////////////////////////////////////////////////////
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////// Login Checker //////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -116,6 +117,7 @@ if(isset($_COOKIE[$cookie_names["session"]]) and isset($_COOKIE[$cookie_names["u
 				* The session key has not expired
 				* The session key belongs to the requesting user */
 			
+			$user = $_COOKIE[$cookie_names["user"]];
 			$logged_in = true;
 			break; //no need to loop over the rest of the session keys
 		}
@@ -168,10 +170,10 @@ switch($_GET["action"])
 	
 	case "search":
 		break;
-
+	
 	case "view":
 		break;
-
+	
 	case "share":
 		break;
 
@@ -210,18 +212,43 @@ switch($_GET["action"])
 		//url[, name, faviconurl, tags]
 		if(!isset($_GET["url"]))
 			senderror(new api_error(400, 15, "You did not specify a url to add."));
-
+		
 		$url = $_GET["url"];
-
+		
 		if(isset($_GET["name"]))
 			$name = $_GET["name"];
 		else
 			$name = auto_find_name($url);
-
+		
 		if(isset($_GET["faviconurl"]))
 			$faviconurl = $_GET["faviconurl"];
 		else
 			$faviconurl = auto_find_favicon_url($url);
+		
+		if(isset($_GET["tags"]))
+			$tags = explode(", ", ",", $_GET["tags"]);
+		else
+			$tags = [];
+		
+		$id = getid();
+		
+		$bookmarks = getjson("./data/$user/bookmarks.json");
+		
+		//add the bookmark to the user's list
+		$bookmarks[] = [
+			"id" => $id,
+			"name" => utf8_encode($name),
+			"url" => utf8_encode($url),
+			"faviconurl" => utf8_encode($faviconurl),
+			"tags" => $tags
+		];
+		
+		setjson("./data/$user/bookmarks.json", $bookmarks);
+		
+		http_response_code(201);
+		header("x-new-bookmark-id: $id");
+		header("x-new-bookmark-name: $name");
+		exit("New bookmark added successfully.\nid: $id");
 
 		break;
 	
@@ -230,7 +257,7 @@ switch($_GET["action"])
 	
 	case "update":
 		break;
-
+	
 	case "usermod":
 		if(!isset($_GET["key"]))
 			senderror(new api_error(422, 1, "No key was specified."));
