@@ -259,19 +259,26 @@ switch($_GET["action"])
 		break;
 	
 	case "delete":
+		//id
 		http_response_code(501);
 		exit();
 		break;
 	
 	case "update":
+		//id[, name, url, faviconurl, tags]
 		http_response_code(501);
 		exit();
 		break;
 	
 	case "usermod":
-		if(!isset($_GET["key"]))
+		//key, value
+		if(isset($_GET["key"]))
+			$key = $_GET["key"];
+		else
 			senderror(new api_error(422, 1, "No key was specified."));
-		if(!isser($_GET["value"]))
+		if(isset($_GET["value"]))
+			$value = $_GET["value"];
+		else
 			senderror(new api_error(422, 2, "No value was specified."));
 		
 		http_response_code(501);
