@@ -4,7 +4,7 @@ This is going to be a bookmark storage system where you can tag your bookmarks, 
 
 You are welcome to fork this repository and help out.
 
-**Current Phase:** Planning
+**Current Phase:** Writing API Core
 
 ## Installation
 
