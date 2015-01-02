@@ -9,11 +9,27 @@ blow_worm = {
 		// the mode we should operate in
 		// can either be "login", or "view-share".
 		mode: "login",
+		
 		// the name of the user who is currently logged in
 		username: "",
+		
+		// our current session token
+		session_token: "",
+		
 		// whether we are logged in or not
 		loggedin: false,
 	},
+	actions: {
+		login: function(username, password) {
+			var login_progress_modal = nanoModal(document.getElementById("modal-login-progress"), {
+					overlayClose: false
+				}),
+				login_display = documen.getElementById("display-login-progress");
+			
+			login_display.value += "Acquiring session token...\n";
+			
+		}
+	}
 	events: {
 		load: function(event) {
 			var loginmodal = nanoModal(document.getElementById("modal-login"), {
