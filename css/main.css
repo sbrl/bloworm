@@ -1,0 +1,77 @@
+/* Don't forget to use the 'rem' CSS unit instead of 'em' because it is relative to the html element */
+html { font-size:100%; }
+
+body
+{
+	font-family: sans-serif; /* Serif is awful :( */
+}
+
+/* A small tweak to things more responsive */
+iframe, object, embed, img, table
+{
+    max-width: 100%;
+}
+
+/* Turn the user's cursor into a hand when over things they can click */
+button, summary
+{
+    cursor: pointer;
+}
+
+th, td
+{
+    margin: 4px 6px;
+    padding: 4px 6px;
+}
+
+/* todo add the rest of the textbox like inputs here */
+input[type=text], input[type=number], textarea
+{
+    margin: 3px 5px;
+    padding: 5px 8px;
+	
+    background: white;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+/* Utility / layout aids */
+.float.left     { float: left;  }
+.float.right    { float: right; }
+
+.flex   { display: flex; }
+.flex-1 { flex: 1;  }
+.flex-2 { flex: 2;  }
+.flex-3 { flex: 3;  }
+.flex-4 { flex: 4;  }
+.flex-5 { flex: 5;  }
+.flex-6 { flex: 6;  }
+
+.small-spacing  { margin: 2px 4px;  padding: 2px 4px;   }
+.med-spacing    { margin: 5px 8px;  padding: 5px 8px;   }
+.high-spacing   { margin: 8px 10px; padding: 8px 10px;  }
+
+.text-left      { text-align: left;     }
+.text-centre    { text-align: center;   }
+.text-right     { text-align: right;    }
+
+.small-text     { font-size: 0.8rem;    }
+.medium-text    { font-size: 1rem;      }
+.large-text     { font-size: 1.3rem;    }
+
+.bold-text      { font-weight: bolder;  }
+
+.block          { display: block;           }
+.inline         { display: inline;          }
+.inline.block   { display: inline-block;    }
+
+.invisible		{ display: none;		}
+.invisilink     { text-decoration: none; color: inherit;            }
+.invisilist     { list-style-type: none; margin: 5px; padding: 5px; }
+
+.tiny-image     { max-width: 100px; max-height: 100px; }
+.small-image    { max-width: 250px; max-height: 250px; }
+.medium-image   { max-width: 450px; max-height: 450px; }
+.large-image    { max-width: 650px; max-height: 650px; }
+
+.img-text-middle{ vertical-align: middle; }

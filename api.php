@@ -255,7 +255,7 @@ switch($_GET["action"])
 		header("x-new-bookmark-id: $id");
 		header("x-new-bookmark-name: $name");
 		exit("New bookmark added successfully.\nid: $id\n");
-
+		
 		break;
 	
 	case "delete":

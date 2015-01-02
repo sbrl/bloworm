@@ -16,6 +16,7 @@ Blow Worm requires the following PHP modules:
 This section contains a list of interesting libraries I have found that may or may not be useful when building this thing:
 
  - http://www.shayanderson.com/php/php-qr-code-generator-class.htm - A qr code generator
+ - https://github.com/kylepaulsen/NanoModal - A cool looking modal dialog box controller
 
 ### Still to find
  - website screenshot generator
