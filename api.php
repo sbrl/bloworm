@@ -24,9 +24,11 @@
 		* [optional] faviconurl
 	* search - search for bookmarks
 		* query
-	* share - share bookmarks with others //todo think about this and design the api properly
-		* [optional] ids - a list of bookmark ids to share, separated by commas
-		* [optional] tag - the tag to share
+		* [optional] limit
+	* share - share bookmarks with others
+		* tag - the tag to share
+	* unshare - unshare a tag
+		* tag - the tag to unshare
 	* view - View a shared tag
 		* tag - the tag to view
 	* usermod - change user settings, like one's password
@@ -237,12 +239,6 @@ switch($_GET["action"])
 		http_response_code(501);
 		exit();
 		break;
-	
-	case "share":
-		http_response_code(501);
-		exit();
-		break;
-
 }
 
 if(!$isloggedin)
@@ -326,6 +322,16 @@ switch($_GET["action"])
 	
 	case "update":
 		//id[, name, url, faviconurl, tags]
+		http_response_code(501);
+		exit();
+		break;
+	
+	case "share":
+		http_response_code(501);
+		exit();
+		break;
+	
+	case "unshare":
 		http_response_code(501);
 		exit();
 		break;
