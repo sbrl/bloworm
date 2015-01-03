@@ -2,7 +2,7 @@
 /*
  * @summary class used to hold details about an error that has occurred.
  * 
- * @param $http_status - The http status code that should be sent
+ * @param $http_status - The http status code that should be sent.
  * @param $code - The error code of the error that has occurred.
  * @param $message - The message that should be displayed.
  * 
@@ -25,6 +25,30 @@ class api_error
 }
 
 /*
+ * @summary base class used to contruct api responses.
+ * 
+ * @param $http_status - The http status code that should be sent.
+ * @param $code - An indicator code giving a little more information about the response.
+ * @param $message - The message that should be displayed.
+ * 
+ * @example new api_error(404, 345, "error #345: bookmark not found.");
+ */
+class api_response
+{
+	public $http_status = 200;
+	public $code = 0;
+	public $type = "";
+	
+	public function __construct($http_status, $code, $type)
+	{
+		$this->http_status = $http_status;
+		$this->code = $code;
+		
+		$this->type = utf8_encode($type);
+	}
+}
+
+/*
  * @summary sends an error message to the client
  * 
  * @param $api_error - an instance of api_error that contains the details of the error that has occurred.
@@ -40,7 +64,7 @@ function senderror($api_error)
 		"code" => $api_error->code,
 		"message" => $api_error->message
 	];
-	exit(json_encode($response, JSON_PRETTY_PRINT)); //todo convert this to json
+	exit(json_encode($response, JSON_PRETTY_PRINT));
 }
 
 /*
@@ -51,7 +75,7 @@ function senderror($api_error)
 function getid()
 {
 	//todo use `data/next.id`
-	return utf8_encode(hash("sha256", uniqid("", true))); //todo write this function
+	return utf8_encode(hash("sha256", uniqid("", true)));
 }
 
 
@@ -103,4 +127,45 @@ function user_exists($user_to_check)
 			return true;
 	}
 	return false;
+}
+
+/*
+ * @summary Use levenshtein's distance to sort an array of bookmarks based on a query string.
+ * 
+ * @param $query - The query string
+ * @param $haystack = The array of objects to sort.
+ * 
+ * @returns The sorted array.
+ */
+function fuzzy_search_bookmarks($query, $haystack)
+{
+	$ranked = [];
+	foreach($haystack as $elem)
+	{
+		$best_so_far = INF;
+		foreach($elem as $key => $value)
+		{
+			// get the similarity between the key and the query string
+			$new_score = levenshtein($query, $elem->$key, 1, 1, 0);
+			// this score is lower than the best, update the best
+			if($new_score < $best_so_far)
+				$best_so_far = $new_score;
+		}
+		//todo insert into the correct place instead of sorting afterwards
+		$ranked[] = [
+			"rank" => $best_so_far,
+			"elem" => $elem
+		];
+	}
+	
+	usort($ranked, function($a, $b) {
+		return $a->rank < $b->rank
+	});
+	
+	$result = [];
+	foreach($ranked as $item)
+	{
+		$result[] = $item->elem;
+	}
+	return $result;
 }
