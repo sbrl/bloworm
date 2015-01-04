@@ -42,6 +42,7 @@
 require("functions.errors.php");
 require("settings.php");
 require("functions.core.php");
+require("functions.users.php");
 require("functions.network.php");
 
 /////////////////////////////////////////////////////////
@@ -149,7 +150,7 @@ switch($_GET["action"])
 			senderror(new api_error(401, 6, "The username and/or password given was/were incorrect."));
 		
 		try {
-			$user_pass_hash = file_get_contents("data/users/" . $_GET["user"] . "/password");
+			$user_pass_hash = file_get_contents(get_user_data_dir_name($user));
 		} catch(Exception $e)
 		{
 			senderror(500, 7, "Failed to read in password hash.");
@@ -184,7 +185,7 @@ switch($_GET["action"])
 		{
 			//return a list of all the bookmarks the user has
 			$response = new api_response(200, 0, "search/all-bookmarks");
-			$response->bookmarks = getjson("./data/users/$user/bookmarks.json");
+			$response->bookmarks = getjson(get_user_data_dir_name($user) . "bookmarks.json");
 			exit(json_encode($response, JSON_PRETTY_PRINT));
 		}
 		
@@ -208,7 +209,7 @@ switch($_GET["action"])
 		}
 		
 		
-		$all_bookmarks = getjson("./data/users/$user/bookmarks.json");
+		$all_bookmarks = getjson(get_user_data_dir_name($user) . "bookmarks.json");
 		
 		// filter by tag(s)
 		if(count($tags) > 0)
@@ -304,7 +305,7 @@ switch($_GET["action"])
 		
 		$id = getid();
 		
-		$bookmarks = getjson("./data/users/$user/bookmarks.json");
+		$bookmarks = getjson(get_user_data_dir_name($user) . "bookmarks.json");
 		
 		//add the bookmark to the user's list
 		$bookmarks[] = [
@@ -315,7 +316,7 @@ switch($_GET["action"])
 			"tags" => $tags
 		];
 		
-		setjson("./data/users/$user/bookmarks.json", $bookmarks);
+		setjson(get_user_data_dir_name($user) . "bookmarks.json", $bookmarks);
 		
 		http_response_code(201);
 		header("x-new-bookmark-id: $id");
