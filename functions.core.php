@@ -68,26 +68,6 @@ function setjson($filename, $thing)
 }
 
 /*
- * @summary Checks to see if a user exists.
- * 
- * @param $username - The username to check.
- * 
- * @returns Whether the user exists.
- */
-function user_exists($user_to_check)
-{
-	//changes commented out getjson
-	//global getjson;
-	$userlist = getjson("data/userlist.json");
-	foreach($userlist as $user_in_list)
-	{
-		if($user_to_check == $user_in_list)
-			return true;
-	}
-	return false;
-}
-
-/*
  * @summary Use levenshtein's distance to sort an array of bookmarks based on a query string.
  * 
  * @param $query - The query string

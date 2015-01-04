@@ -75,6 +75,7 @@ if(!file_exists("data/"))
 		[ "type" => "folder", "path" => "data/users" ],
 		[ "type" => "folder", "path" => "data/users/admin" ],
 		[ "type" => "file", "path" => "data/users/admin/password", "content" => hash_password("blow-worm") ],
+		[ "type" => "file", "path" => "data/users/admin/isadmin", "content" => "true" ],
 		[ "type" => "file", "path" => "data/users/admin/bookmarks.json", "content" => "[]" ],
 		[ "type" => "file", "path" => $paths["sessionkeys"], "content" => "[]" ],
 		[ "type" => "file", "path" => "data/userlist.json", "content" => "[\"admin\"]"]
