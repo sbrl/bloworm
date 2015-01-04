@@ -1,4 +1,6 @@
 /// Micro Snippets ///
+// #2 - Postify
+function postify(a){return Object.keys(a).map(function(k){return [k,encodeURIComponent(a[k])].join("=")}).join("&")}
 // #8 - Promisified GET
 function get(u){return new Promise(function(r,t,a){a=new XMLHttpRequest();a.onload=function(b,c){b=a.status;c=a.response;if(b>199&&b<300){r(c)}else{t(c)}};a.open("GET",u,true);a.send(null)})}
 // #9 - Promisified POST
@@ -21,15 +23,40 @@ blow_worm = {
 	},
 	actions: {
 		login: function(username, password) {
+			//show a progress box
 			var login_progress_modal = nanoModal(document.getElementById("modal-login-progress"), {
 					overlayClose: false,
 					buttons: []
 				}),
-				login_display = documen.getElementById("display-login-progress");
+				login_display = document.getElementById("display-login-progress");
 			
 			login_display.value += "Acquiring session token...\n";
 			
-			//todo login here
+			//send the login request
+			var ajax = new XMLHttpRequest(),
+				data = {
+					user: username,
+					pass: password
+				};
+			
+			ajax.onload = function() {
+				if(ajax.status >= 200 && ajax.status < 300)
+				{
+					//the request was successful
+					login_display.value += "Response recieved: login successful, cookie set.\n";
+					
+					//todo setup the interface
+				}
+				else
+				{
+					login_display.value += "Login failed! See the console for more details.";
+					console.error(ajax);
+				}
+			};
+			
+			ajax.open("POST", "api.php?action=login");
+			ajax.send(postify(data));
+			login_display.value += "Login request sent to server.\n";
 		}
 	},
 	events: {
