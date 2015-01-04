@@ -4,6 +4,7 @@
  ***********************
  * HTTP status codes:
 	* 422 - response understood *and* well formed, but validation failed
+ 	* 449 - missing required parameter
  * Actions:
 	* login
 		* username
@@ -22,6 +23,7 @@
 		* [optional] url
 		* [optional] tags
 		* [optional] faviconurl
+	* stats - view your stats
 	* search - search for bookmarks
 		* query
 		* [optional] limit
@@ -347,6 +349,15 @@ switch($_GET["action"])
 		
 		http_response_code(501);
 		exit("This action is not implemented yet.");
+		break;
+	
+	case "stats":
+		$response = new api_response(200, 0, "stats");
+		$bookmarks = getjson(get_user_data_dir_name($user) . "bookmarks.json");
+		$response->count = count($bookmarks);
+		$response->datasize = filesize(get_user_data_dir_name($user) . "bookmarks.json");
+		
+		echo(json_encode($response, JSON_PRETTY_PRINT));
 		break;
 	
 	case "share":
