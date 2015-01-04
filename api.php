@@ -145,7 +145,7 @@ switch($_GET["action"])
 {
 	case "login":
 		if(!isset($_GET["user"]) or !isset($_GET["pass"]))
-			senderror(new api_error(422, 5, "No username or password was present in the request."));
+			senderror(new api_error(449, 5, "No username or password was present in the request.\n\nThe appropriate GET parameters are `user` and `pass`."));
 		
 		if(!user_exists($_GET["user"]))
 			senderror(new api_error(401, 6, "The username and/or password given was/were incorrect."));
@@ -175,7 +175,8 @@ switch($_GET["action"])
 		setcookie("blow-worm-user", $_GET["user"], time() * $session_key_valid_time);
 		setcookie("blow-worm-session", $sessionkey, time() * $session_key_valid_time);
 		http_response_code(200);
-		exit("Login successful."); //todo convert this to json
+		$response = new api_response(200, 0, "Login successful.");
+		exit(json_encode($response, JSON_PRETTY_PRINT)); //todo convert this to json
 		var_dump($sessionkey);
 		
 		exit();
@@ -249,7 +250,7 @@ switch($_GET["action"])
 	
 	case "view":
 		http_response_code(501);
-		exit();
+		exit("This action is not implemented yet.");
 		break;
 }
 
@@ -327,25 +328,49 @@ switch($_GET["action"])
 		break;
 	
 	case "delete":
-		//id
+		if(isset($_GET["id"]))
+			$id_to_delete = $_GET["id"];
+		else
+			senderror(new api_error(449, 18, "You didn't specify an `id` to delete.\n\nThe appropriate GET parameter is `id`."));
+		
 		http_response_code(501);
-		exit();
+		exit("This action is not implemented yet.");
 		break;
 	
 	case "update":
 		//id[, name, url, faviconurl, tags]
+		if(isset($_GET["id"]))
+			$id_to_delete = $_GET["id"];
+		else
+			senderror(new api_error(449, 19, "You didn't specify an `id` to update.\n\nThe appropriate GET parameter is `id`."));
+		
+		
 		http_response_code(501);
-		exit();
+		exit("This action is not implemented yet.");
 		break;
 	
 	case "share":
+		if(isset($_GET["tags"]))
+			$tags = explode(",", str_replace(", ", ",", $_GET["tags"]));
+		else
+			senderror(new api_error(449, 16, "You didn't specify any `tags` to share.\n\nThe appropriate GET parameter is `tags`."));
+		
+		
+		
 		http_response_code(501);
-		exit();
+		exit("This action is not implemented yet.");
 		break;
 	
 	case "unshare":
+		if(isset($_GET["tags"]))
+			$tags = explode(",", str_replace(", ", ",", $_GET["tags"]));
+		else
+			senderror(new api_error(449, 17, "You didn't specify any `tags` to share.\n\nThe appropriate GET parameter is `tags`."));
+		
+		
+		
 		http_response_code(501);
-		exit();
+		exit("This action is not implemented yet.");
 		break;
 	
 	case "usermod":
@@ -353,14 +378,14 @@ switch($_GET["action"])
 		if(isset($_GET["key"]))
 			$key = $_GET["key"];
 		else
-			senderror(new api_error(422, 1, "No key was specified."));
+			senderror(new api_error(449, 1, "No key was specified.\n\nThe appropriate GET parameter is `key`."));
 		if(isset($_GET["value"]))
 			$value = $_GET["value"];
 		else
-			senderror(new api_error(422, 2, "No value was specified."));
+			senderror(new api_error(449, 2, "No value was specified.\n\nThe approapriate GET parameter is `value`."));
 		
 		http_response_code(501);
-		exit();
+		exit("This action is not implemented yet.");
 		
 		break;
 	
