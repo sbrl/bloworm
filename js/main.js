@@ -31,7 +31,7 @@ blow_worm = {
 			
 			//todo login here
 		}
-	}
+	},
 	events: {
 		load: function(event) {
 			var loginmodal = nanoModal(document.getElementById("modal-login"), {
