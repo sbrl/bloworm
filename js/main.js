@@ -38,6 +38,7 @@ blow_worm = {
 				overlayClose: false,
 				buttons: [{
 					text: "Login",
+					primary: true,
 					hander: function() {
 						var user = document.getElementById("login-user").value,
 							pass = document.getElementById("login-pass").value;
@@ -48,7 +49,7 @@ blow_worm = {
 						}
 					}
 				}]
-			});
+			}).show();
 		}
 	}
 };

@@ -39,9 +39,10 @@
 ////////////////////////////////////////////////////////
 ///////////////////// Requirements /////////////////////
 ////////////////////////////////////////////////////////
+require("functions.errors.php");
 require("settings.php");
 require("functions.core.php");
-require("funtions.network.php");
+require("functions.network.php");
 
 /////////////////////////////////////////////////////////
 ///////////////////////// Paths /////////////////////////
@@ -54,7 +55,13 @@ $paths = [
 /////////////////// Input Validation ///////////////////
 ////////////////////////////////////////////////////////
 if(!isset($_GET["action"]))
-	senderror(422, "No action was specified.");
+{
+	http_response_code(300);
+	header("content-type: text/plain");
+	echo("Welcome to the blow worm api at " . gethostname() . ".
+
+At some point some API help will be printed here instead.\n\n");
+}
 
 ///////////////////////////////////////////////////////
 //////////////////// Initial Setup ////////////////////
@@ -64,16 +71,17 @@ if(!file_exists("data/"))
 	$initial_structure = [
 		[ "type" => "folder", "path" => "data/" ],
 		[ "type" => "file", "path" => "data/next.id", "content" => 0 ],
-		[ "type" => "folder", "path" => "data/admin" ],
-		[ "type" => "file", "path" => "data/admin/password", "content" => hash_password("blow-worm") ],
-		[ "type" => "file", "path" => "data/user/admin/bookmarks.json", "content" => "[]" ],
+		[ "type" => "folder", "path" => "data/users" ],
+		[ "type" => "folder", "path" => "data/users/admin" ],
+		[ "type" => "file", "path" => "data/users/admin/password", "content" => hash_password("blow-worm") ],
+		[ "type" => "file", "path" => "data/users/admin/bookmarks.json", "content" => "[]" ],
 		[ "type" => "file", "path" => $paths["sessionkeys"], "content" => "[]" ],
 		[ "type" => "file", "path" => "data/userlist.json", "content" => "[\"admin\"]"]
 	];
 	
 	foreach($initial_structure as $to_create)
 	{
-		switch($to_create)
+		switch($to_create["type"])
 		{
 			case "folder":
 				if(!mkdir($to_create["path"], 0700, true))
@@ -86,7 +94,7 @@ if(!file_exists("data/"))
 				break;
 			
 			default:
-				senderror(new api_error(500, 4, "Unknown setup entry: " . $to_create["type"]));
+				senderror(new api_error(500, 4, "Unknown setup entry type: " . $to_create["type"]));
 		}
 	}
 }
@@ -128,6 +136,8 @@ if(isset($_COOKIE[$cookie_names["session"]]) and isset($_COOKIE[$cookie_names["u
 }
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
+if(!isset($_GET["action"]))
+	exit();
 
 switch($_GET["action"])
 {
@@ -136,7 +146,7 @@ switch($_GET["action"])
 			senderror(new api_error(422, 5, "No username or password was present in the request."));
 		
 		if(!user_exists($_GET["user"]))
-			senderror(new api_ error(401, 6, "The username and/or password given was/were incorrect."));
+			senderror(new api_error(401, 6, "The username and/or password given was/were incorrect."));
 		
 		try {
 			$user_pass_hash = file_get_contents("data/users/" . $_GET["user"] . "/password");
@@ -146,7 +156,7 @@ switch($_GET["action"])
 		}
 		
 		if(!password_verify($_GET["pass"], $user_pass_hash))
-			senderror(new api_ error(401, 6, "The username and/or password given was/were incorrect."));
+			senderror(new api_error(401, 6, "The username and/or password given was/were incorrect."));
 		
 		//by this point we have verified that the user's credientials are correct
 		
@@ -174,7 +184,7 @@ switch($_GET["action"])
 		{
 			//return a list of all the bookmarks the user has
 			$response = new api_response(200, 0, "search/all-bookmarks");
-			$response->bookmarks = getjson("./data/$username/bookmarks.json");
+			$response->bookmarks = getjson("./data/users/$user/bookmarks.json");
 			exit(json_encode($response, JSON_PRETTY_PRINT));
 		}
 		
@@ -198,7 +208,7 @@ switch($_GET["action"])
 		}
 		
 		
-		$all_bookmarks = getjson("./data/$username/bookmarks.json");
+		$all_bookmarks = getjson("./data/users/$user/bookmarks.json");
 		
 		// filter by tag(s)
 		if(count($tags) > 0)
@@ -207,7 +217,7 @@ switch($_GET["action"])
 				$has_tag = false;
 				foreach($tags as $tag)
 				{
-					foreach($bookmark->tags $bookmark_tag)
+					foreach($bookmark->tags as $bookmark_tag)
 					{
 						if($bookmark_tag == $tag)
 						{
@@ -294,7 +304,7 @@ switch($_GET["action"])
 		
 		$id = getid();
 		
-		$bookmarks = getjson("./data/$user/bookmarks.json");
+		$bookmarks = getjson("./data/users/$user/bookmarks.json");
 		
 		//add the bookmark to the user's list
 		$bookmarks[] = [
@@ -305,7 +315,7 @@ switch($_GET["action"])
 			"tags" => $tags
 		];
 		
-		setjson("./data/$user/bookmarks.json", $bookmarks);
+		setjson("./data/users/$user/bookmarks.json", $bookmarks);
 		
 		http_response_code(201);
 		header("x-new-bookmark-id: $id");

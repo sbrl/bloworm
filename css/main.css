@@ -6,6 +6,11 @@ body
 	font-family: sans-serif; /* Serif is awful :( */
 }
 
+h1, h2, h3, h4, h5, h6
+{
+	text-align: center;
+}
+
 /* A small tweak to things more responsive */
 iframe, object, embed, img, table
 {
@@ -24,14 +29,20 @@ th, td
     padding: 4px 6px;
 }
 
-/* todo add the rest of the textbox like inputs here */
-input[type=text], input[type=number], textarea
+label
+{
+	display		: inline-block;
+	min-width	: 6rem;
+}
+
+/* todo add the rest of the textbox-like inputs here */
+input[type=text], input[type=number], input[type=password], textarea
 {
     margin: 3px 5px;
     padding: 5px 8px;
 	
     background: white;
-    border: 1px solid black;
+	border: 0;
     border-radius: 5px;
 }
 
