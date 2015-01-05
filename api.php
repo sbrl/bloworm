@@ -206,10 +206,16 @@ switch($_GET["action"])
 	case "checklogin":
 		$response = new api_response(200, 0, "checklogin");
 		$response->logged_in = $logged_in;
-		if(isset($user))
+		if($logged_in)
+		{
 			$response->user = $user;
+			$response->sessionkey = $_COOKIE[$cookie_names["session"]];
+		}
 		else
+		{
 			$response->user = false;
+			$response->sessionkey = false;
+		}
 		sendjson($response);
 		exit();
 		break;
