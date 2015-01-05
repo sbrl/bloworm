@@ -24,6 +24,17 @@ class api_response
 }
 
 /*
+ * @summary Sends something to the client after encoding it as json. Unlike senderror, this function does not terminate the request. Also sets the correct header to tell the client that it will be getting a lump of json as a response.
+ * 
+ * @param $thing - The thing to send.
+ */
+function sendjson($thing)
+{
+	header("content-type: application/json");
+	echo(json_encode($thing, JSON_PRETTY_PRINT));
+}
+
+/*
  * @summary Generates a brand new id, which can then be used to refer to a bookmark.
  * 
  * @returns A new id.

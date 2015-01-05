@@ -177,11 +177,12 @@ switch($_GET["action"])
 		
 		setcookie("blow-worm-user", $_POST["user"], time() + $session_key_valid_time);
 		setcookie("blow-worm-session", $sessionkey, time() + $session_key_valid_time);
+		
 		http_response_code(200);
 		$response = new api_response(200, 0, "Login successful.");
-		exit(json_encode($response, JSON_PRETTY_PRINT)); //todo convert this to json
-		var_dump($sessionkey);
-		
+		$response->sessionkey = $sessionkey;
+		$response->expire_time = time() + $session_key_valid_time;
+		sendjson($response);
 		exit();
 		break;
 	
@@ -214,9 +215,13 @@ switch($_GET["action"])
 				unset($sessions[$i]); //remove the session key
 				$sessions = array_values($sessions); //reset all the values
 				setjson($paths["sessionkeys"], $sessions); //save the sessions back to disk
-				exit("Log out completed."); //todo convert this to json
+				
+				$response = new api_response(200, 0, "login/success");
+				sendjson($response);
+				exit();
 			}
 		}
+		
 		senderror(new api_error(422, 11, "Failed to log out - Either your session key or username were invalid."));
 		break;
 	
@@ -257,11 +262,15 @@ switch($_GET["action"])
 		
 		setjson(get_user_data_dir_name($user) . "bookmarks.json", $bookmarks);
 		
-		http_response_code(201);
-		header("x-new-bookmark-id: $id");
-		header("x-new-bookmark-name: $name");
-		exit("New bookmark added successfully.\nid: $id\n");
+		$response = new api_response(201, 0, "create/success");
+		$response->id = $id;
+		$response->name = $name;
 		
+		http_response_code($response->http_status);
+		header("x-new-bookmark-id: $response->id");
+		header("x-new-bookmark-name: $response->name");
+		sendjson($response);
+		exit();
 		break;
 	
 	case "delete":
@@ -292,7 +301,8 @@ switch($_GET["action"])
 			//return a list of all the bookmarks the user has
 			$response = new api_response(200, 0, "search/all-bookmarks");
 			$response->bookmarks = getjson(get_user_data_dir_name($user) . "bookmarks.json");
-			exit(json_encode($response, JSON_PRETTY_PRINT));
+			sendjson($response);
+			exit();
 		}
 		
 		$query = trim($_GET["query"]);
@@ -349,7 +359,8 @@ switch($_GET["action"])
 		$response->bookmarks = $matching_bookmarks;
 		
 		http_response_code($response->http_status);
-		exit(json_encode($response));
+		sendjson($response);
+		exit();
 		break;
 	
 	case "stats":
@@ -358,7 +369,8 @@ switch($_GET["action"])
 		$response->count = count($bookmarks);
 		$response->datasize = filesize(get_user_data_dir_name($user) . "bookmarks.json");
 		
-		echo(json_encode($response, JSON_PRETTY_PRINT));
+		sendjson($response);
+		exit();
 		break;
 	
 	case "share":
