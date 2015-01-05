@@ -27,10 +27,10 @@ blow_worm = {
 			var login_progress_modal = nanoModal(document.getElementById("modal-login-progress"), {
 					overlayClose: false,
 					buttons: []
-				}),
+				}).show(),
 				login_display = document.getElementById("display-login-progress");
 			
-			login_display.value += "Acquiring session token...\n";
+			login_display.innerHTML += "Acquiring session token...<br />\n";
 			
 			//send the login request
 			var ajax = new XMLHttpRequest(),
@@ -43,20 +43,21 @@ blow_worm = {
 				if(ajax.status >= 200 && ajax.status < 300)
 				{
 					//the request was successful
-					login_display.value += "Response recieved: login successful, cookie set.\n";
+					login_display.innerHTML += "Response recieved: login successful, cookie set.<br />\n";
 					
 					//todo setup the interface
 				}
 				else
 				{
-					login_display.value += "Login failed! See the console for more details.";
+					login_display.innerHTML += "Login failed! See the console for more details.<br />\n";
 					console.error(ajax);
 				}
 			};
 			
 			ajax.open("POST", "api.php?action=login");
+			ajax.setRequestHeader("content-type", "application/x-www-form-urlencoded");
 			ajax.send(postify(data));
-			login_display.value += "Login request sent to server.\n";
+			login_display.innerHTML += "Login request sent to server.<br />\n";
 		}
 	},
 	events: {
@@ -66,14 +67,27 @@ blow_worm = {
 				buttons: [{
 					text: "Login",
 					primary: true,
-					hander: function() {
-						var user = document.getElementById("login-user").value,
-							pass = document.getElementById("login-pass").value;
+					handler: function() {
+						loginmodal.hide(); // hide the dialog box
 						
+						// grab the details the user entered
+						var userbox = document.getElementById("login-user"),
+							passbox = document.getElementById("login-pass"),
+							user = userbox.value,
+							pass = passbox.value;
+						
+						// reset the input boxes
+						userbox.value = "";
+						passbox.value = "";
+						
+						// make sure that that the user actually entered both the username and password
 						if(user.length === 0 || pass.length === 0)
 						{
 							nanoModal("The username and / or password box(es) were empty.", { autoRemove: true}).show().onHide(loginmodal.show);
 						}
+						
+						// call the login handler
+						blow_worm.actions.login(user, pass);
 					}
 				}]
 			}).show();

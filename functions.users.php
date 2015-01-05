@@ -8,7 +8,7 @@
  */
 function get_user_data_dir_name($username)
 {
-	return "./data/$username/";
+	return "./data/users/$username/";
 }
 
 /*

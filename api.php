@@ -4,7 +4,7 @@
  ***********************
  * HTTP status codes:
 	* 422 - response understood *and* well formed, but validation failed
- 	* 449 - missing required parameter
+	* 449 - missing required parameter
  * Actions:
 	* login
 		* username
@@ -146,20 +146,20 @@ if(!isset($_GET["action"]))
 switch($_GET["action"])
 {
 	case "login":
-		if(!isset($_GET["user"]) or !isset($_GET["pass"]))
-			senderror(new api_error(449, 5, "No username or password was present in the request.\n\nThe appropriate GET parameters are `user` and `pass`."));
+		if(!isset($_POST["user"]) or !isset($_POST["pass"]))
+			senderror(new api_error(449, 5, "No username and/or password was present in the body of the request.\n\nThe appropriate POST parameters are `user` and `pass`."));
 		
-		if(!user_exists($_GET["user"]))
+		if(!user_exists($_POST["user"]))
 			senderror(new api_error(401, 6, "The username and/or password given was/were incorrect."));
 		
 		try {
-			$user_pass_hash = file_get_contents(get_user_data_dir_name($user));
+			$user_pass_hash = file_get_contents(get_user_data_dir_name($_POST["user"]) . "password");
 		} catch(Exception $e)
 		{
 			senderror(500, 7, "Failed to read in password hash.");
 		}
 		
-		if(!password_verify($_GET["pass"], $user_pass_hash))
+		if(!password_verify($_POST["pass"], $user_pass_hash))
 			senderror(new api_error(401, 6, "The username and/or password given was/were incorrect."));
 		
 		//by this point we have verified that the user's credientials are correct
@@ -169,12 +169,12 @@ switch($_GET["action"])
 		$login_sessions = getjson($paths["sessionkeys"]);
 		$sessionkey = hash("sha256", openssl_random_pseudo_bytes($session_key_length));
 		$login_sessions[] = [
-			"user" => $_GET["user"],
+			"user" => $_POST["user"],
 			"key" => $sessionkey,
 			"expires" => time() * $session_key_valid_time
 		];
 		
-		setcookie("blow-worm-user", $_GET["user"], time() * $session_key_valid_time);
+		setcookie("blow-worm-user", $_POST["user"], time() * $session_key_valid_time);
 		setcookie("blow-worm-session", $sessionkey, time() * $session_key_valid_time);
 		http_response_code(200);
 		$response = new api_response(200, 0, "Login successful.");
@@ -182,72 +182,6 @@ switch($_GET["action"])
 		var_dump($sessionkey);
 		
 		exit();
-		break;
-	
-	case "search":
-		if(!isset($_GET["query"]))
-		{
-			//return a list of all the bookmarks the user has
-			$response = new api_response(200, 0, "search/all-bookmarks");
-			$response->bookmarks = getjson(get_user_data_dir_name($user) . "bookmarks.json");
-			exit(json_encode($response, JSON_PRETTY_PRINT));
-		}
-		
-		$query = trim($_GET["query"]);
-		
-		if(isset($_GET["limit"]))
-			$limit = $_GET["limit"];
-		else
-			$limit = -1;
-		
-		// extract all the tags
-		$terms = explode(" ", $query);
-		$tags = [];
-		$no_keywords = true; // whether the query string contains any keywords
-		foreach($terms as $term)
-		{
-			if(substr(trim($term), 0, 1) === "#")
-				$tags[] = substr(trim($term), 1);
-			else
-				$no_keywords = false;
-		}
-		
-		
-		$all_bookmarks = getjson(get_user_data_dir_name($user) . "bookmarks.json");
-		
-		// filter by tag(s)
-		if(count($tags) > 0)
-		{
-			$all_bookmarks = array_filter($all_bookmarks, function($bookmark) {
-				$has_tag = false;
-				foreach($tags as $tag)
-				{
-					foreach($bookmark->tags as $bookmark_tag)
-					{
-						if($bookmark_tag == $tag)
-						{
-							$has_tag = true;
-							break 2;
-						}
-					}
-				}
-				return $has_tag;
-			});
-		}
-		
-		// don't fuzzy search if we only have tags and no keywords
-		if(!$no_keywords)
-			$matching_bookmarks = fuzzy_search($query, $all_bookmarks);
-		
-		// limit the number of bookmarks we respond with in asked to do so
-		if($limit > 0)
-			$matching_bookmarks = array_slice($matching_bookmarks, 0, $limit);
-		
-		$response = new api_response(200, 0, "search/query-levenshtein");
-		$response->bookmarks = $matching_bookmarks;
-		
-		http_response_code($response->http_status);
-		exit(json_encode($response));
 		break;
 	
 	case "view":
@@ -349,6 +283,72 @@ switch($_GET["action"])
 		
 		http_response_code(501);
 		exit("This action is not implemented yet.");
+		break;
+	
+	case "search":
+		if(!isset($_GET["query"]))
+		{
+			//return a list of all the bookmarks the user has
+			$response = new api_response(200, 0, "search/all-bookmarks");
+			$response->bookmarks = getjson(get_user_data_dir_name($user) . "bookmarks.json");
+			exit(json_encode($response, JSON_PRETTY_PRINT));
+		}
+		
+		$query = trim($_GET["query"]);
+		
+		if(isset($_GET["limit"]))
+			$limit = $_GET["limit"];
+		else
+			$limit = -1;
+		
+		// extract all the tags
+		$terms = explode(" ", $query);
+		$tags = [];
+		$no_keywords = true; // whether the query string contains any keywords
+		foreach($terms as $term)
+		{
+			if(substr(trim($term), 0, 1) === "#")
+				$tags[] = substr(trim($term), 1);
+			else
+				$no_keywords = false;
+		}
+		
+		
+		$all_bookmarks = getjson(get_user_data_dir_name($user) . "bookmarks.json");
+		
+		// filter by tag(s)
+		if(count($tags) > 0)
+		{
+			$all_bookmarks = array_filter($all_bookmarks, function($bookmark) {
+				$has_tag = false;
+				foreach($tags as $tag)
+				{
+					foreach($bookmark->tags as $bookmark_tag)
+					{
+						if($bookmark_tag == $tag)
+						{
+							$has_tag = true;
+							break 2;
+						}
+					}
+				}
+				return $has_tag;
+			});
+		}
+		
+		// don't fuzzy search if we only have tags and no keywords
+		if(!$no_keywords)
+			$matching_bookmarks = fuzzy_search($query, $all_bookmarks);
+		
+		// limit the number of bookmarks we respond with in asked to do so
+		if($limit > 0)
+			$matching_bookmarks = array_slice($matching_bookmarks, 0, $limit);
+		
+		$response = new api_response(200, 0, "search/query-levenshtein");
+		$response->bookmarks = $matching_bookmarks;
+		
+		http_response_code($response->http_status);
+		exit(json_encode($response));
 		break;
 	
 	case "stats":

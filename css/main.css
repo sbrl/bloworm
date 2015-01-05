@@ -36,7 +36,7 @@ label
 }
 
 /* todo add the rest of the textbox-like inputs here */
-input[type=text], input[type=number], input[type=password], textarea
+input[type=text], input[type=number], input[type=password], input[type-search], textarea
 {
     margin: 3px 5px;
     padding: 5px 8px;
@@ -51,6 +51,8 @@ input[type=text], input[type=number], input[type=password], textarea
 .float.right    { float: right; }
 
 .flex   { display: flex; }
+.flex.across	{ flex-direction: row;	}
+.flex.down		{ flex-direction: column;	}
 .flex-1 { flex: 1;  }
 .flex-2 { flex: 2;  }
 .flex-3 { flex: 3;  }
