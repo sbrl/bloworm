@@ -169,13 +169,14 @@ switch($_GET["action"])
 		$login_sessions = getjson($paths["sessionkeys"]);
 		$sessionkey = hash("sha256", openssl_random_pseudo_bytes($session_key_length));
 		$login_sessions[] = [
-			"user" => $_POST["user"],
-			"key" => $sessionkey,
-			"expires" => time() * $session_key_valid_time
+			"user" => utf8_encode($_POST["user"]),
+			"key" => utf8_encode($sessionkey),
+			"expires" => time() + $session_key_valid_time
 		];
+		setjson($paths["sessionkeys"], json_encode($login_sessions, JSON_PRETTY_PRINT));
 		
-		setcookie("blow-worm-user", $_POST["user"], time() * $session_key_valid_time);
-		setcookie("blow-worm-session", $sessionkey, time() * $session_key_valid_time);
+		setcookie("blow-worm-user", $_POST["user"], time() + $session_key_valid_time);
+		setcookie("blow-worm-session", $sessionkey, time() + $session_key_valid_time);
 		http_response_code(200);
 		$response = new api_response(200, 0, "Login successful.");
 		exit(json_encode($response, JSON_PRETTY_PRINT)); //todo convert this to json
@@ -190,7 +191,7 @@ switch($_GET["action"])
 		break;
 }
 
-if(!$isloggedin)
+if(!$logged_in)
 {
 	senderror(new api_error(401, 13, "You need to log in to perform that action."));
 }
