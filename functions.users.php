@@ -20,7 +20,7 @@ function get_user_data_dir_name($username)
  */
 function user_exists($user_to_check)
 {
-	//changes commented out getjson
+	//changes commented out global getjson
 	//global getjson;
 	$userlist = getjson("data/userlist.json");
 	foreach($userlist as $user_in_list)

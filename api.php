@@ -145,6 +145,14 @@ if(!isset($_GET["action"]))
 
 switch($_GET["action"])
 {
+	/*
+	 *  _             _       
+	 * | | ___   __ _(_)_ __  
+	 * | |/ _ \ / _` | | '_ \ 
+	 * | | (_) | (_| | | | | |
+	 * |_|\___/ \__, |_|_| |_|
+	 *          |___/         
+	 */
 	case "login":
 		if(!isset($_POST["user"]) or !isset($_POST["pass"]))
 			senderror(new api_error(449, 5, "No username and/or password was present in the body of the request.\n\nThe appropriate POST parameters are `user` and `pass`."));
@@ -186,6 +194,14 @@ switch($_GET["action"])
 		exit();
 		break;
 	
+	/*
+	 *        _               
+	 * __   _(_) _____      __
+	 * \ \ / / |/ _ \ \ /\ / /
+	 *  \ V /| |  __/\ V  V / 
+	 *   \_/ |_|\___| \_/\_/  
+	 *                        
+	 */
 	case "view":
 		http_response_code(501);
 		exit("This action is not implemented yet.");
@@ -199,6 +215,14 @@ if(!$logged_in)
 
 switch($_GET["action"])
 {
+	/*
+	 *  _                         _   
+	 * | | ___   __ _  ___  _   _| |_ 
+	 * | |/ _ \ / _` |/ _ \| | | | __|
+	 * | | (_) | (_| | (_) | |_| | |_ 
+	 * |_|\___/ \__, |\___/ \__,_|\__|
+	 *          |___/                 
+	 */
 	case "logout":
 		if(!isset($_COOKIE[$cookie_names["session"]]))
 			senderror(new api_error(412, 8, "Failed to find session key cookie (you must already be logged out)."));
@@ -225,6 +249,14 @@ switch($_GET["action"])
 		senderror(new api_error(422, 11, "Failed to log out - Either your session key or username were invalid."));
 		break;
 	
+	/* 
+	 *                      _       
+	 *   ___ _ __ ___  __ _| |_ ___ 
+	 *  / __| '__/ _ \/ _` | __/ _ \
+	 * | (__| | |  __/ (_| | ||  __/
+	 *  \___|_|  \___|\__,_|\__\___|
+	 *                              
+	 */
 	case "create":
 		//url[, name, faviconurl, tags]
 		if(!isset($_GET["url"]))
@@ -273,6 +305,14 @@ switch($_GET["action"])
 		exit();
 		break;
 	
+	/*
+	 *      _      _      _       
+	 *   __| | ___| | ___| |_ ___ 
+	 *  / _` |/ _ \ |/ _ \ __/ _ \
+	 * | (_| |  __/ |  __/ ||  __/
+	 *  \__,_|\___|_|\___|\__\___|
+	 *                            
+	 */
 	case "delete":
 		if(isset($_GET["id"]))
 			$id_to_delete = $_GET["id"];
@@ -283,6 +323,14 @@ switch($_GET["action"])
 		exit("This action is not implemented yet.");
 		break;
 	
+	/* 
+	 *                  _       _       
+	 *  _   _ _ __   __| | __ _| |_ ___ 
+	 * | | | | '_ \ / _` |/ _` | __/ _ \
+	 * | |_| | |_) | (_| | (_| | ||  __/
+	 *  \__,_| .__/ \__,_|\__,_|\__\___|
+	 *       |_|                        
+	 */
 	case "update":
 		//id[, name, url, faviconurl, tags]
 		if(isset($_GET["id"]))
@@ -295,6 +343,14 @@ switch($_GET["action"])
 		exit("This action is not implemented yet.");
 		break;
 	
+	/*
+	 *                          _     
+	 *  ___  ___  __ _ _ __ ___| |__  
+	 * / __|/ _ \/ _` | '__/ __| '_ \ 
+	 * \__ \  __/ (_| | | | (__| | | |
+	 * |___/\___|\__,_|_|  \___|_| |_|
+	 *                                
+	 */
 	case "search":
 		if(!isset($_GET["query"]))
 		{
@@ -363,6 +419,14 @@ switch($_GET["action"])
 		exit();
 		break;
 	
+	/*
+	 *      _        _       
+	 *  ___| |_ __ _| |_ ___ 
+	 * / __| __/ _` | __/ __|
+	 * \__ \ || (_| | |_\__ \
+	 * |___/\__\__,_|\__|___/
+	 *                       
+	 */
 	case "stats":
 		$response = new api_response(200, 0, "stats");
 		$bookmarks = getjson(get_user_data_dir_name($user) . "bookmarks.json");
@@ -373,6 +437,14 @@ switch($_GET["action"])
 		exit();
 		break;
 	
+	/*
+	 *      _                    
+	 *  ___| |__   __ _ _ __ ___ 
+	 * / __| '_ \ / _` | '__/ _ \
+	 * \__ \ | | | (_| | | |  __/
+	 * |___/_| |_|\__,_|_|  \___|
+	 *                           
+	 */
 	case "share":
 		if(isset($_GET["tags"]))
 			$tags = explode(",", str_replace(", ", ",", $_GET["tags"]));
@@ -385,6 +457,14 @@ switch($_GET["action"])
 		exit("This action is not implemented yet.");
 		break;
 	
+	/*
+	 *                  _                    
+	 *  _   _ _ __  ___| |__   __ _ _ __ ___ 
+	 * | | | | '_ \/ __| '_ \ / _` | '__/ _ \
+	 * | |_| | | | \__ \ | | | (_| | | |  __/
+	 *  \__,_|_| |_|___/_| |_|\__,_|_|  \___|
+	 *                                       
+	 */
 	case "unshare":
 		if(isset($_GET["tags"]))
 			$tags = explode(",", str_replace(", ", ",", $_GET["tags"]));
@@ -397,6 +477,14 @@ switch($_GET["action"])
 		exit("This action is not implemented yet.");
 		break;
 	
+	/*
+	 *                                          _ 
+	 *  _   _ ___  ___ _ __ _ __ ___   ___   __| |
+	 * | | | / __|/ _ \ '__| '_ ` _ \ / _ \ / _` |
+	 * | |_| \__ \  __/ |  | | | | | | (_) | (_| |
+	 *  \__,_|___/\___|_|  |_| |_| |_|\___/ \__,_|
+	 *                                            
+	 */
 	case "usermod":
 		//key, value
 		if(isset($_GET["key"]))
