@@ -46,12 +46,22 @@ input[type=text], input[type=number], input[type=password], input[type-search], 
     border-radius: 5px;
 }
 
+footer
+{
+	margin-top: 5rem;
+}
+
+#search-box
+{
+	width: 100%;
+}
+
 /* Utility / layout aids */
 .float.left     { float: left;  }
 .float.right    { float: right; }
 
 .flex   { display: flex; }
-.flex.across	{ flex-direction: row;	}
+.flex.across	{ flex-direction: row;		}
 .flex.down		{ flex-direction: column;	}
 .flex-1 { flex: 1;  }
 .flex-2 { flex: 2;  }
