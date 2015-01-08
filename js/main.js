@@ -85,14 +85,16 @@ blow_worm = {
 				if(blow_worm.env.loggedin)
 				{
 					console.info("[setup] Logged in with session key ", blow_worm.env.sessionkey);
-					console.info("[setup] Beginning...");
+					console.info("[setup] Starting setup...");
+					
+					document.title = "Blow Worm";
 					
 					// display the information that we have now
 					document.getElementById("display-login-status").innerHTML = "You are loggged in as " + blow_worm.env.username + ".";
 					
 					// update the list of bookmarks
 					console.info("[setup] fetching list of bookmarks...");
-					blow_worm.actions.updatebookmarks()
+					blow_worm.actions.bookmarks.update()
 						.then(function() {
 							console.info("[setup] done.");
 							resolve();
@@ -109,35 +111,6 @@ blow_worm = {
 						overlayClose: false,
 					}).show().onHide(blow_worm.actions.login);
 				}
-			});
-		},
-		
-		////////////////////////////////////////////////////////////////////////////////
-		///////////////////////////// update bookmark list /////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////
-		// function to update the list of bookamrks shown to the user
-		updatebookmarks: function() {
-			return new Promise(function(resolve, reject) {
-				var url = "api.php?action=search",
-					query = document.getElementById("search-box").value;
-				
-				if(query.trim().length > 0)
-				{
-					url += "&query=" + encodeURIComponent(query.trim());
-				}
-				
-				get(url).then(function(response) {
-					var resp = JSON.parse(response);
-					
-					// todo display the list of the user's bookmarks
-					
-					
-					resolve();
-				}, function(response) {
-					console.error("Error fetching bookmark list during setup:", response);
-					nanoModal("Something went wrong when loading your bookmarks!<br />\nCheck the console for more information.", { autoRemove: true, buttons: [] }).show();
-					reject(response);
-				});
 			});
 		}
 	},
