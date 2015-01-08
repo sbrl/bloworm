@@ -328,7 +328,8 @@ switch($_GET["action"])
 			"name" => utf8_encode($name),
 			"url" => utf8_encode($url),
 			"faviconurl" => utf8_encode($faviconurl),
-			"tags" => $tags
+			"tags" => $tags,
+			"lastmodified" => time()
 		];
 		
 		setjson(get_user_data_dir_name($user) . "bookmarks.json", $bookmarks);
