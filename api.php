@@ -107,12 +107,25 @@ if(!file_exists("data/"))
 ///////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////// Login Checker //////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
+// function to clear old session keys
+function clear_old_sessions()
+{
+	global $paths;
+	
+	$sessions = getjson($paths["sessionkeys"]);
+	array_filter($sessions, function($session) {
+		if($session->expires < time())
+			unset($session);
+	});
+	array_values($sessions);
+	setjson($paths["sessionkeys"], $sessions);
+}
+
 $logged_in = false;
 if(isset($_COOKIE[$cookie_names["session"]]) and isset($_COOKIE[$cookie_names["user"]]))
 {
 	//the user might be loggged in
 	$sessions = getjson($paths["sessionkeys"]);
-	$i = 0;
 	foreach($sessions as $session)
 	{
 		if($session->key == $_COOKIE[$cookie_names["session"]] and
@@ -121,9 +134,6 @@ if(isset($_COOKIE[$cookie_names["session"]]) and isset($_COOKIE[$cookie_names["u
 			if($session->expires <= time())
 			{
 				//the session key has expired, delete it from the list
-				unset($sessions[$i]);
-				$sessions = array_values($sessions); //reset the array keys
-				setjson($paths["sessionkeys"], $sessions); //save the session keys to disk
 				senderror(new api_error(419, 12, "Your session has expired. Please try logging in again."));
 			}
 			/* by this point we have verified:
@@ -135,8 +145,8 @@ if(isset($_COOKIE[$cookie_names["session"]]) and isset($_COOKIE[$cookie_names["u
 			$logged_in = true;
 			break; //no need to loop over the rest of the session keys
 		}
-		$i++;
 	}
+	clear_old_sessions();
 }
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -154,8 +164,11 @@ switch($_GET["action"])
 	 *          |___/         
 	 */
 	case "login":
+		if($logged_in)
+			senderror(new api_error(400, 20, "You are already logged in. Log out first and then try again."));
+		
 		if(!isset($_POST["user"]) or !isset($_POST["pass"]))
-			senderror(new api_error(449, 5, "No username and/or password was present in the body of the request.\n\nThe appropriate POST parameters are `user` and `pass`."));
+			senderror(new api_error(449, 5, "No username and/or password was/were present in the body of the request.\n\nThe appropriate POST parameters are `user` and `pass`."));
 		
 		if(!user_exists($_POST["user"]))
 			senderror(new api_error(401, 6, "The username and/or password given was/were incorrect."));
@@ -181,10 +194,10 @@ switch($_GET["action"])
 			"key" => utf8_encode($sessionkey),
 			"expires" => time() + $session_key_valid_time
 		];
-		setjson($paths["sessionkeys"], json_encode($login_sessions, JSON_PRETTY_PRINT));
+		setjson($paths["sessionkeys"], $login_sessions);
 		
-		setcookie("blow-worm-user", $_POST["user"], time() + $session_key_valid_time);
-		setcookie("blow-worm-session", $sessionkey, time() + $session_key_valid_time);
+		setcookie($cookie_names["user"], $_POST["user"], time() + $session_key_valid_time);
+		setcookie($cookie_names["session"], $sessionkey, time() + $session_key_valid_time);
 		
 		http_response_code(200);
 		$response = new api_response(200, 0, "Login successful.");
@@ -259,14 +272,14 @@ switch($_GET["action"])
 		$sessions = getjson($paths["sessionkeys"]);
 		for($i = 0; $i < count($sessions); $i++)
 		{
-			if($sessions[$i]["key"] == $_COOKIE[$cookie_names["session"]] and
-			  $sessions[$i]["user"] == $_COOKIE[$cookie_names["user"]])
+			if($sessions[$i]->key == $_COOKIE[$cookie_names["session"]] and
+			   $sessions[$i]->user == $_COOKIE[$cookie_names["user"]])
 			{
 				unset($sessions[$i]); //remove the session key
 				$sessions = array_values($sessions); //reset all the values
 				setjson($paths["sessionkeys"], $sessions); //save the sessions back to disk
 				
-				$response = new api_response(200, 0, "login/success");
+				$response = new api_response(200, 0, "logout/success");
 				sendjson($response);
 				exit();
 			}
