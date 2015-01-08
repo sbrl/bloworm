@@ -74,7 +74,7 @@ function getjson($filename) { return json_decode(file_get_contents($filename)); 
  */
 function setjson($filename, $thing)
 {
-	if(!file_put_contents($filename, $thing))
+	if(!file_put_contents($filename, json_encode($thing)))
 		senderror(new api_error(507, 10, "Failed to save json to file $filename."));
 }
 
