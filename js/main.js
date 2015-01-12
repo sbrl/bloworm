@@ -27,7 +27,7 @@ blow_worm = {
 		///////////////////////////////////////////////////////////////////////////////
 		login: function(username, password) {
 			return new Promise(function(resolve, reject) {
-				//show a progress box
+				// show a progress box
 				var login_progress_modal = nanoModal(document.getElementById("modal-login-progress"), {
 						overlayClose: false,
 						buttons: []
@@ -36,7 +36,7 @@ blow_worm = {
 				
 				login_display.innerHTML += "Acquiring session token...<br />\n";
 				
-				//send the login request
+				// send the login request
 				var ajax = new XMLHttpRequest(),
 					data = {
 						user: username,
@@ -93,12 +93,8 @@ blow_worm = {
 					document.getElementById("display-login-status").innerHTML = "You are loggged in as " + blow_worm.env.username + ".";
 					
 					// update the list of bookmarks
-					console.info("[setup] fetching list of bookmarks...");
-					blow_worm.actions.bookmarks.update()
-						.then(function() {
-							console.info("[setup] done.");
-							resolve();
-						});
+					
+					blow_worm.actions.bookmarks.update();
 					
 					// todo fetch some additional information from the server
 					
