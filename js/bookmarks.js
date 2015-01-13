@@ -26,7 +26,7 @@ blow_worm.actions.bookmarks = {
 				
 				// update the count of the total number of bookmarks that the user has, but only if the query was empty since we want to count *all* of them
 				if(query.trim().length === 0)
-					document.getElementById("display-boomark-count").innerText = resp.bookmarks.length;
+					document.getElementById("display-bookmark-count").innerText = resp.bookmarks.length;
 				
 				resolve();
 			}, function(response) {
