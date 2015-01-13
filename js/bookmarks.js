@@ -55,9 +55,10 @@ blow_worm.actions.bookmarks = {
 		"	</div>" + 
 		"</div>";
 		
-		// insert the name / url
+		// insert the name / url / favicon url
 		html.querySelector(".bookmark-name").innerText = bookmark.name;
 		html.querySelector(".bookmark-url").innerText = bookmark.url;
+		html.querySelector(".bookmark-favicon").dataset.faviconurl = bookmark.faviconurl;
 		
 		// todo format and add the date
 		
