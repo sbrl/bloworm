@@ -95,16 +95,16 @@ if(!file_exists("data/"))
 		{
 			case "folder":
 				if(!mkdir($to_create["path"], 0700, true))
-					senderror(new api_error(507, 3, "Failed to create directory: " . $to_create["path"]));
+					senderror(new api_error(507, 301, "Failed to create directory: " . $to_create["path"]));
 				break;
 			
 			case "file":
 				if(!file_put_contents($to_create["path"], $to_create["content"]))
-					senderror(new api_error(507, 3, "Failed to create file: " . $to_create["path"]));
+					senderror(new api_error(507, 302, "Failed to create file: " . $to_create["path"]));
 				break;
 			
 			default:
-				senderror(new api_error(500, 4, "Unknown setup entry type: " . $to_create["type"]));
+				senderror(new api_error(500, 303, "Unknown setup entry type: " . $to_create["type"]));
 		}
 	}
 }
