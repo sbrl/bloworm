@@ -11,7 +11,7 @@
 if(isset($_GET["tags"]))
 	$tags = explode(",", str_replace(", ", ",", $_GET["tags"]));
 else
-	senderror(new api_error(449, 17, "You didn't specify any `tags` to share.\n\nThe appropriate GET parameter is `tags`."));
+	senderror(new api_error(449, 506, "You didn't specify any `tags` to share.\n\nThe appropriate GET parameter is `tags`."));
 
 
 http_response_code(501);

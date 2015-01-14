@@ -12,7 +12,7 @@ if($logged_in)
 	senderror(new api_error(400, 129, "You are already logged in. Log out first and then try again."));
 
 if(!isset($_POST["user"]) or !isset($_POST["pass"]))
-	senderror(new api_error(449, 5, "No username and/or password was/were present in the body of the request.\n\nThe appropriate POST parameters are `user` and `pass`."));
+	senderror(new api_error(449, 421, "No username and/or password was/were present in the body of the request.\n\nThe appropriate POST parameters are `user` and `pass`."));
 
 if(!user_exists($_POST["user"]))
 	senderror(new api_error(401, 128, "The username and/or password given was/were incorrect."));

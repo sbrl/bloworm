@@ -10,7 +10,7 @@
 
 //url[, name, faviconurl, tags]
 if(!isset($_GET["url"]))
-	senderror(new api_error(400, 15, "You did not specify a url to add."));
+	senderror(new api_error(400, 501, "You did not specify a url to add."));
 
 $url = $_GET["url"];
 

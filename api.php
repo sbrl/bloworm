@@ -69,7 +69,7 @@ At some point some API help will be printed here instead.\n\n");
 
 if(preg_match("/[^a-z]/i", trim($_GET["action"])))
 {
-	senderror(new api_error(400, 21, "Potentially dangerous characters were detected in the action you specified."));
+	senderror(new api_error(400, 402, "Potentially dangerous characters were detected in the action you specified."));
 }
 
 ///////////////////////////////////////////////////////
@@ -193,6 +193,6 @@ if(file_exists("actions/reqadm/" . $_GET["action"] . ".php"))
 	exit();
 }
 
-senderror(new api_error(404, 14, "That `action` was not recognised."));
+senderror(new api_error(404, 401, "That `action` was not recognised."));
 
 ?>
