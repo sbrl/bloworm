@@ -62,7 +62,7 @@ if(!isset($_GET["action"]))
 	http_response_code(300);
 	header("content-type: text/plain");
 	echo("Welcome to the blow worm api at " . gethostname() . ".
-
+	
 At some point some API help will be printed here instead.\n\n");
 	exit();
 }
@@ -118,13 +118,13 @@ function clear_old_sessions()
 {
 	global $paths;
 	
-	$sessions = getjson($paths["sessionkeys"]);
-	array_filter($sessions, function($session) {
+	$sessions = getjson($paths["sessionkeys"]); // read in the current sessions
+	array_filter($sessions, function($session) { // loop over all the sessions and remove expired ones
 		if($session->expires < time())
 			unset($session);
 	});
-	array_values($sessions);
-	setjson($paths["sessionkeys"], $sessions);
+	array_values($sessions); // reset the array keys ready for saving
+	setjson($paths["sessionkeys"], $sessions); // save the sessions back to disk
 }
 
 $logged_in = false;
@@ -165,12 +165,31 @@ if(file_exists("actions/nreql/" . $_GET["action"] . ".php"))
 
 if(file_exists("actions/reql/" . $_GET["action"] . ".php"))
 {
+	// make sure that the user is logged in
 	if(!$logged_in)
 	{
 		senderror(new api_error(401, 13, "You need to log in to perform that action."));
 	}
 	
 	require_once("actions/reql/" . $_GET["action"] . ".php");
+	exit();
+}
+
+if(file_exists("actions/reqadm/" . $_GET["action"] . ".php"))
+{
+	// make sure that the user is logged in
+	if(!$logged_in)
+	{
+		senderror(new api_error(401, 13.5, "You need to be logged in to perform that administrator action."));
+	}
+	
+	// make sure that the user is an administrator
+	if(trim(file_get_contents("data/users/$user/isadmin")) !== "true")
+	{
+		senderror(new api_error(401, 22, "You must be an administrator to perform that action. Please contact an administrator of this Blow Worm installation."));
+	}
+	
+	require_once("actions/reqadm/" . $_GET["action"] . ".php");
 	exit();
 }
 
