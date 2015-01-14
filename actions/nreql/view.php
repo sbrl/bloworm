@@ -8,7 +8,6 @@
  *                        
  */
 
-case "view":
 http_response_code(501);
 exit("This action is not implemented yet.");
 
