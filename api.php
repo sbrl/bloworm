@@ -140,7 +140,7 @@ if(isset($_COOKIE[$cookie_names["session"]]) and isset($_COOKIE[$cookie_names["u
 			if($session->expires <= time())
 			{
 				//the session key has expired, delete it from the list
-				senderror(new api_error(419, 12, "Your session has expired. Please try logging in again."));
+				senderror(new api_error(419, 123, "Your session has expired. Please try logging in again."));
 			}
 			/* by this point we have verified:
 				* The session key is ok
@@ -168,7 +168,7 @@ if(file_exists("actions/reql/" . $_GET["action"] . ".php"))
 	// make sure that the user is logged in
 	if(!$logged_in)
 	{
-		senderror(new api_error(401, 13, "You need to log in to perform that action."));
+		senderror(new api_error(401, 124, "You need to log in to perform that action."));
 	}
 	
 	require_once("actions/reql/" . $_GET["action"] . ".php");
@@ -180,13 +180,13 @@ if(file_exists("actions/reqadm/" . $_GET["action"] . ".php"))
 	// make sure that the user is logged in
 	if(!$logged_in)
 	{
-		senderror(new api_error(401, 13.5, "You need to be logged in to perform that administrator action."));
+		senderror(new api_error(401, 125, "You need to be logged in to perform that administrator action."));
 	}
 	
 	// make sure that the user is an administrator
 	if(trim(file_get_contents("data/users/$user/isadmin")) !== "true")
 	{
-		senderror(new api_error(401, 22, "You must be an administrator to perform that action. Please contact an administrator of this Blow Worm installation."));
+		senderror(new api_error(401, 126, "You must be an administrator to perform that action. Please contact an administrator of this Blow Worm installation."));
 	}
 	
 	require_once("actions/reqadm/" . $_GET["action"] . ".php");

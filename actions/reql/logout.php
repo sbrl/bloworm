@@ -9,10 +9,10 @@
  */
 
 if(!isset($_COOKIE[$cookie_names["session"]]))
-	senderror(new api_error(412, 8, "Failed to find session key cookie (you must already be logged out)."));
+	senderror(new api_error(412, 121, "Failed to find session key cookie (you must already be logged out)."));
 
 if(!isset($_COOKIE[$cookie_names["user"]]))
-	senderror(new api_error(412, 9, "Failed to find username in cookie (you *may* already be logged out)."));
+	senderror(new api_error(412, 122, "Failed to find username in cookie (you *may* already be logged out)."));
 
 $sessions = getjson($paths["sessionkeys"]);
 for($i = 0; $i < count($sessions); $i++)
@@ -30,6 +30,6 @@ for($i = 0; $i < count($sessions); $i++)
 	}
 }
 
-senderror(new api_error(422, 11, "Failed to log out - Either your session key or username were invalid."));
+senderror(new api_error(422, 127, "Failed to log out - Either your session key or username were invalid."));
 
 ?>

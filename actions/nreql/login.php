@@ -9,13 +9,13 @@
  */
 
 if($logged_in)
-	senderror(new api_error(400, 20, "You are already logged in. Log out first and then try again."));
+	senderror(new api_error(400, 129, "You are already logged in. Log out first and then try again."));
 
 if(!isset($_POST["user"]) or !isset($_POST["pass"]))
 	senderror(new api_error(449, 5, "No username and/or password was/were present in the body of the request.\n\nThe appropriate POST parameters are `user` and `pass`."));
 
 if(!user_exists($_POST["user"]))
-	senderror(new api_error(401, 6, "The username and/or password given was/were incorrect."));
+	senderror(new api_error(401, 128, "The username and/or password given was/were incorrect."));
 
 try {
 	$user_pass_hash = file_get_contents(get_user_data_dir_name($_POST["user"]) . "password");
@@ -25,7 +25,7 @@ try {
 }
 
 if(!password_verify($_POST["pass"], $user_pass_hash))
-	senderror(new api_error(401, 6, "The username and/or password given was/were incorrect."));
+	senderror(new api_error(401, 128, "The username and/or password given was/were incorrect."));
 
 //by this point we have verified that the user's credientials are correct
 

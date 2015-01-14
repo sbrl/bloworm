@@ -12,11 +12,11 @@
 if(isset($_GET["key"]))
 	$key = $_GET["key"];
 else
-	senderror(new api_error(449, 1, "No key was specified.\n\nThe appropriate GET parameter is `key`."));
+	senderror(new api_error(449, 501, "No key was specified.\n\nThe appropriate GET parameter is `key`."));
 if(isset($_GET["value"]))
 	$value = $_GET["value"];
 else
-	senderror(new api_error(449, 2, "No value was specified.\n\nThe approapriate GET parameter is `value`."));
+	senderror(new api_error(449, 502, "No value was specified.\n\nThe approapriate GET parameter is `value`."));
 
 http_response_code(501);
 exit("This action is not implemented yet.");
