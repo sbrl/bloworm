@@ -42,6 +42,7 @@ function sendjson($thing)
 function getid()
 {
 	//todo use `data/next.id`
+	//todo include username in id
 	return utf8_encode(hash("sha256", uniqid("", true)));
 }
 
@@ -75,7 +76,7 @@ function getjson($filename) { return json_decode(file_get_contents($filename)); 
 function setjson($filename, $thing)
 {
 	if(!file_put_contents($filename, json_encode($thing)))
-		senderror(new api_error(507, 10, "Failed to save json to file $filename."));
+		senderror(new api_error(507, 701, "Failed to save json to file $filename."));
 }
 
 /*
