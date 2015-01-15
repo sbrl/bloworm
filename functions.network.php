@@ -69,10 +69,14 @@ function auto_find_name($url)
  */
 function auto_find_favicon_url($url)
 {
+	// todo fix invalid urls (we might want to write a special function for this)
 	// todo protect against downloading large files
 	// todo send HEAD request instead of GET request
 	$headers = get_headers($url, true);
 	$headers = array_change_key_case($headers);
+	
+	$urlparts = [];
+	preg_match("/^([a-z]+)\:(?:\/\/)?([^\/?#]+)(.*)/i", $url, $urlparts);
 	
 	$content_type = $headers["content-type"];
 	if(!is_string($content_type)) // account for arrays of content types
@@ -86,17 +90,31 @@ function auto_find_favicon_url($url)
 		if(preg_match("/<link rel=('|\")?shortcut icon('|\")?[^\/]*href=('|\")?([^\"]*)('|\")?( \/)?>/i", $html, $matches) === 1)
 		{
 			$faviconurl = $matches[4];
+			// make sure that the favicon url is absolute
+			if(preg_match("/^[a-z]+\:(?:\/\/)?/i", $faviconurl) === 0)
+			{
+				// the url is not absolute, make it absolute
+				$basepath = dirname($urlparts[3]);
+				
+				// the path should not include the basepath if the favicon url begins with a slash
+				if(substr($faviconurl, 0, 1) === "/")
+				{
+					$faviconurl = "$urlparts[1]://$urlparts[2]$faviconurl";
+				}
+				else
+				{
+					$faviconurl = "$urlparts[1]://$urlparts[2]$basepath/$faviconurl";
+				}
+			}
 		}
 	}
+	
 	if($faviconurl == "images/favicon-default.png")
 	{
 		// we have not found the url of the favicon yet, parse the url
 		// todo guard against invalid urls
-		// todo parse the url
-		$matches = [];
-		preg_match("/^([a-z]+)\:(?:\/\/)?([^\/?#]+)(?:[\/?#]|$)/i", $url, $matches);
 		
-		$faviconurl = $matches[0] . "favicon.ico";
+		$faviconurl = "$urlparts[1]://$urlparts[2]/favicon.ico";
 		$faviconurl = follow_redirects($faviconurl);
 		$favheaders = get_headers($faviconurl, true);
 		$favheaders = array_change_key_case($favheaders);
