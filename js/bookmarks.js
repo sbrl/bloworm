@@ -17,6 +17,8 @@ blow_worm.actions.bookmarks = {
 				var resp = JSON.parse(response),
 					display = document.getElementById("bookmarks");
 				
+				display.innerHTML = "";
+				
 				// render each bookmark
 				// todo display the relevance of each bookmark
 				resp.bookmarks.forEach(function(bookmark) {
