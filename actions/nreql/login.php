@@ -18,7 +18,7 @@ if(!user_exists($_POST["user"]))
 	senderror(new api_error(401, 128, "The username and/or password given was/were incorrect."));
 
 try {
-	$user_pass_hash = file_get_contents(get_user_data_dir_name($_POST["user"]) . "password");
+	$user_pass_hash = file_get_contents(user_dirname($_POST["user"]) . "password");
 } catch(Exception $e)
 {
 	senderror(500, 702, "Failed to read in password hash.");

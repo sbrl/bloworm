@@ -12,7 +12,7 @@ if(!isset($_GET["query"]))
 {
 	//return a list of all the bookmarks the user has
 	$response = new api_response(200, 0, "search/all-bookmarks");
-	$response->bookmarks = getjson(get_user_data_dir_name($user) . "bookmarks.json");
+	$response->bookmarks = getjson(user_dirname($user) . "bookmarks.json");
 	sendjson($response);
 	exit();
 }
@@ -37,7 +37,7 @@ foreach($terms as $term)
 }
 
 
-$all_bookmarks = getjson(get_user_data_dir_name($user) . "bookmarks.json");
+$all_bookmarks = getjson(user_dirname($user) . "bookmarks.json");
 
 // filter by tag(s)
 if(count($tags) > 0)

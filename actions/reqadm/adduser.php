@@ -14,7 +14,7 @@ if(!isset($_GET["newusername"]))
 if(preg_match("/[^a-z0-9\-_]/i", $_GET["newusername"]))
 	senderror(new api_response(400, 582, "User account creation failed: Potentially dangerous characters were found in the new username."));
 
-if(file_exists(get_user_data_dir_name($_GET["newusername"])))
+if(file_exists(user_dirname($_GET["newusername"])))
 	senderror(507, 151, "That user account already exists.");
 
 http_response_code(501);

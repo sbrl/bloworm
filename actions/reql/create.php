@@ -31,7 +31,7 @@ else
 
 $id = getid();
 
-$bookmarks = getjson(get_user_data_dir_name($user) . "bookmarks.json");
+$bookmarks = getjson(user_dirname($user) . "bookmarks.json");
 
 // add the bookmark to the user's list
 $newbookmark = [
@@ -44,10 +44,10 @@ $newbookmark = [
 ];
 array_unshift($bookmarks, $newbookmark);
 
-setjson(get_user_data_dir_name($user) . "bookmarks.json", $bookmarks);
+setjson(user_dirname($user) . "bookmarks.json", $bookmarks);
 
 // update the tags cache
-$alltags = getjson(get_user_data_dir_name($user) . "tags.json");
+$alltags = getjson(user_dirname($user) . "tags.json");
 foreach($tags as $tag)
 {
 	if(isset($alltags->$tag))
@@ -55,7 +55,7 @@ foreach($tags as $tag)
 	else
 		$alltags->$tag = 1;
 }
-setjson(get_user_data_dir_name($user) . "bookmarks.json", $bookmarks);
+setjson(user_dirname($user) . "bookmarks.json", $bookmarks);
 
 $response = new api_response(201, 0, "create/success");
 $response->newbookmark = $newbookmark;

@@ -6,7 +6,7 @@
  * 
  * @returns The path to the given user's data directory
  */
-function get_user_data_dir_name($username)
+function user_dirname($username)
 {
 	return "./data/users/$username/";
 }

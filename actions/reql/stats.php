@@ -9,9 +9,9 @@
  */
 
 $response = new api_response(200, 0, "stats");
-$bookmarks = getjson(get_user_data_dir_name($user) . "bookmarks.json");
+$bookmarks = getjson(user_dirname($user) . "bookmarks.json");
 $response->count = count($bookmarks);
-$response->datasize = filesize(get_user_data_dir_name($user) . "bookmarks.json");
+$response->datasize = filesize(user_dirname($user) . "bookmarks.json");
 
 sendjson($response);
 exit();
