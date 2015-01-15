@@ -25,8 +25,8 @@ button, summary
 
 th, td
 {
-    margin: 4px 6px;
-    padding: 4px 6px;
+    margin: 0.35rem 0.4rem;
+    padding: 0.35rem 0.4rem;
 }
 
 label
@@ -38,14 +38,14 @@ label
 /* todo add the rest of the textbox-like inputs here */
 input[type=text], input[type=number], input[type=password], input[type=search], input[type=url], textarea
 {
-    margin			: 3px 5px;
-    padding			: 5px 8px;
+    margin			: 0.3rem 0.4rem;
+    padding			: 0.3rem 0.4rem;
 	
 	width			: 14rem;
 	
     background		: white;
 	border			: 0;
-    border-radius	: 5px;
+    border-radius	: 0.35rem;
 }
 
 footer
@@ -80,9 +80,9 @@ footer
 .flex-5 { flex: 5;  }
 .flex-6 { flex: 6;  }
 
-.small-spacing  { margin: 2px 4px;  padding: 2px 4px;   }
-.med-spacing    { margin: 5px 8px;  padding: 5px 8px;   }
-.high-spacing   { margin: 8px 10px; padding: 8px 10px;  }
+.small-spacing  { margin: 0.2rem 0.3rem;  padding: 0.2rem 0.3rem;   }
+.med-spacing    { margin: 0.3rem 0.45rem;  padding: 0.3rem 0.45rem;   }
+.high-spacing   { margin: 0.5rem 0.8rem; padding: 0.5rem 0.8rem;  }
 
 .text-left      { text-align: left;     }
 .text-centre    { text-align: center;   }
@@ -102,11 +102,6 @@ footer
 
 .invisible		{ display: none;		}
 .invisilink     { text-decoration: none; color: inherit;            }
-.invisilist     { list-style-type: none; margin: 5px; padding: 5px; }
-
-.tiny-image     { max-width: 100px; max-height: 100px; }
-.small-image    { max-width: 250px; max-height: 250px; }
-.medium-image   { max-width: 450px; max-height: 450px; }
-.large-image    { max-width: 650px; max-height: 650px; }
+.invisilist     { list-style-type: none; margin: 0.3rem; padding: 0.3rem; }
 
 .img-text-middle{ vertical-align: middle; }
