@@ -82,6 +82,9 @@ blow_worm = {
 		// function to setup the interface after login
 		setup: function() {
 			return new Promise(function(resolve, reject) {
+				//add the handlers to the icons
+				document.getElementById("button-add-bookmark").addEventListener("click", blow_worm.modals.create);
+				
 				if(blow_worm.env.loggedin)
 				{
 					console.info("[setup] Logged in with session key ", blow_worm.env.sessionkey);
@@ -111,8 +114,77 @@ blow_worm = {
 		}
 	},
 	
-	
-	
+	modals: {
+		login: function() {
+			return new Promise(function(resolve, reject) {
+				var loginmodal = nanoModal(document.getElementById("modal-login"), {
+					overlayClose: false,
+					buttons: [{
+						text: "Login",
+						primary: true,
+						handler: function() {
+							loginmodal.hide(); // hide the dialog box
+
+							// grab the details the user entered
+							var userbox = document.getElementById("login-user"),
+								passbox = document.getElementById("login-pass"),
+								user = userbox.value,
+								pass = passbox.value;
+
+							// reset the input boxes
+							userbox.value = "";
+							passbox.value = "";
+
+							// make sure that that the user actually entered both the username and password
+							if(user.length === 0 || pass.length === 0)
+							{
+								nanoModal("The username and / or password box(es) were empty.", { autoRemove: true}).show().onHide(loginmodal.show);
+							}
+
+							// call the login handler
+							blow_worm.actions.login(user, pass)
+								.then(resolve); //setup the interface
+						}
+					}]
+				}).show();
+			});
+		},
+		create: function() {
+			return new Promise(function(resolve, reject) {
+				nanoModal(document.getElementById("modal-create"), { buttons: [{
+					text: "Create",
+					primary: true,
+					hander: function() {
+						var namebox = document.getElementById("create-name"),
+							urlbox = document.getElementById("create-url"),
+							tagsbox = document.getElementById("create-tags"),
+							
+							requrl = "api.php?action=create";
+						
+						requrl += "&url=" + encodeURIComponent(urlbox.value);
+						if(namebox.value.length > 0)
+							requrl += "&name=" + encodeURIComponent(namebox.value);
+						if(tagsbox.value.length > 0)
+							requrl += "&tags=" + encodeURIComponent(tagsbox.value);
+						
+						var ajax = new XMLHttpRequest();
+						ajax.onload = function() {
+							if(ajax.status == 201)
+							{
+								resolve(JSON.parse(ajax.response));
+							}
+							else
+							{
+								reject(JSON.parse(ajax.response));
+							}
+						};
+						ajax.open("GET", requrl, true);
+						ajax.send(null);
+					}
+				}] });
+			});
+		}
+	},
 	
 	events: {
 		load: function(event) {
@@ -135,36 +207,8 @@ blow_worm = {
 				else
 				{
 					// We are not logged in, give the user a modal so they can do so
-					var loginmodal = nanoModal(document.getElementById("modal-login"), {
-						overlayClose: false,
-						buttons: [{
-							text: "Login",
-							primary: true,
-							handler: function() {
-								loginmodal.hide(); // hide the dialog box
-								
-								// grab the details the user entered
-								var userbox = document.getElementById("login-user"),
-									passbox = document.getElementById("login-pass"),
-									user = userbox.value,
-									pass = passbox.value;
-								
-								// reset the input boxes
-								userbox.value = "";
-								passbox.value = "";
-								
-								// make sure that that the user actually entered both the username and password
-								if(user.length === 0 || pass.length === 0)
-								{
-									nanoModal("The username and / or password box(es) were empty.", { autoRemove: true}).show().onHide(loginmodal.show);
-								}
-								
-								// call the login handler
-								blow_worm.actions.login(user, pass)
-									.then(blow_worm.actions.setup); //setup the interface
-							}
-						}]
-					}).show();
+					blow_worm.modals.login()
+						.then(blow_worm.actions.setup);
 				}
 			}, function(response) {
 				console.error("Error when checking login status:", response);
