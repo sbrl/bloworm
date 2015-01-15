@@ -33,7 +33,7 @@ $id = getid();
 
 $bookmarks = getjson(get_user_data_dir_name($user) . "bookmarks.json");
 
-//add the bookmark to the user's list
+// add the bookmark to the user's list
 $bookmarks[] = [
 	"id" => $id,
 	"name" => utf8_encode($name),
@@ -44,6 +44,16 @@ $bookmarks[] = [
 ];
 
 setjson(get_user_data_dir_name($user) . "bookmarks.json", $bookmarks);
+
+// update the tags cache
+$alltags = getjson(get_user_data_dir_name($user) . "tags.json");
+foreach($tags as $tag)
+{
+	if(isset($alltags->$tag))
+		$alltags->$tag++;
+	else
+		$alltags->$tag = 1;
+}
 
 $response = new api_response(201, 0, "create/success");
 $response->id = $id;
