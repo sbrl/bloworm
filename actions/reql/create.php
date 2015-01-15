@@ -42,7 +42,7 @@ $newbookmark = [
 	"tags" => $tags,
 	"lastmodified" => time()
 ];
-$bookmarks[] = $newbookmark;
+array_unshift($bookmarks, $newbookmark);
 
 setjson(get_user_data_dir_name($user) . "bookmarks.json", $bookmarks);
 
@@ -55,7 +55,7 @@ foreach($tags as $tag)
 	else
 		$alltags->$tag = 1;
 }
-savejson(get_user_data_dir_name($user) . "bookmarks.json", $bookmarks);
+setjson(get_user_data_dir_name($user) . "bookmarks.json", $bookmarks);
 
 $response = new api_response(201, 0, "create/success");
 $response->newbookmark = $newbookmark;
