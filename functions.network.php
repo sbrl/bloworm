@@ -78,7 +78,7 @@ function auto_find_favicon_url($url)
 	if(!is_string($content_type)) // account for arrays of content types
 		$content_type = $content_type[0];
 
-	$faviconurl = "";
+	$faviconurl = "images/favicon-default.png";
 	if(strpos($content_type, "text/html") !== false)
 	{
 		$html = file_get_contents($url);
@@ -88,23 +88,23 @@ function auto_find_favicon_url($url)
 			$faviconurl = $matches[4];
 		}
 	}
-	if(strlen($faviconurl) === 0)
+	if($faviconurl == "images/favicon-default.png")
 	{
 		// we have not found the url of the favicon yet, parse the url
 		// todo guard against invalid urls
 		// todo parse the url
 		$matches = [];
 		preg_match("/^([a-z]+)\:(?:\/\/)?([^\/?#]+)(?:[\/?#]|$)/i", $url, $matches);
-
+		
 		$faviconurl = $matches[0] . "favicon.ico";
 		$faviconurl = follow_redirects($faviconurl);
 		$favheaders = get_headers($faviconurl, true);
 		$favheaders = array_change_key_case($favheaders);
-
-		if(preg_match("/2\d{3}/i", $favheaders[0]) === 1)
-			return "";
+		
+		if(preg_match("/2\d{3}/i", $favheaders[0]) === 0)
+			return $faviconurl;
 	}
-
+	
 	return $faviconurl;
 }
 ?>
