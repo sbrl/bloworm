@@ -89,8 +89,17 @@ blow_worm = {
 		setup: function() {
 			return new Promise(function(resolve, reject) {
 				console.info("[setup] Adding handlers to icons...");
-				//add the handlers to the icons
+				/// add the handlers to the icons
+				// logout
+				document.getElementById("button-logout").addEventListener("click", function(event) {
+					blow_worm.actions.logout()
+						.then(function() {
+							window.location.reload();
+						});
+				});
+				// add bookmark
 				document.getElementById("button-add-bookmark").addEventListener("click", blow_worm.modals.create);
+				// update the search box as the user types
 				document.getElementById("search-box").addEventListener("keyup", blow_worm.events.searchbox.keyup);
 				
 				if(blow_worm.env.loggedin)
@@ -119,6 +128,33 @@ blow_worm = {
 					}).show().onHide(blow_worm.actions.login);
 				}
 			});
+		},
+		
+		//////////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////// Logout ///////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////
+		logout: function() {
+			return new Promise(function(resolve, reject) {
+				var ajax = new XMLHttpRequest();
+				ajax.onload = function() {
+					if(ajax.status >= 200 && ajax.status < 300)
+					{
+						resolve(ajax.response);
+					}
+					else
+					{
+						nanoModal("Something went wrong while trying to log you out!<br />Please check the console for more information.", {
+							autoRemove: true,
+							overlayClose: false,
+							buttons: []
+						}).show();
+						console.error(ajax.response);
+						reject(ajax.response);
+					}
+				};
+				ajax.open("GET", "api.php?action=logout", true);
+				ajax.send(null);
+			})
 		}
 	},
 	
