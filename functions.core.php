@@ -96,7 +96,7 @@ function fuzzy_search_bookmarks($query, $haystack)
 		foreach($elem as $key => $value)
 		{
 			// get the similarity between the key and the query string
-			$new_score = levenshtein($query, $elem->$key, 1, 1, 0);
+			$new_score = levenshtein($query, @(string)$value, 1, 1, 0);
 			// this score is lower than the best, update the best
 			if($new_score < $best_so_far)
 				$best_so_far = $new_score;
@@ -107,15 +107,17 @@ function fuzzy_search_bookmarks($query, $haystack)
 			"elem" => $elem
 		];
 	}
-	
+//	var_dump($ranked);
 	usort($ranked, function($a, $b) {
-		return $a->rank < $b->rank;
+		return $a["rank"] < $b["rank"];
 	});
 	
 	$result = [];
-	foreach($ranked as $item)
+	foreach($ranked as &$item)
 	{
-		$result[] = $item->elem;
+		$item["elem"]->rank = $item["rank"];
+		$result[] = $item["elem"];
+		
 	}
 	return $result;
 }

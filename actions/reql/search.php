@@ -43,6 +43,7 @@ $all_bookmarks = getjson(get_user_data_dir_name($user) . "bookmarks.json");
 if(count($tags) > 0)
 {
 	$all_bookmarks = array_filter($all_bookmarks, function($bookmark) {
+		global $tags;
 		$has_tag = false;
 		foreach($tags as $tag)
 		{
@@ -61,11 +62,16 @@ if(count($tags) > 0)
 
 // don't fuzzy search if we only have tags and no keywords
 if(!$no_keywords)
-	$matching_bookmarks = fuzzy_search($query, $all_bookmarks);
+	$matching_bookmarks = fuzzy_search_bookmarks($query, $all_bookmarks);
+else
+	$matching_bookmarks = $all_bookmarks;
 
 // limit the number of bookmarks we respond with in asked to do so
+// limit of 0 = unlimited
 if($limit > 0)
 	$matching_bookmarks = array_slice($matching_bookmarks, 0, $limit);
+
+$matching_bookmarks = array_values($matching_bookmarks);
 
 $response = new api_response(200, 0, "search/query-levenshtein");
 $response->bookmarks = $matching_bookmarks;

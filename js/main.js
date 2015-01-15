@@ -20,6 +20,12 @@ blow_worm = {
 		
 		// whether we are logged in or not
 		loggedin: false,
+		
+		// The id of the setTimeOut used to schedule the updating of the search results.
+		// We do this so that we don't update the search box on every character
+		// that the user types, rather we update when the user stops typing.
+		next_update: -1
+		
 	},
 	actions: {
 		///////////////////////////////////////////////////////////////////////////////
@@ -85,6 +91,7 @@ blow_worm = {
 				console.info("[setup] Adding handlers to icons...");
 				//add the handlers to the icons
 				document.getElementById("button-add-bookmark").addEventListener("click", blow_worm.modals.create);
+				document.getElementById("search-box").addEventListener("keyup", blow_worm.events.searchbox.keyup);
 				
 				if(blow_worm.env.loggedin)
 				{
@@ -125,23 +132,23 @@ blow_worm = {
 						primary: true,
 						handler: function() {
 							loginmodal.hide(); // hide the dialog box
-
+							
 							// grab the details the user entered
 							var userbox = document.getElementById("login-user"),
 								passbox = document.getElementById("login-pass"),
 								user = userbox.value,
 								pass = passbox.value;
-
+							
 							// reset the input boxes
 							userbox.value = "";
 							passbox.value = "";
-
+							
 							// make sure that that the user actually entered both the username and password
 							if(user.length === 0 || pass.length === 0)
 							{
 								nanoModal("The username and / or password box(es) were empty.", { autoRemove: true}).show().onHide(loginmodal.show);
 							}
-
+							
 							// call the login handler
 							blow_worm.actions.login(user, pass)
 								.then(resolve); //setup the interface
@@ -241,8 +248,16 @@ blow_worm = {
 				}
 			}, function(response) {
 				console.error("Error when checking login status:", response);
-				nanoModal("Something went wrong when checking your current login status!<br />\nCHeck the console for more details.", { autoRemove: true, buttons: [] }).show();
+				nanoModal("Something went wrong when checking your current login status!<br />\nCheck the console for more details.", { autoRemove: true }).show();
 			});
+		},
+		searchbox: {
+			keyup: function(event) {
+				// clear the previous update that was scheduled
+				clearInterval(blow_worm.env.next_update);
+				// schedule a new one to reset the timeout
+				blow_worm.env.next_update = setTimeout(blow_worm.actions.bookmarks.update, 300);
+			}
 		}
 	}
 };
