@@ -33,6 +33,12 @@ This section contains a bunch of notes that I have made / will make while writin
 - data/
 	- sessionkeys.json - A json file full of active session keys
 	- userlist.json - A json file that lists all the user accounts
-	- &lt;username&gt;/
-		- password - a hashed version of the user's password
-		- bookmarks.json - A json file full of bookmarks
+	- users/ - Folder to hold a folder for each user
+		- &lt;username&gt;/
+			- password - a hashed version of the user's password
+			- bookmarks.json - A json file full of bookmarks
+			- tags.json - The tag cache
+			- isadmin - Contains true if the user is an admin, false otherwise
+
+## Credits
+ - Default globe icon - http://findicons.com/icon/454617/globe
