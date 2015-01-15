@@ -55,6 +55,7 @@ foreach($tags as $tag)
 	else
 		$alltags->$tag = 1;
 }
+savejson(get_user_data_dir_name($user) . "bookmarks.json", $bookmarks);
 
 $response = new api_response(201, 0, "create/success");
 $response->newbookmark = $newbookmark;
