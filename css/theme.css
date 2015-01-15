@@ -1,0 +1,67 @@
+body	{ width: calc(100% - 10px); margin: 0; padding: 0; }
+
+.bookmark
+{
+	position: relative;
+	margin: 0.5rem;
+	padding: 0.5rem;
+}
+
+.bookmark .top-row, .bookmark .bottom-row
+{
+	margin: 0.2rem;
+}
+
+.bookmark-favicon
+{
+	-webkit-appearance: none;
+	appearance: none;
+	
+	position: relative;
+	display: inline-block;
+	
+	width: 2rem;
+	height: 2rem;
+	
+	margin: 0.4rem 0.5rem 0 0;
+	
+	background-size: contain;
+	
+	cursor: pointer;
+	
+	transform: scale(1);
+	opacity: 0.75;
+	
+	transition: all 0.2s;
+}
+
+.bookmark-favicon:checked:after
+{
+	position: absolute; left: 0.3rem; top: -0.5rem;
+	
+	content: "✓";
+	font-size: 2rem;
+}
+
+.bookmark-favicon:active, .bookmark-favicon:checked:active
+{
+	transform: scale(1.5);
+}
+
+.bookmark-favicon:checked
+{
+	transform: scale(1.25);
+	opacity: 1;
+}
+
+.bookmark-tags
+{
+	display: inline-block;
+	text-align: right;
+}
+
+.tag
+{
+	margin: 0.25rem;
+	padding: 0.25rem;
+}

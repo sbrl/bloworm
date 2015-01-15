@@ -43,7 +43,7 @@ blow_worm.actions.bookmarks = {
 		html.classList.add("bookmark", "flex", "across");
 		html.dataset.id = bookmark.id;
 		html.innerHTML = "<input type='checkbox' class='bookmark-favicon' />" + 
-		"<div class='bookmark-details flex down'>" + 
+		"<div class='bookmark-details flex down flex-1'>" + 
 		"	<div class='top-row'>" + 
 		"			<span class='bookmark-name'></span>" + 
 		"			<span class='bookmark-date'></span>" + 

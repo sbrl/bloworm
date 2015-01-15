@@ -36,14 +36,16 @@ label
 }
 
 /* todo add the rest of the textbox-like inputs here */
-input[type=text], input[type=number], input[type=password], input[type-search], textarea
+input[type=text], input[type=number], input[type=password], input[type=search], input[type=url], textarea
 {
-    margin: 3px 5px;
-    padding: 5px 8px;
+    margin			: 3px 5px;
+    padding			: 5px 8px;
 	
-    background: white;
-	border: 0;
-    border-radius: 5px;
+	width			: 14rem;
+	
+    background		: white;
+	border			: 0;
+    border-radius	: 5px;
 }
 
 footer
@@ -54,6 +56,12 @@ footer
 #search-box
 {
 	width: 100%;
+}
+
+.icon
+{
+	width: 1.25rem;
+	height: 1.25rem;
 }
 
 /* Utility / layout aids */
@@ -87,6 +95,8 @@ footer
 .block          { display: block;           }
 .inline         { display: inline;          }
 .inline.block   { display: inline-block;    }
+
+.clickable		{ cursor: pointer;		}
 
 .invisible		{ display: none;		}
 .invisilink     { text-decoration: none; color: inherit;            }
