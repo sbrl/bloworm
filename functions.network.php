@@ -36,13 +36,19 @@ function follow_redirects($url, $maxdepth = 10, $depth = 0)
  */
 function auto_find_name($url)
 {
+	global $default_bookmark_name;
 	// todo prevent downloading of large files
 	// todo catch errors due to a bad url
 	// todo send HEAD request instead of GET request
 	$headers = get_headers($url, true);
 	$headers = array_change_key_case($headers);
 	$title = $default_bookmark_name;
-	if(strpos($headers["content-type"], "text/html") !== false)
+	
+	$content_type = $headers["content-type"];
+	if(!is_string($content_type)) // account for arrays of content types
+		$content_type = $content_type[0];
+	
+	if(strpos($content_type, "text/html") !== false)
 	{
 		//the url refers to some html
 		$html = file_get_contents($url);
@@ -67,9 +73,13 @@ function auto_find_favicon_url($url)
 	// todo send HEAD request instead of GET request
 	$headers = get_headers($url, true);
 	$headers = array_change_key_case($headers);
+	
+	$content_type = $headers["content-type"];
+	if(!is_string($content_type)) // account for arrays of content types
+		$content_type = $content_type[0];
 
 	$faviconurl = "";
-	if(strpos($headers["content-type"], "text/html") !== false)
+	if(strpos($content_type, "text/html") !== false)
 	{
 		$html = file_get_contents($url);
 		$matches = [];

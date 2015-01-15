@@ -25,7 +25,7 @@ else
 	$faviconurl = auto_find_favicon_url($url);
 
 if(isset($_GET["tags"]))
-	$tags = explode(", ", ",", $_GET["tags"]);
+	$tags = explode(",", str_replace(", ", ",", $_GET["tags"]));
 else
 	$tags = [];
 
@@ -34,7 +34,7 @@ $id = getid();
 $bookmarks = getjson(get_user_data_dir_name($user) . "bookmarks.json");
 
 // add the bookmark to the user's list
-$bookmarks[] = [
+$newbookmark = [
 	"id" => $id,
 	"name" => utf8_encode($name),
 	"url" => utf8_encode($url),
@@ -42,6 +42,7 @@ $bookmarks[] = [
 	"tags" => $tags,
 	"lastmodified" => time()
 ];
+$bookmarks[] = $newbookmark;
 
 setjson(get_user_data_dir_name($user) . "bookmarks.json", $bookmarks);
 
@@ -56,12 +57,11 @@ foreach($tags as $tag)
 }
 
 $response = new api_response(201, 0, "create/success");
-$response->id = $id;
-$response->name = $name;
+$response->newbookmark = $newbookmark;
 
 http_response_code($response->http_status);
-header("x-new-bookmark-id: $response->id");
-header("x-new-bookmark-name: $response->name");
+header("x-new-bookmark-id: " . $response->newbookmark["id"]);
+header("x-new-bookmark-name: " . $response->newbookmark["name"]);
 sendjson($response);
 exit();
 

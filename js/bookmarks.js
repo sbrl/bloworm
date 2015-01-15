@@ -20,7 +20,7 @@ blow_worm.actions.bookmarks = {
 				// render each bookmark
 				// todo display the relevance of each bookmark
 				resp.bookmarks.forEach(function(bookmark) {
-					display.appendChild(blow_worm.actions.bookmarks.render());
+					display.appendChild(blow_worm.actions.bookmarks.render(bookmark));
 				});
 				console.info("[setup/update] done");
 				
@@ -40,25 +40,25 @@ blow_worm.actions.bookmarks = {
 	// function to convert a bookmark object to the appropriate html
 	render: function(bookmark) {
 		var html = document.createElement("div");
+		html.classList.add("bookmark", "flex", "across");
 		html.dataset.id = bookmark.id;
-		html.innerHTML = "<div class='bookmark' data-id='...'>" +
-		"<input type='checkbox' class='bookmark-favicon' />" + 
+		html.innerHTML = "<input type='checkbox' class='bookmark-favicon' />" + 
 		"<div class='bookmark-details flex down'>" + 
 		"	<div class='top-row'>" + 
 		"			<span class='bookmark-name'></span>" + 
 		"			<span class='bookmark-date'></span>" + 
 		"		</div>" + 
-		"		<div class='bottom-row'>" + 
-		"			<span class='bookmark-url'></span>" + 
-		"			<span class='bookmark-tags'></span>" + 
+		"		<div class='bottom-row flex across'>" + 
+		"			<span class='bookmark-url flex-2'></span>" + 
+		"			<span class='bookmark-tags flex-1'></span>" + 
 		"		</div>" + 
-		"	</div>" + 
-		"</div>";
+		"	</div>";
 		
 		// insert the name / url / favicon url
 		html.querySelector(".bookmark-name").innerText = bookmark.name;
 		html.querySelector(".bookmark-url").innerText = bookmark.url;
 		html.querySelector(".bookmark-favicon").dataset.faviconurl = bookmark.faviconurl;
+		html.querySelector(".bookmark-favicon").style.backgroundImage = "url(" + bookmark.faviconurl + ")";
 		
 		// todo format and add the date
 		

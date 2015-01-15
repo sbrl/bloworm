@@ -82,6 +82,7 @@ blow_worm = {
 		// function to setup the interface after login
 		setup: function() {
 			return new Promise(function(resolve, reject) {
+				console.info("[setup] Adding handlers to icons...");
 				//add the handlers to the icons
 				document.getElementById("button-add-bookmark").addEventListener("click", blow_worm.modals.create);
 				
@@ -154,34 +155,62 @@ blow_worm = {
 				nanoModal(document.getElementById("modal-create"), { buttons: [{
 					text: "Create",
 					primary: true,
-					hander: function() {
-						var namebox = document.getElementById("create-name"),
+					handler: function(modal) {
+						console.log("[create] adding bookmark...");
+						// create a new modal dialog to tell the user that we are adding the bookmark
+						var progress_modal = nanoModal("Adding Bookmark...", { overlayClose: false, autoRemove: true, buttons: [] }).show(),
+							
+							// grab references to the input boxes
+							namebox = document.getElementById("create-name"),
 							urlbox = document.getElementById("create-url"),
 							tagsbox = document.getElementById("create-tags"),
 							
 							requrl = "api.php?action=create";
 						
+						// build the url
 						requrl += "&url=" + encodeURIComponent(urlbox.value);
 						if(namebox.value.length > 0)
 							requrl += "&name=" + encodeURIComponent(namebox.value);
 						if(tagsbox.value.length > 0)
 							requrl += "&tags=" + encodeURIComponent(tagsbox.value);
 						
+						// hide and reset the input modal
+						namebox.value  = "";
+						urlbox.value = "";
+						tagsbox.value = "";
+						modal.hide();
+						
 						var ajax = new XMLHttpRequest();
 						ajax.onload = function() {
+							console.log("[create] response recieved", ajax.response);
+							var respjson = JSON.parse(ajax.response);
+							
 							if(ajax.status == 201)
 							{
+								// render and insert the new bookmark into the display
+								var newhtml = blow_worm.actions.bookmarks.render(respjson.newbookmark),
+									bookmarks_display = document.getElementById("bookmarks");
+								
+								bookmarks_display.insertBefore(newhtml, bookmarks_display.firstChild);
+								
+								// hide the modal dialog telling the user that we are doing something
+								progress_modal.hide();
+								
+								// resolve the promise
 								resolve(JSON.parse(ajax.response));
 							}
 							else
 							{
+								nanoModal("Something went wrong!<br />Please check the console for more information.", { autoRemove: true }).show();
+								console.error(ajax.response, JSON.parse(ajax.response));
 								reject(JSON.parse(ajax.response));
 							}
 						};
 						ajax.open("GET", requrl, true);
 						ajax.send(null);
+						console.log("[create] request sent");
 					}
-				}] });
+				}] }).show();
 			});
 		}
 	},
