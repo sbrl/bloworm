@@ -200,6 +200,13 @@ blow_worm = {
 					primary: true,
 					handler: function(modal) {
 						console.log("[create] adding bookmark...");
+						
+						// disable the button that the user clicked on
+						// we don't want the mclicking it more than once :)
+						// https://github.com/kylepaulsen/NanoModal/issues/1
+						modal.event.target.setAttribute("disabled", "disabled");
+						
+						
 						// create a new modal dialog to tell the user that we are adding the bookmark
 						var progress_modal = nanoModal("Adding Bookmark...", { overlayClose: false, autoRemove: true, buttons: [] }).show(),
 							
@@ -221,7 +228,6 @@ blow_worm = {
 						namebox.value  = "";
 						urlbox.value = "";
 						tagsbox.value = "";
-						modal.hide();
 						
 						var ajax = new XMLHttpRequest();
 						ajax.onload = function() {
@@ -236,7 +242,9 @@ blow_worm = {
 								
 								bookmarks_display.insertBefore(newhtml, bookmarks_display.firstChild);
 								
-								// hide the modal dialog telling the user that we are doing something
+								// hide and reset the modal dialogs
+								modal.event.target.removeAttribute("disabled");
+								modal.hide();
 								progress_modal.hide();
 								
 								// resolve the promise
