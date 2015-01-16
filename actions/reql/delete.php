@@ -9,7 +9,7 @@
  */
 
 if(isset($_GET["ids"]))
-	$ids_to_delete = $_GET["id"];
+	$ids_to_delete = $_GET["ids"];
 else
 	senderror(new api_error(449, 504, "You didn't specify an `id` to delete.\n\nThe appropriate GET parameter is `id`."));
 
@@ -22,19 +22,19 @@ else
 	$ids_to_delete = [$ids_to_delete];
 }
 
+$total_ids = count($ids_to_delete);
+
 $bookmarks = getjson(user_dirname($user) . "bookmarks.json");
 $all_tags = getjson(user_dirname($user) . "tags.json");
-$deleted = 0;
-for($i = count($bookmarks); $i >= 0; $i++)
+for($i = count($bookmarks); $i >= 0; $i--)
 {
-	foreach($ids_to_delete as $id_to_delete)
+	for($j = count($ids_to_delete); $j >= 0; $j--)
 	{
-		if($bookmarks[$i]->id == $id_to_delete)
+		if($bookmarks[$i]->id == $ids_to_delete[$j])
 		{
 			$tags = $bookmarks[$i]->tags; //save the tags
 			unset($bookmarks);
-			
-			$deleted++;
+			unset($ids_to_delete[$j]);
 			
 			foreach($tags as $tag)
 			{
@@ -44,13 +44,14 @@ for($i = count($bookmarks); $i >= 0; $i++)
 			}
 		}
 	}
+	$ids_to_delete = array_values($ids_to_delete);
 }
 
 $bookmarks = array_values($bookmarks);
 $all_tags = array_values($all_tags);
 
-setjson(user_dirname($user) . "tags.json");
-setjson(user_dirname($user) . "bookmarks.json");
+setjson(user_dirname($user), "tags.json");
+setjson(user_dirname($user), "bookmarks.json");
 
 if($deleted >= count($ids_to_delete))
 {
@@ -60,7 +61,7 @@ if($deleted >= count($ids_to_delete))
 }
 else
 {
-	senderror(new api_error(400, 509, "One or more bookmark ids were not found.\nTotal bookmark ids: " . count($ids_to_delete) . "\nDeleted: $deleted\nFailed: " . (count($ids_to_delete) - $deleted));
+	senderror(new api_error(400, 509, "One or more bookmark ids were not found.\nTotal bookmark ids: $total_ids\nDeleted: " . ($total_ids - count($ids_to_delete)) . "\nFailed: " . count($ids_to_delete)));
 }
 
 ?>
