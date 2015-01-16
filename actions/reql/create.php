@@ -55,6 +55,7 @@ foreach($tags as $tag)
 	else
 		$alltags->$tag = 1;
 }
+setjson(user_dirname($user) . "tags.json", $alltags);
 setjson(user_dirname($user) . "bookmarks.json", $bookmarks);
 
 $response = new api_response(201, 0, "create/success");

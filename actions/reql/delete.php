@@ -26,32 +26,29 @@ $total_ids = count($ids_to_delete);
 
 $bookmarks = getjson(user_dirname($user) . "bookmarks.json");
 $all_tags = getjson(user_dirname($user) . "tags.json");
-for($i = count($bookmarks); $i >= 0; $i--)
+$deleted = 0;
+for($i = count($bookmarks) - 1; $i >= 0; $i--)
 {
-	for($j = count($ids_to_delete); $j >= 0; $j--)
+	if(in_array($bookmarks[$i]->id, $ids_to_delete))
 	{
-		if($bookmarks[$i]->id == $ids_to_delete[$j])
+		$tags = $bookmarks[$i]->tags; //save the tags
+		unset($bookmarks[$i]);
+		$deleted++;
+		
+		foreach($tags as $tag)
 		{
-			$tags = $bookmarks[$i]->tags; //save the tags
-			unset($bookmarks);
-			unset($ids_to_delete[$j]);
-			
-			foreach($tags as $tag)
-			{
-				$tags->$tag--;
-				if($tags->$tag == 0)
-					unset($tags->$tag);
-			}
+			$all_tags->$tag -= 1;
+			if($all_tags->$tag === 0)
+				unset($all_tags->$tag);
 		}
 	}
-	$ids_to_delete = array_values($ids_to_delete);
 }
 
 $bookmarks = array_values($bookmarks);
-$all_tags = array_values($all_tags);
 
-setjson(user_dirname($user), "tags.json");
-setjson(user_dirname($user), "bookmarks.json");
+setjson(user_dirname($user) . "tags.json", $all_tags);
+if(!is_array($bookmarks)) die("Bookmarks array corrupt");
+setjson(user_dirname($user) . "bookmarks.json", $bookmarks);
 
 if($deleted >= count($ids_to_delete))
 {
@@ -61,7 +58,7 @@ if($deleted >= count($ids_to_delete))
 }
 else
 {
-	senderror(new api_error(400, 509, "One or more bookmark ids were not found.\nTotal bookmark ids: $total_ids\nDeleted: " . ($total_ids - count($ids_to_delete)) . "\nFailed: " . count($ids_to_delete)));
+	senderror(new api_error(400, 509, "One or more bookmark ids were not found.\nTotal bookmark ids: $total_ids\nDeleted: " . $deleted . "\nFailed: " . $total_ids - ($deleted)));
 }
 
 ?>
