@@ -242,6 +242,10 @@ blow_worm = {
 								
 								bookmarks_display.insertBefore(newhtml, bookmarks_display.firstChild);
 								
+								// update the count of the number of bookmarks that the user has
+								var display_bookmark_count = document.getElementById("display-bookmark-count");
+								display_bookmark_count.innerHTML = parseInt(display_bookmark_count.innerHTML) + 1;
+								
 								// hide and reset the modal dialogs
 								modal.event.target.removeAttribute("disabled");
 								modal.hide();
