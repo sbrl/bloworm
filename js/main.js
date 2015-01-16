@@ -97,6 +97,8 @@ blow_worm = {
 							window.location.reload();
 						});
 				});
+				// remove bookmarks
+				document.getElementById("button-remove-bookmarks").addEventListener("click", blow_worm.modals.delete);
 				// add bookmark
 				document.getElementById("button-add-bookmark").addEventListener("click", blow_worm.modals.create);
 				// update the search box as the user types
@@ -266,6 +268,73 @@ blow_worm = {
 						console.log("[create] request sent");
 					}
 				}] }).show();
+			});
+		},
+		
+		delete: function() {
+			return new Promise(function(resolve, reject) {
+				nanoModal("<h2>Delete Bookmarks</h2><p>Are you sure you want to delete these bookmarks?</p><p>It can't be undone!</p>", {
+					autoRemove: true,
+					buttons: [
+						{
+							text: "Yes",
+							primary: true,
+							handler: function(modal) {
+								modal.hide();
+								
+								var bookmarks = document.querySelectorAll(".bookmark"),
+									to_delete = [];
+								
+								for(var i = 0; i < bookmarks.length; i++)
+								{
+									if(bookmarks[i].querySelector("input[type=checkbox]").checked)
+									{
+										to_delete.push(bookmarks[i].dataset.id);
+										bookmarks[i].parentElement.removeChild(bookmarks[i]);
+									}
+								}
+								
+								if(to_delete.length == 0)
+								{
+									resolve();
+								}
+								
+								modal.hide();
+								var progress_modal = nanoModal("Deleting...", { autoRemove: true, overlayClose: false, buttons: [] }).show(),
+									ajax = new XMLHttpRequest();
+								
+								ajax.onload = function() {
+									if(ajax.status >= 200 && ajax.status < 300)
+									{
+										// the server deleted the bookmarks successfully
+										progress_modal.hide();
+										
+										resolve();
+									}
+									else
+									{
+										console.error(ajax.response);
+										nanoModal("<p>Something went wrong!</p><p>Check the console for more information.</p><p>Press 'continue' to reload the page.</p>", {
+											autoRemove: true,
+											overlayClose: true,
+											buttons: [{
+												text: "Continue",
+												primary: true,
+												handler: window.location.reload
+											}]
+										}).show();
+									}
+								}
+								ajax.open("GET", "api.php?action=delete&ids=" + to_delete.join(","), true);
+								ajax.send(null);
+							}
+						},
+						{
+							text: "No",
+							handler: "hide"
+						}
+					]
+				}).show();
 			});
 		}
 	},
