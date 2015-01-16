@@ -110,7 +110,7 @@ blow_worm = {
 					document.title = "Blow Worm";
 					
 					// display the information that we have now
-					document.getElementById("display-login-status").innerHTML = "You are loggged in as " + blow_worm.env.username + ".";
+					document.getElementById("display-login-status").innerHTML = "You are logged in as " + blow_worm.env.username + ".";
 					
 					// update the list of bookmarks
 					

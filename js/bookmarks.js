@@ -51,13 +51,14 @@ blow_worm.actions.bookmarks = {
 		"			<span class='bookmark-date'></span>" + 
 		"		</div>" + 
 		"		<div class='bottom-row flex across'>" + 
-		"			<span class='bookmark-url flex-2'></span>" + 
+		"			<a target='_blank' class='bookmark-url flex-2'></a>" + 
 		"			<span class='bookmark-tags flex-1'></span>" + 
 		"		</div>" + 
 		"	</div>";
 		
 		// insert the name / url / favicon url
 		html.querySelector(".bookmark-name").innerText = bookmark.name;
+		html.querySelector(".bookmark-url").href = bookmark.url;
 		html.querySelector(".bookmark-url").innerText = bookmark.url;
 		html.querySelector(".bookmark-favicon").dataset.faviconurl = bookmark.faviconurl;
 		html.querySelector(".bookmark-favicon").style.backgroundImage = "url(" + bookmark.faviconurl + ")";
