@@ -109,7 +109,7 @@ blow_worm = {
 					console.info("[setup] Logged in with session key ", blow_worm.env.sessionkey);
 					console.info("[setup] Starting setup...");
 					
-					document.title = "Blow Worm";
+					document.title = "Bloworm";
 					
 					// display the information that we have now
 					document.getElementById("display-login-name").innerHTML = blow_worm.env.username;
