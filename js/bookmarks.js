@@ -72,6 +72,7 @@ blow_worm.actions.bookmarks = {
 			new_tag_html.classList.add("tag");
 			new_tag_html.appendChild(document.createTextNode(tag));
 			html_tags.appendChild(new_tag_html);
+			html_tags.appendChild(document.createTextNode(" "));
 		});
 		
 		return html;

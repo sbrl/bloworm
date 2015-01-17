@@ -3,6 +3,8 @@ body
 	width: calc(100% - 13px);
 	margin: 0; padding: 0;
 	
+	font-family: "Fresca", sans-serif;
+	
 	background-image: url(../images/swirl.png);
 	background-color: rgba(121, 206, 210, 0.45);
 }
@@ -31,6 +33,15 @@ footer
 	text-align: center;
 }
 .logo img	{ max-width: 90%;		}
+
+#display-login-name
+{
+	display		: inline-block;
+	margin-top	: 0.8rem;
+	
+	font-family	: "Londrina Solid", cursive;
+	font-size	: 1.3rem;
+}
 
 .bookmark
 {
@@ -105,7 +116,9 @@ footer
 .bookmark-tags
 {
 	display: inline-block;
+	
 	text-align: right;
+	line-height: 2.4rem;
 }
 
 .tag
@@ -116,6 +129,6 @@ footer
 	color: #83a8d7;
 	white-space: nowrap;
 	
-	background: rgba(204, 193, 225, 0.51);
+	background: rgba(255, 255, 255, 0.51);
 	border-radius: 0.4rem;
 }
