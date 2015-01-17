@@ -7,6 +7,11 @@ body
 	background-color: rgba(121, 206, 210, 0.45);
 }
 
+a			{ color: #95b7e2; transition: color 0.25s;	}
+a:visited	{ color: #95b7e2;	}
+a:hover		{ color: #81a5d3;	}
+a:active	{ color: #6793cb;	}
+
 hr
 {
 	width: 75%;
@@ -91,7 +96,7 @@ footer
 
 .bookmark-url
 {
-	opacity: 0.4;
+	opacity: 0.6;
 }
 
 .bookmark-tags

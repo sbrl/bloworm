@@ -72,7 +72,12 @@ footer
 	height: 1.25rem;
 	
 	margin: 0.5rem;
+	
+	transform: scale(1);
+	transition: transform 0.25s;
 }
+.icon:hover		{ transform: scale(1.15);	}
+.icon:active	{ transform: scale(0.9);	}
 
 /* Utility / layout aids */
 .float.left     { float: left;  }
