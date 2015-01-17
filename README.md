@@ -48,6 +48,7 @@ Thing				| Creator				| Link
 Logo				| Mythdael				| (n/a)
 Default globe icon	| The Working Group		| http://findicons.com/icon/454617/globe
 Background			| Transparent Textures	| http://www.transparenttextures.com/
+Icons				| Open Iconic			| https://useiconic.com/open/
 
 ## License
 Bloworm is currently licensed under the **Creative Commons Attribution Sharealike** license. If anyone can help me to choose a license from github's list of supported licenses that are specifically designed for code , that would be very helpful since I don't really understand any of them.....
