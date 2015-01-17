@@ -82,7 +82,7 @@ if(!file_exists("data/"))
 		[ "type" => "file", "path" => "data/next.id", "content" => 0 ],
 		[ "type" => "folder", "path" => "data/users" ],
 		[ "type" => "folder", "path" => "data/users/admin" ],
-		[ "type" => "file", "path" => "data/users/admin/password", "content" => hash_password("blow-worm") ],
+		[ "type" => "file", "path" => "data/users/admin/password", "content" => hash_password("bloworm") ],
 		[ "type" => "file", "path" => "data/users/admin/isadmin", "content" => "true" ],
 		[ "type" => "file", "path" => "data/users/admin/bookmarks.json", "content" => "[]" ],
 		[ "type" => "file", "path" => "data/users/admin/tags.json", "content" => "{}" ],
