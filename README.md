@@ -52,4 +52,6 @@ Background					| Transparent Textures	| http://www.transparenttextures.com/
 Icons						| Open Iconic			| https://useiconic.com/open/
 
 ## License
-Bloworm is currently licensed under the **Creative Commons Attribution Sharealike** license. If anyone can help me to choose a license from github's list of supported licenses that are specifically designed for code , that would be very helpful since I don't really understand any of them.....
+Bloworm is currently licensed under the **Creative Commons Attribution Sharealike (CC-BY-SA)** license. If anyone can help me to choose a license from github's list of supported licenses that are specifically designed for code, that would be very helpful since I don't really understand any of them.....
+
+Things in the credits table above are probably not under the CC-BY-SA license. You should check their respective websites for licensing information.
