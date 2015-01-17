@@ -1,4 +1,4 @@
-Blow Worm
+Bloworm
 =========
 This is going to be a bookmark storage system where you can tag your bookmarks, and share them with people. It will be self hosted - all you will need to do is clone this repository.
 
@@ -9,7 +9,7 @@ You are welcome to fork this repository and help out.
 ## Installation
 
 ### Requirements
-Blow Worm requires the following PHP modules:
+Bloworm requires the following PHP modules:
 * `openssl` - used to generate secure random numbers for login tokens
 
 ## Libraries
@@ -23,7 +23,7 @@ This section contains a list of interesting libraries I have found that may or m
 
 
 ## Notes
-This section contains a bunch of notes that I have made / will make while writing blow worm. Eventually, they will slowly disappear as the help pages are written properly or as I don't need them anymore.
+This section contains a bunch of notes that I have made / will make while writing bloworm. Eventually, they will slowly disappear as the help pages are written properly or as I don't need them anymore.
 
 ### File Structure
 - functions.core.php - The core fnctions for the server side API
