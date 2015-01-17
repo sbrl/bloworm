@@ -52,7 +52,7 @@ blow_worm.actions.bookmarks = {
 		"		</div>" + 
 		"		<div class='bottom-row flex across'>" + 
 		"			<a target='_blank' class='bookmark-url flex-2'></a>" + 
-		"			<span class='bookmark-tags flex-1'></span>" + 
+		"			<span class='bookmark-tags flex-2'></span>" + 
 		"		</div>" + 
 		"	</div>";
 		

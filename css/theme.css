@@ -15,7 +15,7 @@ a:active	{ color: #6793cb;	}
 hr
 {
 	width: 75%;
-	border: 1px solid #83a5d3;
+	border: 1px solid #aec4e2;
 	border-radius: 1rem;
 }
 
@@ -111,6 +111,8 @@ footer
 	padding: 0.3rem 0.5rem;
 	
 	color: #83a8d7;
+	white-space: nowrap;
+	
 	background: rgba(204, 193, 225, 0.51);
 	border-radius: 0.4rem;
 }
