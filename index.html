@@ -14,22 +14,18 @@
 			</div>
 			<!-- Main nav buttons -->
 			<nav>
-				<ul class="invisilist">
-					<!-- Logout -->
-					<svg viewbox="0 0 8 8" class="icon clickable" id="button-logout" title="Logout"><use xlink:href="images/open-iconic.min.svg#power-standby"></use></svg>
-					<!-- Share settings -->
-					<svg viewbox="0 0 8 8" class="icon clickable" id="button-share-settings" title="Share Settings"><use xlink:href="images/open-iconic.min.svg#people"></use></svg>
-					<!-- Add Bookmark -->
-					<svg viewbox="0 0 8 8" class="icon clickable" id="button-add-bookmark" title="Add Bookmark"><use xlink:href="images/open-iconic.min.svg#plus"></use></svg>
-					<!-- Delete Selected -->
-					<svg viewbox="0 0 8 8" class="icon clickable" id="button-remove-bookmarks" title="Delete Selected"><use xlink:href="images/open-iconic.min.svg#minus"></use></svg>
-					<!-- Settings -->
-					<svg viewbox="0 0 8 8" class="icon clickable" id="button-settings" title="Settings"><use xlink:href="images/open-iconic.min.svg#cog"></use></svg>
-				</ul>
+				<!-- Username -->
+				<span id="display-login-name">Anonymous</span>
+				<!-- Logout -->
+				<svg viewbox="0 0 8 8" class="icon clickable" id="button-logout" title="Logout"><use xlink:href="images/open-iconic.min.svg#power-standby"></use></svg>
+				<!-- Share settings -->
+				<img src="images/icons/share.png" class="icon clickable" id="button-share-settings" title="Share Settings" />
+				<!-- Settings -->
+				<img src="images/icons/cog.png" class="icon clickable" id="button-settings" title="Settings" />
 			</nav>
 			<!-- Info -->
 			<ul class="invisilist">
-				<li><span id="display-login-status">You are not logged in (yet).</span></li>
+				<li></li>
 				<li>You have <span id="display-bookmark-count">?</span> bookmarks.</li>
 			</ul>
 			<!-- Tags -->
@@ -39,6 +35,15 @@
 		<main class="flex-5">
 			<!-- search box -->
 			<input type="search" id="search-box" placeholder="Type here to search or filter..." />
+			
+			<!-- Bookmark Controls -->
+			<nav class="text-centre">
+				<!-- Add Bookmark -->
+				<img src="images/icons/add.png" class="icon clickable" id="button-add-bookmark" title="Add Bookmark" />
+				<!-- Delete Selected -->
+				<img src="images/icons/remove.png" class="icon clickable" id="button-remove-bookmarks" title="Delete Selected" />
+			</nav>
+			<!----------------------->
 			
 			<!-- Bookmarks get shown here -->
 			<div id="bookmarks"></div>
