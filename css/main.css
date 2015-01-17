@@ -43,6 +43,9 @@ input[type=text], input[type=number], input[type=password], input[type=search], 
 	
 	width			: 14rem;
 	
+	color			: #83a8d7;
+	font-size		: 1.1rem;
+	
     background		: rgba(228, 238, 248, 0.58);
 	border			: 0;
     border-radius	: 0.35rem;
@@ -97,6 +100,7 @@ footer
 .medium-text    { font-size: 1rem;      }
 .large-text     { font-size: 1.3rem;    }
 
+.tiny-image		{ max-width: 1.5rem; max-height: 1.5rem;}
 .small-image	{ max-width: 3rem; max-height: 3rem;	}
 .medium-image	{ max-width: 10rem; max-height: 10rem;	}
 .large-image	{ max-width: 20rem; max-height: 20rem;	}
