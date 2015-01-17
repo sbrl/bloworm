@@ -1,5 +1,8 @@
 body	{ width: calc(100% - 13px); margin: 0; padding: 0; }
 
+.logo		{ text-align: center;	}
+.logo img	{ max-width: 90%;		}
+
 .bookmark
 {
 	position: relative;
@@ -33,6 +36,11 @@ body	{ width: calc(100% - 13px); margin: 0; padding: 0; }
 	opacity: 0.75;
 	
 	transition: all 0.2s;
+}
+
+.bookmark-favicon:focus
+{
+	outline: 0;
 }
 
 .bookmark-favicon:checked:after

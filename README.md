@@ -41,4 +41,5 @@ This section contains a bunch of notes that I have made / will make while writin
 			- isadmin - Contains true if the user is an admin, false otherwise
 
 ## Credits
+ - Logo - Mythdael
  - Default globe icon - http://findicons.com/icon/454617/globe
