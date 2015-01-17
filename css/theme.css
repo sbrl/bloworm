@@ -1,13 +1,40 @@
-body	{ width: calc(100% - 13px); margin: 0; padding: 0; }
+body
+{
+	width: calc(100% - 13px);
+	margin: 0; padding: 0;
+	
+	background-image: url(../images/swirl.png);
+	background-color: rgba(121, 206, 210, 0.45);
+}
 
-.logo		{ text-align: center;	}
+hr
+{
+	width: 75%;
+	border: 1px solid #83a5d3;
+	border-radius: 1rem;
+}
+
+footer
+{
+	text-align: center;
+}
+
+.logo
+{
+	margin-top: 1rem;
+	
+	text-align: center;
+}
 .logo img	{ max-width: 90%;		}
 
 .bookmark
 {
 	position: relative;
 	margin: 0.5rem;
-	padding: 0.5rem;
+	padding: 0.9rem 1.3rem;
+	
+	background: rgba(255, 255, 255, 0.37);
+	border-radius: 0.4rem;
 }
 
 .bookmark .top-row, .bookmark .bottom-row
@@ -62,6 +89,11 @@ body	{ width: calc(100% - 13px); margin: 0; padding: 0; }
 	opacity: 1;
 }
 
+.bookmark-url
+{
+	opacity: 0.4;
+}
+
 .bookmark-tags
 {
 	display: inline-block;
@@ -71,5 +103,9 @@ body	{ width: calc(100% - 13px); margin: 0; padding: 0; }
 .tag
 {
 	margin: 0.25rem;
-	padding: 0.25rem;
+	padding: 0.3rem 0.5rem;
+	
+	color: #83a8d7;
+	background: rgba(204, 193, 225, 0.51);
+	border-radius: 0.4rem;
 }
