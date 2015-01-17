@@ -1,5 +1,20 @@
 <?php
 /*
+ * @summary Validates a url.
+ * 
+ * @param $url - The url to validate
+ * 
+ * @returns Whether the url is valid.
+ */
+function validate_url($url)
+{
+	if(!preg_match("/^([a-z]+)\:\/\/([a-z\.]+)/i", $url))
+		return false;
+	
+	return true;
+}
+
+/*
  * @summary Follows a chain of redirects and returns that last url in the sequence.
  *
  * @param $url - The url to start at.
@@ -37,8 +52,13 @@ function follow_redirects($url, $maxdepth = 10, $depth = 0)
 function auto_find_name($url)
 {
 	global $default_bookmark_name;
+	
+	if(!validate_url($url))
+		senderror(new api_error(400, 521, "The url you specified was invalid."));
+	
 	// todo prevent downloading of large files
-	// todo catch errors due to a bad url
+	// todo catch errors thrown by `get_headers()` and `file_get_contents()`
+	
 	// todo send HEAD request instead of GET request
 	$headers = get_headers($url, true);
 	$headers = array_change_key_case($headers);
@@ -54,7 +74,7 @@ function auto_find_name($url)
 		$html = file_get_contents($url);
 		$matches = [];
 		preg_match("/<title>([^>]*)<\/title>/i", $html, $matches);
-
+		
 		if(count($matches) >= 2)
 			$title = trim($matches[1]);
 	}
@@ -69,8 +89,11 @@ function auto_find_name($url)
  */
 function auto_find_favicon_url($url)
 {
-	// todo fix invalid urls (we might want to write a special function for this)
+	if(!validate_url($url))
+		senderror(new api_error(400, 520, "The url you specified for the favicon was invalid."));
+	
 	// todo protect against downloading large files
+	// todo catch errors thrown by `get_headers()` and `file_get_contents()`
 	// todo send HEAD request instead of GET request
 	$headers = get_headers($url, true);
 	$headers = array_change_key_case($headers);
