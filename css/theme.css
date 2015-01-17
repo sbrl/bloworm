@@ -65,7 +65,7 @@ footer
 	cursor: pointer;
 	
 	transform: scale(1);
-	opacity: 0.75;
+	opacity: 1;
 	
 	transition: all 0.2s;
 }
@@ -81,17 +81,20 @@ footer
 	
 	content: "✓";
 	font-size: 2rem;
+	
+	opacity: 1;
 }
 
 .bookmark-favicon:active, .bookmark-favicon:checked:active
 {
+	opacity: 0.5;
 	transform: scale(1.5);
 }
 
 .bookmark-favicon:checked
 {
 	transform: scale(1.25);
-	opacity: 1;
+	opacity: 0.6;
 }
 
 .bookmark-url
