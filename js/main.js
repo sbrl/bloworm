@@ -219,6 +219,11 @@ blow_worm = {
 							
 							requrl = "api.php?action=create";
 						
+						//add 'http://' if the user forgot to do that
+						if(!urlbox.value.match(/^[a-z]+\:(?:\/\/)?/i))
+							urlbox.value = "http://" + urlbox.value;
+						
+						
 						// build the url
 						requrl += "&url=" + encodeURIComponent(urlbox.value);
 						if(namebox.value.length > 0)
