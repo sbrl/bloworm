@@ -130,7 +130,6 @@ function auto_find_favicon_url($url)
 		$matches = [];
 		if(preg_match("/rel=\"shortcut(?: icon)?\" (?:href=[\'\"]([^\'\"]+)[\'\"])/i", $html, $matches) === 1)
 		{
-			var_dump($matches);
 			$faviconurl = $matches[1];
 			// make sure that the favicon url is absolute
 			if(preg_match("/^[a-z]+\:(?:\/\/)?/i", $faviconurl) === 0)
