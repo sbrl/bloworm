@@ -26,6 +26,41 @@ footer
 	text-align: center;
 }
 
+.nanoModal
+{
+	color: #5a34bf;
+	background: rgba(200, 189, 229, 0.5);
+	background-size: 4rem;
+}
+
+.nanoModal input:not([type=button]), .nanoModal textarea
+{
+	background: rgba(255, 255, 255, 0.5);
+	color: #7a5bcc;
+}
+.nanoModal ::-webkit-input-placeholder	{ color: rgba(184, 167, 230, 0.78); }
+
+.nanoModalOverlay
+{
+	background: white;
+	opacity: 0.6;
+}
+
+.nanoModal button
+{
+	background-color: #8142ca !important;
+	border-color: #9d51d4 !important;
+	
+	transition: all 0.25s;
+}
+.nanoModal button:hover	{ background-color: #7236b6 !important; border-color: #893cc0 !important; }
+.nanoModal button:active{ background-color: #6024a3 !important; border-color: #7629ad !important; }
+
+.nanoModalButtons
+{
+	border-top: 1px solid rgba(176, 89, 208, 0.4);
+}
+
 .logo
 {
 	margin-top: 1rem;
