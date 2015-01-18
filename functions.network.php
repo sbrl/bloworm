@@ -29,7 +29,11 @@ function follow_redirects($url, $maxdepth = 10, $depth = 0)
 		return $url;
 
 	//download the headers from the url and make all the keys lowercase
-	$headers = get_headers($url, true);
+	try {
+		$headers = get_headers($url, true);
+	} catch (Exception $e) {
+		senderror(new api_error(502, 714, "Failed to fetch the headers from url: $url"));
+	}
 	$headers = array_change_key_case($headers);
 	//we have a redirect if the `location` header is set
 	if(isset($headers["location"]))
@@ -57,10 +61,13 @@ function auto_find_name($url)
 		senderror(new api_error(400, 521, "The url you specified was invalid."));
 	
 	// todo prevent downloading of large files
-	// todo catch errors thrown by `get_headers()` and `file_get_contents()`
 	
 	// todo send HEAD request instead of GET request
-	$headers = get_headers($url, true);
+	try {
+		$headers = get_headers($url, true);
+	} catch (Exception $e) {
+		senderror(new api_error(502, 712, "Failed to fetch the headers from url: $url"));
+	}
 	$headers = array_change_key_case($headers);
 	$title = $default_bookmark_name;
 	
@@ -71,7 +78,11 @@ function auto_find_name($url)
 	if(strpos($content_type, "text/html") !== false)
 	{
 		//the url refers to some html
-		$html = file_get_contents($url);
+		try {
+			$html = file_get_contents($url);
+		} catch (Exception $e) {
+			senderror(new api_error(502, 713, "Failed to download url: $url"));
+		}
 		$matches = [];
 		preg_match("/<title>([^>]*)<\/title>/i", $html, $matches);
 		
@@ -93,9 +104,12 @@ function auto_find_favicon_url($url)
 		senderror(new api_error(400, 520, "The url you specified for the favicon was invalid."));
 	
 	// todo protect against downloading large files
-	// todo catch errors thrown by `get_headers()` and `file_get_contents()`
 	// todo send HEAD request instead of GET request
-	$headers = get_headers($url, true);
+	try {
+		$headers = get_headers($url, true);
+	} catch (Exception $e) {
+		senderror(new api_error(502, 710, "Failed to fetch the headers from url: $url"));
+	}
 	$headers = array_change_key_case($headers);
 	
 	$urlparts = [];
@@ -108,7 +122,11 @@ function auto_find_favicon_url($url)
 	$faviconurl = "images/favicon-default.png";
 	if(strpos($content_type, "text/html") !== false)
 	{
-		$html = file_get_contents($url);
+		try {
+			$html = file_get_contents($url);
+		} catch (Exception $e) {
+			senderror(new api_error(502, 711, "Failed to fetch url: $url"));
+		}
 		$matches = [];
 		if(preg_match("/rel=\"shortcut(?: icon)?\" (?:href=[\'\"]([^\'\"]+)[\'\"])/i", $html, $matches) === 1)
 		{
