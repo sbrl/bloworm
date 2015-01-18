@@ -307,6 +307,7 @@ blow_worm = {
 								if(to_delete.length == 0)
 								{
 									resolve();
+									return;
 								}
 								
 								modal.hide();
