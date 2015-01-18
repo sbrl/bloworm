@@ -143,6 +143,11 @@ blow_worm = {
 					{
 						resolve(ajax.response);
 					}
+					else if(ajax.getResponseHeader("content-type") == "application/json")
+					{
+						blow_worm.actions.display_error(ajax.response)
+							.then(location.reload);
+					}
 					else
 					{
 						nanoModal("Something went wrong while trying to log you out!<br />Please check the console for more information.", {
@@ -157,6 +162,27 @@ blow_worm = {
 				ajax.open("GET", "api.php?action=logout", true);
 				ajax.send(null);
 			})
+		},
+		
+		display_error: function(response) {
+			return new Promise(function(resolve, reject) {
+				var error = JSON.parse(response),
+					html = "<h2>Something went wrong!</h2>";
+				html += "<p>Error Code: <strong>" + error.code + "</strong></p>";
+				html += "<p>" + error.type + "</p>";
+				html += "<p><strong>Techincal Details:</strong></p>";
+				html += "<p><small><em>(Make sure to include all these details if you report this issue)</em></small></p>";
+				html += "<pre>" + response + "</pre>";
+				
+				nanoModal(html, {
+					autoRemove: true,
+					buttons: [{
+						text: "Continue",
+						primary: true,
+						handler: resolve
+					}]
+				});
+			});
 		}
 	},
 	
@@ -266,6 +292,13 @@ blow_worm = {
 								// resolve the promise
 								resolve(JSON.parse(ajax.response));
 							}
+							else if(ajax.getResponseHeader("content-type") == "application/json")
+							{
+								blow_worm.actions.display_error(ajax.response)
+									.then(function() {
+										reject(JSON.parse(ajax.response));
+									});
+							}
 							else
 							{
 								nanoModal("Something went wrong!<br />Please check the console for more information.", { autoRemove: true }).show();
@@ -322,12 +355,16 @@ blow_worm = {
 										
 										resolve();
 									}
+									else if(ajax.getResponseHeader("content-type") == "application/json")
+									{
+										blow_worm.actions.display_error(ajax.response)
+											.then(window.location.reload);
+									}
 									else
 									{
 										console.error(ajax.response);
 										nanoModal("<p>Something went wrong!</p><p>Check the console for more information.</p><p>Press 'continue' to reload the page.</p>", {
 											autoRemove: true,
-											overlayClose: true,
 											buttons: [{
 												text: "Continue",
 												primary: true,
