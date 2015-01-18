@@ -203,21 +203,26 @@ blow_worm = {
 					handler: function(modal) {
 						console.log("[create] adding bookmark...");
 						
+						// create a new modal dialog to tell the user that we are adding the bookmark
+						// grab references to the input boxes
+						var namebox = document.getElementById("create-name"),
+							urlbox = document.getElementById("create-url"),
+							tagsbox = document.getElementById("create-tags"),
+							
+							requrl = "api.php?action=create";
+						
+						if(urlbox.value.length == 0)
+						{
+							resolve();
+							return;
+						}
+						
 						// disable the button that the user clicked on
 						// we don't want the mclicking it more than once :)
 						// https://github.com/kylepaulsen/NanoModal/issues/1
 						modal.event.target.setAttribute("disabled", "disabled");
 						
-						
-						// create a new modal dialog to tell the user that we are adding the bookmark
-						var progress_modal = nanoModal("Adding Bookmark...", { overlayClose: false, autoRemove: true, buttons: [] }).show(),
-							
-							// grab references to the input boxes
-							namebox = document.getElementById("create-name"),
-							urlbox = document.getElementById("create-url"),
-							tagsbox = document.getElementById("create-tags"),
-							
-							requrl = "api.php?action=create";
+						var progress_modal = nanoModal("Adding Bookmark...", { overlayClose: false, autoRemove: true, buttons: [] }).show()
 						
 						//add 'http://' if the user forgot to do that
 						if(!urlbox.value.match(/^[a-z]+\:(?:\/\/)?/i))
