@@ -43,6 +43,14 @@ footer
 	font-size	: 1.3rem;
 }
 
+#display-bookmark-count
+{
+	background: url(../images/icons/star.png) no-repeat;
+	background-size: contain;
+	
+	cursor: help;
+}
+
 .bookmark
 {
 	position: relative;
