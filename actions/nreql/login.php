@@ -27,9 +27,14 @@ try {
 if(!password_verify($_POST["pass"], $user_pass_hash))
 	senderror(new api_error(401, 128, "The username and/or password given was/were incorrect."));
 
-//by this point we have verified that the user's credientials are correct
+// by this point we have verified that the user's credientials are correct
 
-//todo rehash the password if necessary (use password_needs_rehash())
+// rehash the password if necessary
+if(password_needs_rehash(user_dirname($_POST["user"]) . "password", PASSWORD_DEFAULT, [ "cost" => $password_cost ]))
+{
+	file_put_contents(user_dirname($_POST["user"]) . "password", password_hash($_POST["pass"], PASSWORD_DEFAULT, [ "cost" => $password_cost ]));
+}
+
 
 $login_sessions = getjson($paths["sessionkeys"]);
 $sessionkey = hash("sha256", openssl_random_pseudo_bytes($session_key_length));
