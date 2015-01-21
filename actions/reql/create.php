@@ -12,20 +12,20 @@
 if(!isset($_GET["url"]))
 	senderror(new api_error(400, 501, "You did not specify a url to add."));
 
-$url = $_GET["url"];
+$url = rawurlencode($_GET["url"]);
 
 if(isset($_GET["name"]))
-	$name = $_GET["name"];
+	$name = htmlentities($_GET["name"]);
 else
-	$name = auto_find_name($url);
+	$name = htmlentities(auto_find_name($url));
 
 if(isset($_GET["faviconurl"]))
-	$faviconurl = $_GET["faviconurl"];
+	$faviconurl = rawurlencode($_GET["faviconurl"]);
 else
 	$faviconurl = auto_find_favicon_url($url);
 
 if(isset($_GET["tags"]))
-	$tags = explode(",", str_replace(", ", ",", $_GET["tags"]));
+	$tags = explode(",", str_replace(", ", ",", htmlentities($_GET["tags"])));
 else
 	$tags = [];
 

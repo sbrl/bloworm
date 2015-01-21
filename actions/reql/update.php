@@ -24,14 +24,14 @@ for($i = count($bookmarks); $i >= 0; $i--)
 	{
 		// update the bookmark's details
 		if(isset($_GET["name"]))
-			$bookmarks[$i]->name = $_GET["name"];
+			$bookmarks[$i]->name = htmlentities($_GET["name"]);
 		if(isset($_GET["url"]))
-			$bookmarks[$i]->url = $_GET["url"];
+			$bookmarks[$i]->url = rawurlencode($_GET["url"]);
 		if(isset($_GET["faviconurl"]))
-			$bookmarks[$i]->faviconurl = $_GET["faviconurl"];
+			$bookmarks[$i]->faviconurl = rawurlencode($_GET["faviconurl"]);
 		if(isset($_GET["tags"]))
 		{
-			$tags_to_add = explode(",", str_replace(", ", $_GET["tags"]));
+			$tags_to_add = explode(",", str_replace(", ", htmlentities($_GET["tags"])));
 			$bookmarks[$i] = $tags_to_add;
 		}
 		$bookmarks[$i]->lastmodified = time(); // update the last modified counter
