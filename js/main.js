@@ -221,6 +221,7 @@ blow_worm = {
 				}).show();
 			});
 		},
+		
 		create: function() {
 			return new Promise(function(resolve, reject) {
 				nanoModal(document.getElementById("modal-create"), { buttons: [{
@@ -383,6 +384,12 @@ blow_worm = {
 						}
 					]
 				}).show();
+			});
+		},
+		
+		update: function(bookmark_html) {
+			return new Promise(function(resolve, reject) {
+				// todo write this function
 			});
 		}
 	},

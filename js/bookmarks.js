@@ -46,9 +46,10 @@ blow_worm.actions.bookmarks = {
 		html.dataset.id = bookmark.id;
 		html.innerHTML = "<input type='checkbox' class='bookmark-favicon' />" + 
 		"<div class='bookmark-details flex down flex-1'>" + 
-		"	<div class='top-row'>" + 
-		"			<span class='bookmark-name'></span>" + 
+		"	<div class='top-row flex across'>" + 
+		"			<span class='bookmark-name flex-3'></span>" + 
 		"			<span class='bookmark-date'></span>" + 
+		"			<img src='images/icons/cog.png' class='bookmark-update tiny-image clickable' />" + 
 		"		</div>" + 
 		"		<div class='bottom-row flex across'>" + 
 		"			<a target='_blank' class='bookmark-url flex-2'></a>" + 
@@ -62,6 +63,13 @@ blow_worm.actions.bookmarks = {
 		html.querySelector(".bookmark-url").innerText = bookmark.url;
 		html.querySelector(".bookmark-favicon").dataset.faviconurl = bookmark.faviconurl;
 		html.querySelector(".bookmark-favicon").style.backgroundImage = "url(" + bookmark.faviconurl + ")";
+		
+		// attach the event handler to the update button
+		html.querySelector(".bookmark-update").addEventListener("click", function(event) {
+			var bookmark_html = event.target.parentElement.parentElement.parentElement;
+			console.log(bookmark_html);
+			blow_worm.modals.update(bookmark_html);
+		})
 		
 		// todo format and add the date
 		

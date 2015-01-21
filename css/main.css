@@ -75,12 +75,7 @@ footer
 	margin: 0.3rem;
 	
 	vertical-align: middle;
-	
-	transform: scale(1);
-	transition: transform 0.25s;
 }
-.icon:hover		{ transform: scale(1.15);	}
-.icon:active	{ transform: scale(0.9);	}
 
 /* Utility / layout aids */
 .float.left     { float: left;  }
@@ -119,10 +114,21 @@ footer
 .inline         { display: inline;          }
 .inline.block   { display: inline-block;    }
 
-.clickable		{ cursor: pointer;		}
-
 .invisible		{ display: none;		}
 .invisilink     { text-decoration: none; color: inherit;            }
 .invisilist     { list-style-type: none; margin: 0.3rem; padding: 0.3rem; }
 
 .img-text-middle{ vertical-align: middle; }
+
+.clickable
+{
+	cursor: pointer;
+	
+	user-select: none;
+	-webkit-user-select: none;
+	
+	transform: scale(1);
+	transition: transform 0.25s;
+}
+.clickable:hover	{ transform: scale(1.15);	}
+.clickable:active	{ transform: scale(0.9);	}
