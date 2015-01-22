@@ -389,7 +389,96 @@ blow_worm = {
 		
 		update: function(bookmark_html) {
 			return new Promise(function(resolve, reject) {
-				// todo write this function
+				var update_html = document.getElementById("modal-update"),
+					// grab the bookmark's data
+					id = bookmark_html.dataset.id,
+					name =  bookmark_html.querySelector(".bookmark-name").innerHTML,
+					bookmark_url = bookmark_html.querySelector(".bookmark-url").href,
+					
+					tags_html = bookmark_html.querySelectorAll(".tag"),
+					tags = "";
+				
+				// todo add the favicon url as an advanced option
+				// note we could display a preview of the favicon they have chosen with an <img /> tag
+				
+				// obtain the tags
+				for(var i = tags.length; i >= 0; i--)
+				{
+					tags += tags[i].innerHTML + ", ";
+				}
+				tags = tags.trim().slice(-1); // remove any whitespace and the last comma
+				
+				// update the interface
+				var namebox = document.getElementById("update-name"),
+					urlbox = document.getElementById("update-url"),
+					tagsbox = document.getElementById("update-tags");
+				
+				namebox.value = name;
+				urlbox.value = bookmark_url;
+				tagsbox.value = tags;
+				
+				// show the user a modal they can use to edit the bookmark
+				nanoModal(update_html, {
+					buttons: [
+						{
+							text: "Update",
+							primary: true,
+							handler: function(modal) {
+								modal.hide();
+								var progress_modal = nanoModal("Updating bookmark...", { autoRemove: true }).show(),
+									ajax = new XMLHttpRequest(),
+									url = "api.php?action=update";
+								
+								url += "&id=" + id;
+								
+								// todo don't do anything if they are all the same
+								
+								if(name != namebox.value)
+									url += "&name=" + encodeURIComponent(namebox.value);
+								if(bookmark_url != urlbox.value)
+									url += "&url=" + encodeURIComponent(urlbox.value);
+								if(tags != tagsbox.value)
+									url += "&tags=" = encodeURIComponent(tagsbox.value);
+								
+								ajax.onload = function() {
+									if(ajax.status >= 200 && ajax.status < 300)
+									{
+										// success!
+										
+										// todo update the interface
+										
+										// hide the progress modal
+										progress_modal.hide();
+										
+										resolve(ajax.response);
+									}
+									else if(ajax.getResponseHeader("content-type") == "application/json")
+									{
+										blow_worm.actions.display_error(ajax.response);
+									}
+									else
+									{
+										console.error(ajax.response);
+										nanoModal("<p>Something went wrong!</p><p>Check the console for more information.</p>", {
+											autoRemove: true,
+											buttons: [{
+												text: "Continue",
+												primary: true,
+												handler: "hide"
+											}]
+										}).show();
+									}
+								};
+								ajax.open("GET", url, true);
+								ajax.send(null);
+							}
+						},
+						{
+							text: "Cancel",
+							handler: "hide"
+						}
+					]
+				}).show();
 			});
 		}
 	},

@@ -118,7 +118,7 @@ function auto_find_favicon_url($url)
 	$content_type = $headers["content-type"];
 	if(!is_string($content_type)) // account for arrays of content types
 		$content_type = $content_type[0];
-
+	
 	$faviconurl = "images/favicon-default.png";
 	if(strpos($content_type, "text/html") !== false)
 	{
