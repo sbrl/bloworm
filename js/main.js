@@ -438,7 +438,7 @@ blow_worm = {
 								if(bookmark_url != urlbox.value)
 									url += "&url=" + encodeURIComponent(urlbox.value);
 								if(tags != tagsbox.value)
-									url += "&tags=" = encodeURIComponent(tagsbox.value);
+									url += "&tags=" + encodeURIComponent(tagsbox.value);
 								
 								ajax.onload = function() {
 									if(ajax.status >= 200 && ajax.status < 300)
