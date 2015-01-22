@@ -73,7 +73,7 @@ if($limit > 0)
 
 $matching_bookmarks = array_values($matching_bookmarks);
 
-$response = new api_response(200, 0, "search/query-levenshtein");
+$response = new api_response(200, 0, "search/query");
 $response->bookmarks = $matching_bookmarks;
 
 http_response_code($response->http_status);

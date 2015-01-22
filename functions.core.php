@@ -87,37 +87,36 @@ function setjson($filename, $thing)
  * 
  * @returns The sorted array.
  */
-function fuzzy_search_bookmarks($query, $haystack)
+function fuzzy_search_bookmarks($query, $bookmarks)
 {
-	$ranked = [];
-	foreach($haystack as $elem)
-	{
-		$best_so_far = INF;
-		foreach($elem as $key => $value)
-		{
-			// get the similarity between the key and the query string
-			$new_score = levenshtein($query, @(string)$value, 1, 1, 0);
-			// this score is lower than the best, update the best
-			if($new_score < $best_so_far)
-				$best_so_far = $new_score;
-		}
-		//todo insert into the correct place instead of sorting afterwards
-		$ranked[] = [
-			"rank" => $best_so_far,
-			"elem" => $elem
-		];
-	}
-//	var_dump($ranked);
-	usort($ranked, function($a, $b) {
-		return $a["rank"] < $b["rank"];
-	});
+	$terms = preg_split("/\s+/", strtolower($query), -1, PREG_SPLIT_NO_EMPTY);
 	
-	$result = [];
-	foreach($ranked as &$item)
+	foreach($bookmarks as &$bookmark)
 	{
-		$item["elem"]->rank = $item["rank"];
-		$result[] = $item["elem"];
+		$bookmark_str = "";
+		foreach($bookmark as $key => $value)
+		{
+			if(is_string($value))
+				$bookmark_str .= "$value ";
+		}
+		$bookmark_str = strtolower($bookmark_str);
+		
+		$bookmark->rank = 0;
+		foreach($terms as $term)
+		{
+			if(substr($term, 0, 1) == "#")
+			{
+				if(in_array(substr($term, 1), $bookmark->tags))
+					$bookmark->rank += 50;
+			}
+			$bookmark->rank += substr_count($bookmark_str, $term);
+		}
 		
 	}
-	return $result;
+	
+	usort($bookmarks, function($a, $b) {
+		return $a->rank < $b->rank;
+	});
+	
+	return $bookmarks;
 }
