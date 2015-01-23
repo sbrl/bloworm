@@ -395,18 +395,17 @@ blow_worm = {
 					name =  bookmark_html.querySelector(".bookmark-name").innerHTML,
 					bookmark_url = bookmark_html.querySelector(".bookmark-url").href,
 					
-					tags_html = bookmark_html.querySelectorAll(".tag"),
+					tags_html_list = bookmark_html.querySelectorAll(".tag"),
 					tags = "";
 				
 				// todo add the favicon url as an advanced option
 				// note we could display a preview of the favicon they have chosen with an <img /> tag
 				
 				// obtain the tags
-				for(var i = tags.length; i >= 0; i--)
-				{
-					tags += tags[i].innerHTML + ", ";
-				}
-				tags = tags.trim().slice(-1); // remove any whitespace and the last comma
+				[].forEach.call(tags_html_list, function(tag) {
+					tags += tag.innerHTML.trim() + ", ";
+				});
+				tags = tags.replace(/^\s+|,\s+$/g, ""); // remove any whitespace and the last comma
 				
 				// update the interface
 				var namebox = document.getElementById("update-name"),
@@ -445,13 +444,25 @@ blow_worm = {
 									{
 										// success!
 										
-										// todo update the interface
+										bookmark_html.querySelector(".bookmark-name").innerHTML = namebox.value;
+										bookmark_html.querySelector(".bookmark-url").innerHTML = urlbox.value;
+										bookmark_html.querySelector(".bookmark-url").href = urlbox.value;
+										
+										var tags_html_str = "",
+											tags_split = tagsbox.value.split(/, ?/g);
+										
+										for(var i = tags_split.length - 1; i >= 0; i--)
+										{
+											tags_html_str = "<span class='tag'>" + tags_split[i] + "</span>" + tags_html_str;
+										}
+										bookmark_html.querySelector(".bookmark-tags").innerHTML = tags_html_str;
 										
 										// hide the progress modal
 										progress_modal.hide();
 										
 										resolve(ajax.response);
 									}
+									// something went wrong :(
 									else if(ajax.getResponseHeader("content-type") == "application/json")
 									{
 										blow_worm.actions.display_error(ajax.response);
