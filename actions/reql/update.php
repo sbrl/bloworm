@@ -9,32 +9,32 @@
  */
 // id[, name, url, faviconurl, tags]
 if(isset($_GET["id"]))
-	$id_to_delete = $_GET["id"];
+	$id_to_update = $_GET["id"];
 else
 	senderror(new api_error(449, 502, "You didn't specify an `id` to update.\n\nThe appropriate GET parameter is `id`."));
 
 if(!isset($_GET["name"]) and !isset($_GET["url"]) and !isset($_GET["faviconurl"]) and !isset($_GET["tags"]))
 	senderror(new api_error(449, 503, "You didn't specify any parameters to update."));
 
-$bookmarks = getjson(user_dirname() . "bookmarks.json"); // open the user's bookmarks for editing
-for($i = count($bookmarks); $i >= 0; $i--)
+$bookmarks = getjson(user_dirname($user) . "bookmarks.json"); // open the user's bookmarks for editing
+foreach($bookmarks as &$bookmark)
 {
 	// loop over and find the bookmark with the appropriate id
-	if($bookmarks[$i]->id)
+	if($bookmark->id == $id_to_update)
 	{
 		// update the bookmark's details
 		if(isset($_GET["name"]))
-			$bookmarks[$i]->name = htmlentities($_GET["name"]);
+			$bookmark->name = htmlentities($_GET["name"]);
 		if(isset($_GET["url"]))
-			$bookmarks[$i]->url = rawurlencode($_GET["url"]);
+			$bookmark->url = rawurlencode($_GET["url"]);
 		if(isset($_GET["faviconurl"]))
-			$bookmarks[$i]->faviconurl = rawurlencode($_GET["faviconurl"]);
+			$bookmark->faviconurl = rawurlencode($_GET["faviconurl"]);
 		if(isset($_GET["tags"]))
 		{
-			$tags_to_add = explode(",", str_replace(", ", htmlentities($_GET["tags"])));
-			$bookmarks[$i] = $tags_to_add;
+			$tags_to_add = explode(",", str_replace(", ", ",", htmlentities($_GET["tags"])));
+			$bookmark->tags = $tags_to_add;
 		}
-		$bookmarks[$i]->lastmodified = time(); // update the last modified counter
+		$bookmark->lastmodified = time(); // update the last modified counter
 		break;
 	}
 }
