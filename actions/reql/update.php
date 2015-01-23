@@ -26,9 +26,9 @@ foreach($bookmarks as &$bookmark)
 		if(isset($_GET["name"]))
 			$bookmark->name = htmlentities($_GET["name"]);
 		if(isset($_GET["url"]))
-			$bookmark->url = rawurlencode($_GET["url"]);
+			$bookmark->url = $_GET["url"];
 		if(isset($_GET["faviconurl"]))
-			$bookmark->faviconurl = rawurlencode($_GET["faviconurl"]);
+			$bookmark->faviconurl = $_GET["faviconurl"];
 		if(isset($_GET["tags"]))
 		{
 			$tags_to_add = explode(",", str_replace(", ", ",", htmlentities($_GET["tags"])));

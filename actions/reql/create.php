@@ -20,7 +20,7 @@ else
 	$name = htmlentities(auto_find_name($url));
 
 if(isset($_GET["faviconurl"]))
-	$faviconurl = rawurlencode($_GET["faviconurl"]);
+	$faviconurl = $_GET["faviconurl"];
 else
 	$faviconurl = auto_find_favicon_url($url);
 
@@ -37,7 +37,7 @@ $bookmarks = getjson(user_dirname($user) . "bookmarks.json");
 $newbookmark = [
 	"id" => $id,
 	"name" => utf8_encode($name),
-	"url" => utf8_encode(rawurlencode($url)),
+	"url" => utf8_encode($url),
 	"faviconurl" => utf8_encode($faviconurl),
 	"tags" => $tags,
 	"lastmodified" => time()
