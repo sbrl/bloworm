@@ -38,7 +38,7 @@ for($i = count($bookmarks); $i >= 0; $i--)
 		break;
 	}
 }
-setjson(user_dirname() . "bookmarks.json"); // save the bookmarks back to disk
+setjson(user_dirname($user) . "bookmarks.json", $bookmarks); // save the bookmarks back to disk
 
 sendjson(new api_response(200, 0, "bookmark-update/success"));
 
