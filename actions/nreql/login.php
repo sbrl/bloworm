@@ -21,7 +21,7 @@ try {
 	$user_pass_hash = file_get_contents(user_dirname($_POST["user"]) . "password");
 } catch(Exception $e)
 {
-	senderror(500, 702, "Failed to read in password hash.");
+	senderror(500, 703, "Failed to read in password hash.");
 }
 
 if(!password_verify($_POST["pass"], $user_pass_hash))
