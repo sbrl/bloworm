@@ -12,7 +12,7 @@
 if(!isset($_GET["url"]))
 	senderror(new api_error(400, 501, "You did not specify a url to add."));
 
-$url = rawurlencode($_GET["url"]);
+$url = $_GET["url"];
 
 if(isset($_GET["name"]))
 	$name = htmlentities($_GET["name"]);
@@ -37,7 +37,7 @@ $bookmarks = getjson(user_dirname($user) . "bookmarks.json");
 $newbookmark = [
 	"id" => $id,
 	"name" => utf8_encode($name),
-	"url" => utf8_encode($url),
+	"url" => utf8_encode(rawurlencode($url)),
 	"faviconurl" => utf8_encode($faviconurl),
 	"tags" => $tags,
 	"lastmodified" => time()

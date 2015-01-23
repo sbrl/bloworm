@@ -8,7 +8,7 @@
  */
 function validate_url($url)
 {
-	if(!preg_match("/^([a-z]+)\:\/\/([a-z\.]+)/i", $url))
+	if(preg_match("/^([a-z]+)\:\/\/([a-z\.]+)/i", $url) === 0)
 		return false;
 	
 	return true;
