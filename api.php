@@ -44,6 +44,7 @@
 require("functions.errors.php");
 require("settings.php");
 require("functions.core.php");
+require("functions.files.php");
 require("functions.users.php");
 require("functions.network.php");
 

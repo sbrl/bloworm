@@ -59,33 +59,7 @@ function hash_password($password)
 }
 
 /*
- * @summary Fetches and decodes a json file.
- * 
- * @param $filename - The path to the json file.
- * 
- * @returns The decoded json.
- */
-function getjson($filename) { return json_decode(file_get_contents($filename)); }
-
-/*
- * @summary Save something to a file as json.
- * 
- * @param $filename - The path to the file that should be written to.
- * @param $thing - The thing to save.
- */
-function setjson($filename, $thing, $create_backup = true)
-{
-	if(file_exists($filename))
-	{
-		if(!rename($filename, "$filename.backup"))
-			senderror(new api_error(507, 702, "Failed to create backup of $filename"));
-	}
-	if(!file_put_contents($filename, json_encode($thing, JSON_PRETTY_PRINT)))
-		senderror(new api_error(507, 701, "Failed to save json to file $filename"));
-}
-
-/*
- * @summary Use levenshtein's distance to sort an array of bookmarks based on a query string.
+ * @summary Sort an array of bookmarks based on a query string.
  * 
  * @param $query - The query string
  * @param $haystack = The array of objects to sort.
@@ -125,3 +99,5 @@ function fuzzy_search_bookmarks($query, $bookmarks)
 	
 	return $bookmarks;
 }
+
+?>
