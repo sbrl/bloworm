@@ -30,7 +30,8 @@ class api_response
  */
 function sendjson($thing)
 {
-	header("content-type: application/json");
+	if(!headers_sent())
+		header("content-type: application/json");
 	echo(json_encode($thing, JSON_PRETTY_PRINT));
 }
 
