@@ -31,4 +31,16 @@ function user_exists($user_to_check)
 	return false;
 }
 
+/*
+ * @summary Determines whether a user is an administrator.
+ */
+function user_isadmin($username)
+{
+	$isadmin = trim(file_get_contents(user_dirname($username) . "isadmin"));
+	if($isadmin == "true")
+		return true;
+	else
+		return false;
+}
+
 ?>

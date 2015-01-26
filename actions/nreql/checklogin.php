@@ -13,11 +13,13 @@ $response->logged_in = $logged_in;
 if($logged_in)
 {
 	$response->user = $user;
+	$response->isadmin = user_isadmin($user);
 	$response->sessionkey = $_COOKIE[$cookie_names["session"]];
 }
 else
 {
 	$response->user = false;
+	$response->isadmin = false;
 	$response->sessionkey = false;
 }
 sendjson($response);

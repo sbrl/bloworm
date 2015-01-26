@@ -53,6 +53,7 @@ $response = new api_response(200, 0, "Login successful.");
 $response->user = $_POST["user"];
 $response->sessionkey = $sessionkey;
 $response->expire_time = time() + $session_key_valid_time;
+$response->isadmin = user_isadmin($_POST["user"]);
 sendjson($response);
 exit();
 
