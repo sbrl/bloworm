@@ -10,6 +10,7 @@ blow_worm = {
 	env: {
 		// the mode we should operate in
 		// can either be "login", or "view-share".
+		// currently not used.
 		mode: "login",
 		
 		// the name of the user who is currently logged in
@@ -49,35 +50,26 @@ blow_worm = {
 						pass: password
 					};
 				
-				ajax.onload = function() {
-					if(ajax.status >= 200 && ajax.status < 300)
-					{
-						// the request was successful
-						login_display.innerHTML += "Response recieved: login successful, cookie set.<br />\n";
-						// read the response and set the environment variables
-						var response = JSON.parse(ajax.response);
-						blow_worm.env.loggedin = true;
-						blow_worm.env.username = response.user;
-						blow_worm.env.sessionkey = response.sessionkey;
-						
-						
-						//hide and reset the login progress box
-						login_progress_modal.hide();
-						login_display.innerHTML = "";
-						
-						resolve(response);
-					}
-					else
-					{
-						login_display.innerHTML += "Login failed! See the console for more details.<br />\n";
-						console.error(ajax);
-						reject(response);
-					}
-				};
-				
-				ajax.open("POST", "api.php?action=login");
-				ajax.setRequestHeader("content-type", "application/x-www-form-urlencoded");
-				ajax.send(postify(data));
+				post("api.php?action=login", postify(data)).then(function(response) {
+					// the request was successful
+					login_display.innerHTML += "Response recieved: login successful, cookie set.<br />\n";
+					
+					// read the response and set the environment variables
+					var respjson = JSON.parse(response);
+					blow_worm.env.loggedin = true;
+					blow_worm.env.username = respjson.user;
+					blow_worm.env.sessionkey = respjson.sessionkey;
+					
+					//hide and reset the login progress box
+					login_progress_modal.hide();
+					login_display.innerHTML = "";
+					
+					resolve(respjson);
+				}, function(response) {
+					login_display.innerHTML += "Login failed! See the console for more details.<br />\n";
+					console.error(response);
+					reject(response);
+				});
 				login_display.innerHTML += "Login request sent to server.<br />\n";
 			});
 		},
@@ -118,7 +110,7 @@ blow_worm = {
 					
 					blow_worm.actions.bookmarks.update();
 					
-					// todo fetch some additional information from the server
+					// todo fetch tag information from the server
 					
 				}
 				else
@@ -140,7 +132,7 @@ blow_worm = {
 				get("api.php?action=logout").then(resolve, function(response) {
 					if(ajax.getResponseHeader("content-type") == "application/json")
 					{
-						blow_worm.actions.display_error(ajax.response)
+						blow_worm.actions.display_error(response)
 							.then(location.reload);
 					}
 					else
@@ -150,8 +142,8 @@ blow_worm = {
 							overlayClose: false,
 							buttons: []
 						}).show();
-						console.error(ajax.response);
-						reject(ajax.response);
+						console.error(response);
+						reject(response);
 					}
 				});
 			});
@@ -238,11 +230,11 @@ blow_worm = {
 						}
 						
 						// disable the button that the user clicked on
-						// we don't want the mclicking it more than once :)
+						// we don't want them clicking it more than once :)
 						// https://github.com/kylepaulsen/NanoModal/issues/1
 						modal.event.target.setAttribute("disabled", "disabled");
 						
-						var progress_modal = nanoModal("Adding Bookmark...", { overlayClose: false, autoRemove: true, buttons: [] }).show()
+						var progress_modal = nanoModal("Adding Bookmark...", { overlayClose: false, autoRemove: true, buttons: [] }).show();
 						
 						//add 'http://' if the user forgot to do that
 						if(!urlbox.value.match(/^[a-z]+\:(?:\/\/)?/i))
@@ -261,47 +253,41 @@ blow_worm = {
 						urlbox.value = "";
 						tagsbox.value = "";
 						
-						var ajax = new XMLHttpRequest();
-						ajax.onload = function() {
-							console.log("[create] response recieved", ajax.response);
+						get(requrl).then(function(response) {
 							var respjson = JSON.parse(ajax.response);
+							console.log("[create] Response recieved", respjson);
 							
-							if(ajax.status == 201)
+							// render and insert the new bookmark into the display
+							var newhtml = blow_worm.actions.bookmarks.render(respjson.newbookmark),
+								bookmarks_display = document.getElementById("bookmarks");
+							
+							bookmarks_display.insertBefore(newhtml, bookmarks_display.firstChild);
+							
+							// update the count of the number of bookmarks that the user has
+							var display_bookmark_count = document.getElementById("display-bookmark-count");
+							display_bookmark_count.innerHTML = parseInt(display_bookmark_count.innerHTML) + 1;
+							
+							// hide and reset the modal dialogs
+							modal.event.target.removeAttribute("disabled");
+							modal.hide();
+							progress_modal.hide();
+							
+							// resolve the promise
+							resolve(respjson);
+						}, function(response) {
+							console.error("[create] Error occurred. ", response);
+							var resp = JSON.parse(response);
+							if(ajax.getResponseHeader("content-type") == "application/json")
 							{
-								// render and insert the new bookmark into the display
-								var newhtml = blow_worm.actions.bookmarks.render(respjson.newbookmark),
-									bookmarks_display = document.getElementById("bookmarks");
-								
-								bookmarks_display.insertBefore(newhtml, bookmarks_display.firstChild);
-								
-								// update the count of the number of bookmarks that the user has
-								var display_bookmark_count = document.getElementById("display-bookmark-count");
-								display_bookmark_count.innerHTML = parseInt(display_bookmark_count.innerHTML) + 1;
-								
-								// hide and reset the modal dialogs
-								modal.event.target.removeAttribute("disabled");
-								modal.hide();
-								progress_modal.hide();
-								
-								// resolve the promise
-								resolve(JSON.parse(ajax.response));
-							}
-							else if(ajax.getResponseHeader("content-type") == "application/json")
-							{
-								blow_worm.actions.display_error(ajax.response)
-									.then(function() {
-										reject(JSON.parse(ajax.response));
-									});
+								blow_worm.actions.display_error(response)
+									.then(function() { reject(resp); });
 							}
 							else
 							{
 								nanoModal("Something went wrong!<br />Please check the console for more information.", { autoRemove: true }).show();
-								console.error(ajax.response, JSON.parse(ajax.response));
-								reject(JSON.parse(ajax.response));
+								reject(response);
 							}
-						};
-						ajax.open("GET", requrl, true);
-						ajax.send(null);
+						});
 						console.log("[create] request sent");
 					}
 				}] }).show();
