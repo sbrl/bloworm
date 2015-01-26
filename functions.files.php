@@ -25,4 +25,48 @@ function setjson($filename, $thing, $create_backup = true)
 		senderror(new api_error(507, 701, "Failed to save json to file $filename"));
 }
 
+/*
+ * @summary Easily create a file / folder tree
+ * 
+ * @param $tree - An array describing the tree to create.
+ */
+function create_tree($tree)
+{
+	foreach($tree as &$instruction)
+	{
+		if(!isset($instruction["mode"]))
+			$instruction["mode"] = 0775;
+		
+		switch($instruction["type"])
+		{
+			case "file":
+				if(!isset($instruction["content"]))
+					$instruction["content"] = "";
+				
+				try {
+					file_put_contents($instruction["path"], $instruction["content"]);
+				} catch ($error) {
+					senderror(new api_error(507, 704, "Failed to create file " . $instruction["path"], $error));
+				}
+				try {
+					chmod($instruction["path"], $instruction["mode"]);
+				} catch ($error) {
+					senderror(new api_error(507, 705, "Failed to set permissions on " . $instruction["path"], $error));
+				}
+				break;
+			
+			case "folder":
+				if(!isset($instruction["mode"]))
+					$instruction["mode"] = "0775";
+				try {
+					mkdir($instruction["path"], $instruction["mode"], true);
+				}
+				break;
+			
+			default:
+				senderror(new api_error(500, 706, "Unknown file tree entry type: " . $instruction["type"]));
+		}
+	}
+}
+
 ?>

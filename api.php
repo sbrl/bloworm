@@ -34,7 +34,8 @@
 	* view - View a shared tag
 		* tag - the tag to view
 	* usermod - change user settings, like one's password
-		* key - Possible values: password
+		* key - Possible values:
+			* password - requires $_GET["oldpass"]
 		* value
  */
 
