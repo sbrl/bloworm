@@ -484,6 +484,10 @@ blow_worm = {
 								post("api.php?action=usermod", postify(data)).then(function(response) {
 									// success!
 									console.log("[usermod] Usermod successful. Reloading page...");
+									
+									get("api.php?action=logout").then(function() {
+										window.location.reload();
+									});
 								}, function(response) {
 									try {
 										JSON.parse(response);
@@ -499,8 +503,7 @@ blow_worm = {
 											}]
 										}).show();
 									}
-								}).then(blow_worm.actions.logout)
-								.then(window.location.reload);
+								});
 							}
 						}
 					}, {
