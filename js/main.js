@@ -478,7 +478,7 @@ blow_worm = {
 								var data = {
 									key: "password",
 									value: boxes.newpass.value,
-									oldpass: boxes.newpassconf.value
+									oldpass: boxes.oldpass.value
 								};
 								
 								post("api.php?action=usermod", postify(data)).then(function(response) {
