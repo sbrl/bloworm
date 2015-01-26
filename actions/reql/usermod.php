@@ -31,6 +31,7 @@ switch($key)
 		
 		$response = new api_response(200, 0, "usermod/passwordchange/success");
 		sendjson($response);
+		break;
 	
 	default:
 		senderror(new api_error(400, 510, "That user setting key was not found."));
