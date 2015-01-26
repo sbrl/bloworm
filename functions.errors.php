@@ -66,9 +66,9 @@ function senderror($api_error)
 		"message" => $api_error->message
 	];
 	if(isset($api_error->details))
-		$response->details = $api_error->details;
+		$response["details"] = $api_error->details;
 	else
-		$response->details = false;
+		$response["details"] = false;
 	exit(json_encode($response, JSON_PRETTY_PRINT));
 }
 

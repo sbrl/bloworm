@@ -32,7 +32,7 @@ th, td
 label
 {
 	display		: inline-block;
-	min-width	: 6rem;
+	min-width	: 11rem;
 }
 
 /* todo add the rest of the textbox-like inputs here */
