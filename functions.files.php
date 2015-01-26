@@ -45,12 +45,12 @@ function create_tree($tree)
 				
 				try {
 					file_put_contents($instruction["path"], $instruction["content"]);
-				} catch ($error) {
+				} catch (Exception $error) {
 					senderror(new api_error(507, 704, "Failed to create file " . $instruction["path"], $error));
 				}
 				try {
 					chmod($instruction["path"], $instruction["mode"]);
-				} catch ($error) {
+				} catch (Exception $error) {
 					senderror(new api_error(507, 705, "Failed to set permissions on " . $instruction["path"], $error));
 				}
 				break;
@@ -60,11 +60,13 @@ function create_tree($tree)
 					$instruction["mode"] = "0775";
 				try {
 					mkdir($instruction["path"], $instruction["mode"], true);
+				} catch (Exception $error) {
+					senderror(new api_error(507, 706, "Failed to create directory " . $instruction["path"]));
 				}
 				break;
 			
 			default:
-				senderror(new api_error(500, 706, "Unknown file tree entry type: " . $instruction["type"]));
+				senderror(new api_error(500, 707, "Unknown file tree entry type: " . $instruction["type"]));
 		}
 	}
 }
