@@ -92,6 +92,8 @@ blow_worm = {
 				document.getElementById("button-remove-bookmarks").addEventListener("click", blow_worm.modals.delete);
 				// add bookmark
 				document.getElementById("button-add-bookmark").addEventListener("click", blow_worm.modals.create);
+				// settings
+				document.getElementById("button-settings").addEventListener("click", blow_worm.modals.settings);
 				// update the search box as the user types
 				document.getElementById("search-box").addEventListener("keyup", blow_worm.events.searchbox.keyup);
 				
