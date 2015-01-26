@@ -137,13 +137,8 @@ blow_worm = {
 		//////////////////////////////////////////////////////////////////////////////
 		logout: function() {
 			return new Promise(function(resolve, reject) {
-				var ajax = new XMLHttpRequest();
-				ajax.onload = function() {
-					if(ajax.status >= 200 && ajax.status < 300)
-					{
-						resolve(ajax.response);
-					}
-					else if(ajax.getResponseHeader("content-type") == "application/json")
+				get("api.php?action=logout").then(resolve, function(response) {
+					if(ajax.getResponseHeader("content-type") == "application/json")
 					{
 						blow_worm.actions.display_error(ajax.response)
 							.then(location.reload);
@@ -158,10 +153,8 @@ blow_worm = {
 						console.error(ajax.response);
 						reject(ajax.response);
 					}
-				};
-				ajax.open("GET", "api.php?action=logout", true);
-				ajax.send(null);
-			})
+				});
+			});
 		},
 		
 		display_error: function(response) {
@@ -489,6 +482,68 @@ blow_worm = {
 							handler: "hide"
 						}
 					]
+				}).show();
+			});
+		},
+		
+		settings: function() {
+			return new Promise(function(resolve, reject) {
+				nanoModal(document.getElementById("modal-settings"), {
+					buttons: [{
+						text: "Save",
+						primary: true,
+						handler: function(modal) {
+							var boxes = {
+								oldpass: document.getElementById("settings-passchange-oldpass"),
+								newpass: document.getElementById("settings-passchange-newpass"),
+								newpassconf: document.getElementById("settings-passchange-newpassconf")
+							};
+							if(boxes.oldpass.value.length > 0 &&
+							   boxes.newpass.value.length > 0 &&
+							   boxes.newpassconf.value.length > 0)
+							{
+								if(boxes.newpass.value !== boxes.newpassconf.value)
+								{
+									nanoModal("The passwords didn't match.", { autoRemove: true, buttons: [{ text: "Go Back", primary: true, handler: "hide" }] }).show();
+									return;
+								}
+								//the user want's to change their password
+								var ajax = new XMLHttpRequest(),
+									postdata = "key=password";
+								postdata += "&value=" + encodeURIComponent(boxes.newpass.value);
+								postdata += "&oldpass=" + encodeURIComponent(boxes.newpassconf.value);
+								ajax.onload = function() {
+									if(ajax.status >= 200 && ajax.status < 300)
+									{
+										// success!
+									}
+									// something went wrong :(
+									else if(ajax.getResponseHeader("content-type") == "application/json")
+									{
+										blow_worm.actions.display_error(ajax.response);
+									}
+									else
+									{
+										console.error(ajax.response);
+										nanoModal("<p>Something went wrong!</p><p>Check the console for more information.</p>", {
+											autoRemove: true,
+											buttons: [{
+												text: "Continue",
+												primary: true,
+												handler: "hide"
+											}]
+										}).show();
+									}
+								};
+								ajax.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+								ajax.open("POST", "api.php?action=usermod", true);
+								ajax.send(postdata);
+							}
+						}
+					}, {
+						text: "Cancel",
+						handler: "hide"
+					}]
 				}).show();
 			});
 		}
