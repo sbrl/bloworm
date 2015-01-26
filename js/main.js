@@ -44,8 +44,7 @@ blow_worm = {
 				login_display.innerHTML += "Acquiring session token...<br />\n";
 				
 				// send the login request
-				var ajax = new XMLHttpRequest(),
-					data = {
+				var data = {
 						user: username,
 						pass: password
 					};
@@ -60,7 +59,7 @@ blow_worm = {
 					blow_worm.env.username = respjson.user;
 					blow_worm.env.sessionkey = respjson.sessionkey;
 					
-					//hide and reset the login progress box
+					// hide and reset the login progress box
 					login_progress_modal.hide();
 					login_display.innerHTML = "";
 					
@@ -130,13 +129,11 @@ blow_worm = {
 		logout: function() {
 			return new Promise(function(resolve, reject) {
 				get("api.php?action=logout").then(resolve, function(response) {
-					if(ajax.getResponseHeader("content-type") == "application/json")
-					{
+					try {
+						JSON.parse(response);
 						blow_worm.actions.display_error(response)
 							.then(location.reload);
-					}
-					else
-					{
+					} catch (error) {
 						nanoModal("Something went wrong while trying to log you out!<br />Please check the console for more information.", {
 							autoRemove: true,
 							overlayClose: false,
@@ -254,7 +251,7 @@ blow_worm = {
 						tagsbox.value = "";
 						
 						get(requrl).then(function(response) {
-							var respjson = JSON.parse(ajax.response);
+							var respjson = JSON.parse(response);
 							console.log("[create] Response recieved", respjson);
 							
 							// render and insert the new bookmark into the display
@@ -276,14 +273,12 @@ blow_worm = {
 							resolve(respjson);
 						}, function(response) {
 							console.error("[create] Error occurred. ", response);
-							var resp = JSON.parse(response);
-							if(ajax.getResponseHeader("content-type") == "application/json")
-							{
+							try {
+								var resp = JSON.parse(response);
+								
 								blow_worm.actions.display_error(response)
 									.then(function() { reject(resp); });
-							}
-							else
-							{
+							} catch (error) {
 								nanoModal("Something went wrong!<br />Please check the console for more information.", { autoRemove: true }).show();
 								reject(response);
 							}
@@ -324,25 +319,19 @@ blow_worm = {
 								}
 								
 								modal.hide();
-								var progress_modal = nanoModal("Deleting...", { autoRemove: true, overlayClose: false, buttons: [] }).show(),
-									ajax = new XMLHttpRequest();
+								var progress_modal = nanoModal("Deleting...", { autoRemove: true, overlayClose: false, buttons: [] }).show();
 								
-								ajax.onload = function() {
-									if(ajax.status >= 200 && ajax.status < 300)
-									{
-										// the server deleted the bookmarks successfully
-										progress_modal.hide();
-										
-										resolve();
-									}
-									else if(ajax.getResponseHeader("content-type") == "application/json")
-									{
-										blow_worm.actions.display_error(ajax.response)
+								get("api.php?action=delete&ids=" + to_delete.join(",")).then(function(response) {
+									// the server deleted the bookmarks successfully
+									progress_modal.hide();
+									resolve(response);
+								}, function(response) {
+									try {
+										JSON.parse(response);
+										blow_worm.actions.display_error(response)
 											.then(window.location.reload);
-									}
-									else
-									{
-										console.error(ajax.response);
+									} catch(error) {
+										console.error(response);
 										nanoModal("<p>Something went wrong!</p><p>Check the console for more information.</p><p>Press 'continue' to reload the page.</p>", {
 											autoRemove: true,
 											buttons: [{
@@ -352,9 +341,7 @@ blow_worm = {
 											}]
 										}).show();
 									}
-								}
-								ajax.open("GET", "api.php?action=delete&ids=" + to_delete.join(","), true);
-								ajax.send(null);
+								});
 							}
 						},
 						{
@@ -404,7 +391,6 @@ blow_worm = {
 							handler: function(modal) {
 								modal.hide();
 								var progress_modal = nanoModal("Updating bookmark...", { autoRemove: true }).show(),
-									ajax = new XMLHttpRequest(),
 									url = "api.php?action=update";
 								
 								url += "&id=" + id;
@@ -418,37 +404,31 @@ blow_worm = {
 								if(tags != tagsbox.value)
 									url += "&tags=" + encodeURIComponent(tagsbox.value);
 								
-								ajax.onload = function() {
-									if(ajax.status >= 200 && ajax.status < 300)
+								get(url).then(function(response) {
+									// success!
+									bookmark_html.querySelector(".bookmark-name").innerHTML = namebox.value;
+									bookmark_html.querySelector(".bookmark-url").innerHTML = urlbox.value;
+									bookmark_html.querySelector(".bookmark-url").href = urlbox.value;
+									
+									var tags_html_str = "",
+										tags_split = tagsbox.value.split(/, ?/g);
+									
+									for(var i = tags_split.length - 1; i >= 0; i--)
 									{
-										// success!
-										
-										bookmark_html.querySelector(".bookmark-name").innerHTML = namebox.value;
-										bookmark_html.querySelector(".bookmark-url").innerHTML = urlbox.value;
-										bookmark_html.querySelector(".bookmark-url").href = urlbox.value;
-										
-										var tags_html_str = "",
-											tags_split = tagsbox.value.split(/, ?/g);
-										
-										for(var i = tags_split.length - 1; i >= 0; i--)
-										{
-											tags_html_str = "<span class='tag'>" + tags_split[i] + "</span>" + tags_html_str;
-										}
-										bookmark_html.querySelector(".bookmark-tags").innerHTML = tags_html_str;
-										
-										// hide the progress modal
-										progress_modal.hide();
-										
-										resolve(ajax.response);
+										tags_html_str = "<span class='tag'>" + tags_split[i] + "</span>" + tags_html_str;
 									}
-									// something went wrong :(
-									else if(ajax.getResponseHeader("content-type") == "application/json")
-									{
-										blow_worm.actions.display_error(ajax.response);
-									}
-									else
-									{
-										console.error(ajax.response);
+									bookmark_html.querySelector(".bookmark-tags").innerHTML = tags_html_str;
+									
+									// hide the progress modal
+									progress_modal.hide();
+									
+									resolve(response);
+								}, function(response) {
+									try {
+										JSON.parse(response);
+										blow_worm.actions.display_error(response);
+									} catch (error) {
+										console.error(response);
 										nanoModal("<p>Something went wrong!</p><p>Check the console for more information.</p>", {
 											autoRemove: true,
 											buttons: [{
@@ -458,9 +438,8 @@ blow_worm = {
 											}]
 										}).show();
 									}
-								};
-								ajax.open("GET", url, true);
-								ajax.send(null);
+									reject(response);
+								});
 							}
 						},
 						{
@@ -494,23 +473,21 @@ blow_worm = {
 									return;
 								}
 								//the user want's to change their password
-								var ajax = new XMLHttpRequest(),
-									postdata = "key=password";
-								postdata += "&value=" + encodeURIComponent(boxes.newpass.value);
-								postdata += "&oldpass=" + encodeURIComponent(boxes.newpassconf.value);
-								ajax.onload = function() {
-									if(ajax.status >= 200 && ajax.status < 300)
-									{
-										// success!
-									}
-									// something went wrong :(
-									else if(ajax.getResponseHeader("content-type") == "application/json")
-									{
-										blow_worm.actions.display_error(ajax.response);
-									}
-									else
-									{
-										console.error(ajax.response);
+								var data = {
+									key: "password",
+									value: boxes.newpass.value,
+									oldpass: boxes.newpassconf.value
+								};
+								
+								post("api.php?action=usermod", postify(data)).then(function(response) {
+									// success!
+									console.log("[usermod] Usermod successful. Reloading page...");
+								}, function(response) {
+									try {
+										JSON.parse(response);
+										blow_worm.actions.display_error(response);
+									} catch (error) {
+										console.error(response);
 										nanoModal("<p>Something went wrong!</p><p>Check the console for more information.</p>", {
 											autoRemove: true,
 											buttons: [{
@@ -520,10 +497,8 @@ blow_worm = {
 											}]
 										}).show();
 									}
-								};
-								ajax.setRequestHeader("content-type", "application/x-www-form-urlencoded");
-								ajax.open("POST", "api.php?action=usermod", true);
-								ajax.send(postdata);
+								}).then(blow_worm.actions.logout)
+								.then(window.location.reload);
 							}
 						}
 					}, {
