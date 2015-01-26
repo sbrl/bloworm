@@ -39,12 +39,13 @@ class api_error
 	
 	public $message = "An unknown error has occurred.";
 	
-	public function __construct($http_status, $code, $message)
+	public function __construct($http_status, $code, $message, $details = false)
 	{
 		$this->http_status = $http_status;
 		$this->code = $code;
 		
 		$this->message = utf8_encode($message);
+		$this->details = $details;
 	}
 }
 
@@ -64,6 +65,10 @@ function senderror($api_error)
 		"code" => $api_error->code,
 		"message" => $api_error->message
 	];
+	if(isset($api_error->details))
+		$response->details = $api_error->details;
+	else
+		$response->details = false;
 	exit(json_encode($response, JSON_PRETTY_PRINT));
 }
 
