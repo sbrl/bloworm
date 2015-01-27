@@ -25,7 +25,10 @@ blow_worm = {
 		// The id of the setTimeOut used to schedule the updating of the search results.
 		// We do this so that we don't update the search box on every character
 		// that the user types, rather we update when the user stops typing.
-		next_update: -1
+		next_update: -1,
+		
+		// whether we are an administrator.
+		isadmin: false
 		
 	},
 	actions: {
@@ -58,6 +61,12 @@ blow_worm = {
 					blow_worm.env.loggedin = true;
 					blow_worm.env.username = respjson.user;
 					blow_worm.env.sessionkey = respjson.sessionkey;
+					blow_worm.env.isadmin = respjson.isadmin;
+					if(blow_worm.env.isadmin)
+					{
+						document.body.classList.remove("notadmin");
+						document.body.classList.add("isadmin");
+					}
 					
 					// hide and reset the login progress box
 					login_progress_modal.hide();
@@ -528,6 +537,12 @@ blow_worm = {
 					blow_worm.env.loggedin = true;
 					blow_worm.env.username = resp.user;
 					blow_worm.env.sessionkey = resp.sessionkey;
+					blow_worm.env.isadmin = resp.isadmin;
+					if(blow_worm.env.isadmin)
+					{
+						document.body.classList.remove("notadmin");
+						document.body.classList.add("isadmin");
+					}
 					
 					console.info("Already logged in. Session key: " + blow_worm.env.sessionkey);
 					
