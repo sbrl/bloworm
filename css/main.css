@@ -77,6 +77,9 @@ footer
 	vertical-align: middle;
 }
 
+.notadmin	.admin	{ display: none;		}
+.isadmin	.admin	{ display: inline-block;}
+
 /* Utility / layout aids */
 .float.left     { float: left;  }
 .float.right    { float: right; }
