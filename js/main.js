@@ -137,6 +137,8 @@ blow_worm = {
 				document.getElementById("button-add-bookmark").addEventListener("click", blow_worm.modals.create);
 				// settings
 				document.getElementById("button-settings").addEventListener("click", blow_worm.modals.settings);
+				// admin settings
+				document.getElementById("button-admin-settings").addEventListener("click", blow_worm.modals.admin);
 				// update the search box as the user types
 				document.getElementById("search-box").addEventListener("keyup", blow_worm.events.searchbox.keyup);
 				
@@ -243,6 +245,9 @@ blow_worm = {
 			adduser: function() {
 				var usernamebox = document.getElementById("admin-adduser-name");
 				
+				if(usernamebox.value == 0)
+					resolve();
+				
 				get("api.php?action=adduser&newusername=" + encodeURIComponent(usernamebox.value)).then(function(response) {
 					var obj = JSON.parse(response);
 					nanoModal("<p>Successfuly created new user '" + obj.username + "' " +
@@ -255,6 +260,7 @@ blow_worm = {
 							handler: "hide"
 						}]
 					});
+					resolve(obj);
 				}, blow_worm.actions.display_error);
 			}
 		}
