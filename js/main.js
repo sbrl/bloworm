@@ -179,27 +179,33 @@ blow_worm = {
 		logout: function() {
 			return new Promise(function(resolve, reject) {
 				get("api.php?action=logout").then(resolve, function(response) {
-					try {
-						JSON.parse(response);
-						blow_worm.actions.display_error(response)
-							.then(location.reload);
-					} catch (error) {
-						nanoModal("Something went wrong while trying to log you out!<br />Please check the console for more information.", {
-							autoRemove: true,
-							overlayClose: false,
-							buttons: []
-						}).show();
-						console.error(response);
-						reject(response);
-					}
+					blow_worm.actions.display_error(response)
+						.then(location.reload);
+					reject(response);
 				});
 			});
 		},
 		
+		/***
+		 *                 _   _                __  _ _           _                                         
+		 *       __ _  ___| |_(_) ___  _ __    / /_| (_)___ _ __ | | __ _ _   _     ___ _ __ _ __ ___  _ __ 
+		 *      / _` |/ __| __| |/ _ \| '_ \  / / _` | / __| '_ \| |/ _` | | | |   / _ \ '__| '__/ _ \| '__|
+		 *     | (_| | (__| |_| | (_) | | | |/ / (_| | \__ \ |_) | | (_| | |_| |  |  __/ |  | | | (_) | |   
+		 *      \__,_|\___|\__|_|\___/|_| |_/_/ \__,_|_|___/ .__/|_|\__,_|\__, |___\___|_|  |_|  \___/|_|   
+		 *                                                 |_|            |___/_____| %action/display_error%
+		 */
 		display_error: function(response) {
 			return new Promise(function(resolve, reject) {
-				var error = JSON.parse(response),
-					html = "<h2>Something went wrong!</h2>";
+				console.error("Error occurred. ", response);
+				try {
+					var error = JSON.parse(response);
+				} catch(error) {
+					nanoModal("Something went wrong!<br />Please check the console for more information.", { autoRemove: true }).show();
+					reject(response);
+					return false;
+				}
+				
+				var html = "<h2>Something went wrong!</h2>";
 				html += "<p>Error Code: <strong>" + error.code + "</strong></p>";
 				html += "<p>" + error.type + "</p>";
 				html += "<p><strong>Techincal Details:</strong></p>";
@@ -215,6 +221,42 @@ blow_worm = {
 					}]
 				});
 			});
+		},
+		
+		/***
+		 *                 _   _                __        _           _       
+		 *       __ _  ___| |_(_) ___  _ __    / /_ _  __| |_ __ ___ (_)_ __  
+		 *      / _` |/ __| __| |/ _ \| '_ \  / / _` |/ _` | '_ ` _ \| | '_ \ 
+		 *     | (_| | (__| |_| | (_) | | | |/ / (_| | (_| | | | | | | | | | |
+		 *      \__,_|\___|\__|_|\___/|_| |_/_/ \__,_|\__,_|_| |_| |_|_|_| |_|
+		 *                                                      %action/admin%
+		 */
+		admin: {
+			/***
+			 *                 _   _                __        _           _          __        _     _                     
+			 *       __ _  ___| |_(_) ___  _ __    / /_ _  __| |_ __ ___ (_)_ __    / /_ _  __| | __| |_   _ ___  ___ _ __ 
+			 *      / _` |/ __| __| |/ _ \| '_ \  / / _` |/ _` | '_ ` _ \| | '_ \  / / _` |/ _` |/ _` | | | / __|/ _ \ '__|
+			 *     | (_| | (__| |_| | (_) | | | |/ / (_| | (_| | | | | | | | | | |/ / (_| | (_| | (_| | |_| \__ \  __/ |   
+			 *      \__,_|\___|\__|_|\___/|_| |_/_/ \__,_|\__,_|_| |_| |_|_|_| |_/_/ \__,_|\__,_|\__,_|\__,_|___/\___|_|   
+			 *                                                                                                             
+			 */
+			adduser: function() {
+				var usernamebox = document.getElementById("admin-adduser-name");
+				
+				get("api.php?action=adduser&newusername=" + encodeURIComponent(usernamebox.value)).then(function(response) {
+					var obj = JSON.parse(response);
+					nanoModal("<p>Successfuly created new user '" + obj.username + "' " +
+							  "with password <code>" + obj.password + "</code>.</p>" +
+							  "<p><strong>Warning: The new user's password is shown here once. After you close this dislog, you won't be able to retrieve the user's password!</strong></p>", {
+						autoRemove: true,
+						buttons: [{
+							text: "Continue",
+							primary: true,
+							handler: "hide"
+						}]
+					});
+				}, blow_worm.actions.display_error);
+			}
 		}
 	},
 	
@@ -346,16 +388,8 @@ blow_worm = {
 							// resolve the promise
 							resolve(respjson);
 						}, function(response) {
-							console.error("[create] Error occurred. ", response);
-							try {
-								var resp = JSON.parse(response);
-								
-								blow_worm.actions.display_error(response)
-									.then(function() { reject(resp); });
-							} catch (error) {
-								nanoModal("Something went wrong!<br />Please check the console for more information.", { autoRemove: true }).show();
-								reject(response);
-							}
+							blow_worm.actions.display_error(response)
+								.then(function() { reject(resp); });
 						});
 						console.log("[create] request sent");
 					}
@@ -408,21 +442,8 @@ blow_worm = {
 									progress_modal.hide();
 									resolve(response);
 								}, function(response) {
-									try {
-										JSON.parse(response);
-										blow_worm.actions.display_error(response)
-											.then(window.location.reload);
-									} catch(error) {
-										console.error(response);
-										nanoModal("<p>Something went wrong!</p><p>Check the console for more information.</p><p>Press 'continue' to reload the page.</p>", {
-											autoRemove: true,
-											buttons: [{
-												text: "Continue",
-												primary: true,
-												handler: window.location.reload
-											}]
-										}).show();
-									}
+									blow_worm.actions.display_error(response)
+										.then(window.location.reload);
 								});
 							}
 						},
@@ -514,21 +535,8 @@ blow_worm = {
 									
 									resolve(response);
 								}, function(response) {
-									try {
-										JSON.parse(response);
-										blow_worm.actions.display_error(response);
-									} catch (error) {
-										console.error(response);
-										nanoModal("<p>Something went wrong!</p><p>Check the console for more information.</p>", {
-											autoRemove: true,
-											buttons: [{
-												text: "Continue",
-												primary: true,
-												handler: "hide"
-											}]
-										}).show();
-									}
-									reject(response);
+									blow_worm.actions.display_error(response)
+										.then(function() { reject(response) });
 								});
 							}
 						},
@@ -584,27 +592,36 @@ blow_worm = {
 									get("api.php?action=logout").then(function() {
 										window.location.reload();
 									});
-								}, function(response) {
-									try {
-										JSON.parse(response);
-										blow_worm.actions.display_error(response);
-									} catch (error) {
-										console.error(response);
-										nanoModal("<p>Something went wrong!</p><p>Check the console for more information.</p>", {
-											autoRemove: true,
-											buttons: [{
-												text: "Continue",
-												primary: true,
-												handler: "hide"
-											}]
-										}).show();
-									}
-								});
+								}, blow_worm.actions.display_error);
 							}
 						}
 					}, {
 						text: "Cancel",
 						handler: "hide"
+					}]
+				}).show();
+			});
+		},
+		
+		/***
+		 *                          _       _    __        _           _       
+		 *      _ __ ___   ___   __| | __ _| |  / /_ _  __| |_ __ ___ (_)_ __  
+		 *     | '_ ` _ \ / _ \ / _` |/ _` | | / / _` |/ _` | '_ ` _ \| | '_ \ 
+		 *     | | | | | | (_) | (_| | (_| | |/ / (_| | (_| | | | | | | | | | |
+		 *     |_| |_| |_|\___/ \__,_|\__,_|_/_/ \__,_|\__,_|_| |_| |_|_|_| |_|
+		 *                                                        %modal/admin%
+		 */
+		admin: function() {
+			return new Promise(function(resolve, reject) {
+				nanoModal(document.getElementById("modal-admin"), {
+					buttons: [{
+						text: "Done",
+						primary: true,
+						handler: function(modal) {
+							modal.hide();
+							document.getElementById("admin-adduser-name").value = "";
+							resolve();
+						}
 					}]
 				}).show();
 			});
