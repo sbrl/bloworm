@@ -35,8 +35,8 @@ footer
 
 .nanoModal input:not([type=button]), .nanoModal textarea
 {
-	background: rgba(255, 255, 255, 0.5);
-	color: #7a5bcc;
+	background	: rgba(255, 255, 255, 0.5);
+	color		: #7a5bcc;
 }
 .nanoModal ::-webkit-input-placeholder	{ color: rgba(184, 167, 230, 0.78); }
 
@@ -48,10 +48,14 @@ footer
 
 .nanoModal button
 {
-	background-color: #8142ca !important;
-	border-color: #9d51d4 !important;
+	margin			: 0.3rem 0.45rem;
+	padding			: 0.3rem 0.45rem;
 	
-	transition: all 0.25s;
+	background-color: #8142ca !important;
+	border			: 0.1rem solid #9d51d4 !important;
+	border-radius	: 0.5rem;
+	
+	transition		: all 0.25s;
 }
 .nanoModal button:hover	{ background-color: #7236b6 !important; border-color: #893cc0 !important; }
 .nanoModal button:active{ background-color: #6024a3 !important; border-color: #7629ad !important; }
@@ -80,20 +84,20 @@ footer
 
 #display-bookmark-count
 {
-	background: url(../images/icons/star.png) no-repeat;
-	background-size: contain;
+	background		: url(../images/icons/star.png) no-repeat;
+	background-size	: contain;
 	
-	cursor: help;
+	cursor			: help;
 }
 
 .bookmark
 {
-	position: relative;
-	margin: 0.5rem;
-	padding: 0.9rem 1.3rem;
+	position		: relative;
+	margin			: 0.5rem;
+	padding			: 0.9rem 1.3rem;
 	
-	background: rgba(255, 255, 255, 0.37);
-	border-radius: 0.4rem;
+	background		: rgba(255, 255, 255, 0.37);
+	border-radius	: 0.4rem;
 }
 
 .bookmark .top-row, .bookmark .bottom-row
@@ -103,25 +107,25 @@ footer
 
 .bookmark-favicon
 {
-	-webkit-appearance: none;
-	appearance: none;
+	-webkit-appearance	: none;
+	appearance			: none;
 	
-	position: relative;
-	display: inline-block;
+	position			: relative;
+	display				: inline-block;
 	
-	width: 2rem;
-	height: 2rem;
+	width				: 2rem;
+	height				: 2rem;
 	
-	margin: 0.4rem 0.5rem 0 0;
+	margin				: 0.4rem 0.5rem 0 0;
 	
-	background-size: contain;
+	background-size		: contain;
 	
-	cursor: pointer;
+	cursor				: pointer;
 	
-	transform: scale(1);
-	opacity: 1;
+	transform			: scale(1);
+	opacity				: 1;
 	
-	transition: all 0.2s;
+	transition			: all 0.2s;
 }
 
 .bookmark-favicon:focus
@@ -131,24 +135,24 @@ footer
 
 .bookmark-favicon:checked:after
 {
-	position: absolute; left: 0.3rem; top: -0.5rem;
+	position	: absolute; left: 0.3rem; top: -0.5rem;
 	
-	content: "✓";
-	font-size: 2rem;
+	content		: "✓";
+	font-size	: 2rem;
 	
-	opacity: 1;
+	opacity		: 1;
 }
 
 .bookmark-favicon:active, .bookmark-favicon:checked:active
 {
-	opacity: 0.5;
-	transform: scale(1.5);
+	opacity		: 0.5;
+	transform	: scale(1.5);
 }
 
 .bookmark-favicon:checked
 {
-	transform: scale(1.25);
-	opacity: 0.6;
+	transform	: scale(1.25);
+	opacity		: 0.6;
 }
 
 .bookmark-url
@@ -158,20 +162,20 @@ footer
 
 .bookmark-tags
 {
-	display: inline-block;
+	display		: inline-block;
 	
-	text-align: right;
-	line-height: 2.4rem;
+	text-align	: right;
+	line-height	: 2.4rem;
 }
 
 .tag
 {
-	margin: 0.25rem;
-	padding: 0.3rem 0.5rem;
+	margin			: 0.25rem;
+	padding			: 0.3rem 0.5rem;
 	
-	color: #83a8d7;
-	white-space: nowrap;
+	color			: #83a8d7;
+	white-space		: nowrap;
 	
-	background: rgba(255, 255, 255, 0.51);
-	border-radius: 0.4rem;
+	background		: rgba(255, 255, 255, 0.51);
+	border-radius	: 0.4rem;
 }
