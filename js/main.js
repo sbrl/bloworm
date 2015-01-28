@@ -5,8 +5,24 @@ function postify(a){return Object.keys(a).map(function(k){return [k,encodeURICom
 function get(u){return new Promise(function(r,t,a){a=new XMLHttpRequest();a.onload=function(b,c){b=a.status;c=a.response;if(b>199&&b<300){r(c)}else{t(c)}};a.open("GET",u,true);a.send(null)})}
 // #9 - Promisified POST
 function post(u,d,h){return new Promise(function(r,t,a){a=new XMLHttpRequest();a.onload=function(b,c){b=a.status;c=a.response;if(b>199&&b<300){r(c)}else{t(c)}};a.open("POST",u,true);a.setRequestHeader("content-type",h?h:"application/x-www-form-urlencoded");a.send(d)})}
-
+/***
+ *      ____  _                __          __                  
+ *     |  _ \| |               \ \        / /                  
+ *     | |_) | | _____      __  \ \  /\  / /__  _ __ _ __ ___  
+ *     |  _ <| |/ _ \ \ /\ / /   \ \/  \/ / _ \| '__| '_ ` _ \ 
+ *     | |_) | | (_) \ V  V /     \  /\  / (_) | |  | | | | | |
+ *     |____/|_|\___/ \_/\_/       \/  \/ \___/|_|  |_| |_| |_|
+ *                                                  %blow-worm%
+ */
 blow_worm = {
+	/***
+	 *                      
+	 *       ___ _ ____   __
+	 *      / _ \ '_ \ \ / /
+	 *     |  __/ | | \ V / 
+	 *      \___|_| |_|\_/  
+	 *                 %env%
+	 */
 	env: {
 		// the mode we should operate in
 		// can either be "login", or "view-share".
@@ -31,10 +47,23 @@ blow_worm = {
 		isadmin: false
 		
 	},
+	/***
+	 *                 _   _                 
+	 *       __ _  ___| |_(_) ___  _ __  ___ 
+	 *      / _` |/ __| __| |/ _ \| '_ \/ __|
+	 *     | (_| | (__| |_| | (_) | | | \__ \
+	 *      \__,_|\___|\__|_|\___/|_| |_|___/
+	 *******************************%actions%****************************
+	 */
 	actions: {
-		///////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////// Login ////////////////////////////////////
-		///////////////////////////////////////////////////////////////////////////////
+		/***
+		 *                 _   _                ___             _       
+		 *       __ _  ___| |_(_) ___  _ __    / / | ___   __ _(_)_ __  
+		 *      / _` |/ __| __| |/ _ \| '_ \  / /| |/ _ \ / _` | | '_ \ 
+		 *     | (_| | (__| |_| | (_) | | | |/ / | | (_) | (_| | | | | |
+		 *      \__,_|\___|\__|_|\___/|_| |_/_/  |_|\___/ \__, |_|_| |_|
+		 *                            %action/login%      |___/         
+		 */
 		login: function(username, password) {
 			return new Promise(function(resolve, reject) {
 				// show a progress box
@@ -82,9 +111,14 @@ blow_worm = {
 			});
 		},
 		
-		///////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////// setup ////////////////////////////////////
-		///////////////////////////////////////////////////////////////////////////////
+		/***
+		 *                 _   _                __        _               
+		 *       __ _  ___| |_(_) ___  _ __    / /__  ___| |_ _   _ _ __  
+		 *      / _` |/ __| __| |/ _ \| '_ \  / / __|/ _ \ __| | | | '_ \ 
+		 *     | (_| | (__| |_| | (_) | | | |/ /\__ \  __/ |_| |_| | |_) |
+		 *      \__,_|\___|\__|_|\___/|_| |_/_/ |___/\___|\__|\__,_| .__/ 
+		 *                                         %action/setup%  |_|    
+		 */
 		// function to setup the interface after login
 		setup: function() {
 			return new Promise(function(resolve, reject) {
@@ -134,9 +168,14 @@ blow_worm = {
 			});
 		},
 		
-		//////////////////////////////////////////////////////////////////////////////
-		/////////////////////////////////// Logout ///////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////
+		/***
+		 *                 _   _                ___                         _   
+		 *       __ _  ___| |_(_) ___  _ __    / / | ___   __ _  ___  _   _| |_ 
+		 *      / _` |/ __| __| |/ _ \| '_ \  / /| |/ _ \ / _` |/ _ \| | | | __|
+		 *     | (_| | (__| |_| | (_) | | | |/ / | | (_) | (_| | (_) | |_| | |_ 
+		 *      \__,_|\___|\__|_|\___/|_| |_/_/  |_|\___/ \__, |\___/ \__,_|\__|
+		 *                                                |___/  %action/logout%
+		 */
 		logout: function() {
 			return new Promise(function(resolve, reject) {
 				get("api.php?action=logout").then(resolve, function(response) {
@@ -179,7 +218,23 @@ blow_worm = {
 		}
 	},
 	
+	/***
+	 *                          _       _     
+	 *      _ __ ___   ___   __| | __ _| |___ 
+	 *     | '_ ` _ \ / _ \ / _` |/ _` | / __|
+	 *     | | | | | | (_) | (_| | (_| | \__ \
+	 *     |_| |_| |_|\___/ \__,_|\__,_|_|___/
+	 **********************************%modals%***************************
+	 */
 	modals: {
+		/***
+		 *                          _       _        ___             _       
+		 *      _ __ ___   ___   __| | __ _| |___   / / | ___   __ _(_)_ __  
+		 *     | '_ ` _ \ / _ \ / _` |/ _` | / __| / /| |/ _ \ / _` | | '_ \ 
+		 *     | | | | | | (_) | (_| | (_| | \__ \/ / | | (_) | (_| | | | | |
+		 *     |_| |_| |_|\___/ \__,_|\__,_|_|___/_/  |_|\___/ \__, |_|_| |_|
+		 *                                   %modal/login%     |___/         
+		 */
 		login: function() {
 			return new Promise(function(resolve, reject) {
 				var loginmodal = nanoModal(document.getElementById("modal-login"), {
@@ -215,6 +270,14 @@ blow_worm = {
 			});
 		},
 		
+		/***
+		 *                          _       _        __                  _       
+		 *      _ __ ___   ___   __| | __ _| |___   / /__ _ __ ___  __ _| |_ ___ 
+		 *     | '_ ` _ \ / _ \ / _` |/ _` | / __| / / __| '__/ _ \/ _` | __/ _ \
+		 *     | | | | | | (_) | (_| | (_| | \__ \/ / (__| | |  __/ (_| | ||  __/
+		 *     |_| |_| |_|\___/ \__,_|\__,_|_|___/_/ \___|_|  \___|\__,_|\__\___|
+		 *                                                         %modal/create%
+		 */
 		create: function() {
 			return new Promise(function(resolve, reject) {
 				nanoModal(document.getElementById("modal-create"), { buttons: [{
@@ -300,6 +363,14 @@ blow_worm = {
 			});
 		},
 		
+		/***
+		 *                          _       _        __  _      _      _       
+		 *      _ __ ___   ___   __| | __ _| |___   / /_| | ___| | ___| |_ ___ 
+		 *     | '_ ` _ \ / _ \ / _` |/ _` | / __| / / _` |/ _ \ |/ _ \ __/ _ \
+		 *     | | | | | | (_) | (_| | (_| | \__ \/ / (_| |  __/ |  __/ ||  __/
+		 *     |_| |_| |_|\___/ \__,_|\__,_|_|___/_/ \__,_|\___|_|\___|\__\___|
+		 *                                                       %modal/update%
+		 */
 		delete: function() {
 			return new Promise(function(resolve, reject) {
 				nanoModal("<h2>Delete Bookmarks</h2><p>Are you sure you want to delete these bookmarks?</p><p>It can't be undone!</p>", {
@@ -364,6 +435,14 @@ blow_worm = {
 			});
 		},
 		
+		/***
+		 *                          _       _        __               _       _       
+		 *      _ __ ___   ___   __| | __ _| |___   / /   _ _ __   __| | __ _| |_ ___ 
+		 *     | '_ ` _ \ / _ \ / _` |/ _` | / __| / / | | | '_ \ / _` |/ _` | __/ _ \
+		 *     | | | | | | (_) | (_| | (_| | \__ \/ /| |_| | |_) | (_| | (_| | ||  __/
+		 *     |_| |_| |_|\___/ \__,_|\__,_|_|___/_/  \__,_| .__/ \__,_|\__,_|\__\___|
+		 *                                                 |_|          %modal/update%
+		 */
 		update: function(bookmark_html) {
 			return new Promise(function(resolve, reject) {
 				var update_html = document.getElementById("modal-update"),
@@ -462,6 +541,14 @@ blow_worm = {
 			});
 		},
 		
+		/***
+		 *                          _       _        __        _   _   _                 
+		 *      _ __ ___   ___   __| | __ _| |___   / /__  ___| |_| |_(_)_ __   __ _ ___ 
+		 *     | '_ ` _ \ / _ \ / _` |/ _` | / __| / / __|/ _ \ __| __| | '_ \ / _` / __|
+		 *     | | | | | | (_) | (_| | (_| | \__ \/ /\__ \  __/ |_| |_| | | | | (_| \__ \
+		 *     |_| |_| |_|\___/ \__,_|\__,_|_|___/_/ |___/\___|\__|\__|_|_| |_|\__, |___/
+		 *                                              %modal/settings%       |___/     
+		 */
 		settings: function() {
 			return new Promise(function(resolve, reject) {
 				nanoModal(document.getElementById("modal-settings"), {
@@ -524,7 +611,23 @@ blow_worm = {
 		}
 	},
 	
+	/***
+	 *                           _       
+	 *       _____   _____ _ __ | |_ ___ 
+	 *      / _ \ \ / / _ \ '_ \| __/ __|
+	 *     |  __/\ V /  __/ | | | |_\__ \
+	 *      \___| \_/ \___|_| |_|\__|___/
+	 ****************************%events%***************************
+	 */
 	events: {
+		/***
+		 *                           _      ___                 _ 
+		 *       _____   _____ _ __ | |_   / / | ___   __ _  __| |
+		 *      / _ \ \ / / _ \ '_ \| __| / /| |/ _ \ / _` |/ _` |
+		 *     |  __/\ V /  __/ | | | |_ / / | | (_) | (_| | (_| |
+		 *      \___| \_/ \___|_| |_|\__/_/  |_|\___/ \__,_|\__,_|
+		 *                                            %event/load%
+		 */
 		load: function(event) {
 			// check whether the user is logged in
 			console.log("Checking login status...");
@@ -559,6 +662,14 @@ blow_worm = {
 				nanoModal("Something went wrong when checking your current login status!<br />\nCheck the console for more details.", { autoRemove: true }).show();
 			});
 		},
+		/***
+		 *                           _      __                       _     _               
+		 *       _____   _____ _ __ | |_   / /__  ___  __ _ _ __ ___| |__ | |__   _____  __
+		 *      / _ \ \ / / _ \ '_ \| __| / / __|/ _ \/ _` | '__/ __| '_ \| '_ \ / _ \ \/ /
+		 *     |  __/\ V /  __/ | | | |_ / /\__ \  __/ (_| | | | (__| | | | |_) | (_) >  < 
+		 *      \___| \_/ \___|_| |_|\__/_/ |___/\___|\__,_|_|  \___|_| |_|_.__/ \___/_/\_\
+		 *                                                                %event/searchbox%
+		 */
 		searchbox: {
 			keyup: function(event) {
 				// clear the previous update that was scheduled
