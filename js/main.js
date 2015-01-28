@@ -243,25 +243,27 @@ blow_worm = {
 			 *                                                                                                             
 			 */
 			adduser: function() {
-				var usernamebox = document.getElementById("admin-adduser-name");
-				
-				if(usernamebox.value == 0)
-					resolve();
-				
-				get("api.php?action=adduser&newusername=" + encodeURIComponent(usernamebox.value)).then(function(response) {
-					var obj = JSON.parse(response);
-					nanoModal("<p>Successfuly created new user '" + obj.username + "' " +
-							  "with password <code>" + obj.password + "</code>.</p>" +
-							  "<p><strong>Warning: The new user's password is shown here once. After you close this dislog, you won't be able to retrieve the user's password!</strong></p>", {
-						autoRemove: true,
-						buttons: [{
-							text: "Continue",
-							primary: true,
-							handler: "hide"
-						}]
-					});
-					resolve(obj);
-				}, blow_worm.actions.display_error);
+				return new Promise(function(resolve, reject) {
+					var usernamebox = document.getElementById("admin-adduser-name");
+					
+					if(usernamebox.value == 0)
+						resolve();
+					
+					get("api.php?action=adduser&newusername=" + encodeURIComponent(usernamebox.value)).then(function(response) {
+						var obj = JSON.parse(response);
+						nanoModal("<p>Successfuly created new user '" + obj.username + "' " +
+								  "with password <code>" + obj.password + "</code>.</p>" +
+								  "<p><strong>Warning: The new user's password is shown here once. After you close this dislog, you won't be able to retrieve the user's password!</strong></p>", {
+							autoRemove: true,
+							buttons: [{
+								text: "Continue",
+								primary: true,
+								handler: "hide"
+							}]
+						}).show();
+						resolve(obj);
+					}, blow_worm.actions.display_error);
+				})
 			}
 		}
 	},
