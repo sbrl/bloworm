@@ -15,6 +15,22 @@ function validate_url($url)
 }
 
 /*
+ * @summary Checks the status code of a url to make sure that the url actually exists
+ * 
+ * @param $url - The url to test.
+ * 
+ * @returns Whether ther url gives a 2xx code.
+ */
+function test_url_status($url)
+{
+	$status = intval(explode(" ", get_headers($url)[0])[1]);
+	if(!($status >= 400 and $status < 500))
+		return true;
+	else
+		return false;
+}
+
+/*
  * @summary Follows a chain of redirects and returns that last url in the sequence.
  *
  * @param $url - The url to start at.
