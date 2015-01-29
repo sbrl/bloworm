@@ -16,18 +16,18 @@ if(preg_match("/[^a-z0-9\-_]/i", $_GET["newusername"]))
 else
 	$newusername = $_GET["newusername"];
 
-if(file_exists(user_dirname($_GET["newusername"])))
+if(user_exists($_GET["newusername"]))
 	senderror(507, 151, "That user account already exists.");
 
 $password = base_convert(uniqid("", true), 10, 36);
 
 // create a the new user's directory tree
 create_tree([
-	[ "type" => "folder", "mode" => 0700, "path" => "users/$newusername" ],
-	[ "type" => "file", "mode" => 0700 , "path" => "users/$newusername/password", "content" => hash_password($password)],
-	[ "type" => "file", "mode" => 0700, "path" => "users/$newusername/bookmarks.json", "content" => "[]" ],
-	[ "type" => "file", "mode" => 0700, "path" => "users/$newusername/isadmin", "content" => "false" ],
-	[ "type" => "file", "mode" => 0700, "path" => "users/$newusername/tags.json", "content" => "{}" ]
+	[ "type" => "folder", "mode" => 0700, "path" => "data/users/$newusername" ],
+	[ "type" => "file", "mode" => 0700 , "path" => "data/users/$newusername/password", "content" => hash_password($password)],
+	[ "type" => "file", "mode" => 0700, "path" => "data/users/$newusername/bookmarks.json", "content" => "[]" ],
+	[ "type" => "file", "mode" => 0700, "path" => "data/users/$newusername/isadmin", "content" => "false" ],
+	[ "type" => "file", "mode" => 0700, "path" => "data/users/$newusername/tags.json", "content" => "{}" ]
 ]);
 
 // add the new username to the user list

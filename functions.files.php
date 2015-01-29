@@ -56,10 +56,8 @@ function create_tree($tree)
 				break;
 			
 			case "folder":
-				if(!isset($instruction["mode"]))
-					$instruction["mode"] = "0775";
 				try {
-					mkdir($instruction["path"], $instruction["mode"], true);
+					mkdir($instruction["path"], $instruction["mode"]);
 				} catch (Exception $error) {
 					senderror(new api_error(507, 706, "Failed to create directory " . $instruction["path"]));
 				}

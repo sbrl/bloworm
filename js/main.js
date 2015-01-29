@@ -256,7 +256,7 @@ blow_worm = {
 						var obj = JSON.parse(response);
 						nanoModal("<p>Successfuly created new user '" + obj.username + "' " +
 								  "with password <code>" + obj.password + "</code>.</p>" +
-								  "<p><strong>Warning: After you close this dislog, you won't be able to retrieve the new user's password!</strong></p>", {
+								  "<p><strong>Warning: After you close this dialog, <br />you won't be able to retrieve the new user's password!</strong></p>", {
 							autoRemove: true,
 							buttons: [{
 								text: "Continue",

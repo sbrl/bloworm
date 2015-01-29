@@ -41,6 +41,7 @@ class api_error
 	
 	public function __construct($http_status, $code, $message, $details = false)
 	{
+		// echo(generate_stack_trace());
 		$this->http_status = $http_status;
 		$this->code = $code;
 		
