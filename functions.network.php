@@ -95,7 +95,7 @@ function auto_find_name($url)
 	{
 		//the url refers to some html
 		try {
-			$html = file_get_contents($url);
+			$html = @file_get_contents($url); // todo make this less hackish....
 		} catch (Exception $e) {
 			senderror(new api_error(502, 713, "Failed to download url: $url"));
 		}
@@ -139,7 +139,7 @@ function auto_find_favicon_url($url)
 	if(strpos($content_type, "text/html") !== false)
 	{
 		try {
-			$html = file_get_contents($url);
+			$html = @file_get_contents($url); // todo make this less hackish....
 		} catch (Exception $e) {
 			senderror(new api_error(502, 711, "Failed to fetch url: $url"));
 		}
