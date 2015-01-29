@@ -250,10 +250,13 @@ blow_worm = {
 						resolve();
 					
 					get("api.php?action=adduser&newusername=" + encodeURIComponent(usernamebox.value)).then(function(response) {
+						// clear the input
+						usernamebox.value = "";
+						
 						var obj = JSON.parse(response);
 						nanoModal("<p>Successfuly created new user '" + obj.username + "' " +
 								  "with password <code>" + obj.password + "</code>.</p>" +
-								  "<p><strong>Warning: The new user's password is shown here once. After you close this dislog, you won't be able to retrieve the user's password!</strong></p>", {
+								  "<p><strong>Warning: After you close this dislog, you won't be able to retrieve the new user's password!</strong></p>", {
 							autoRemove: true,
 							buttons: [{
 								text: "Continue",
