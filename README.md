@@ -13,6 +13,7 @@ You are welcome to fork this repository and help out.
 ### Requirements
 Bloworm requires the following PHP modules:
 * `openssl` - used to generate secure random numbers for login tokens
+* `zlib` - used when users are exporting their data
 
 ## Libraries
 This section contains a list of interesting libraries I have found that may or may not be useful when building this thing:
