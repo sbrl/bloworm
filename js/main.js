@@ -136,7 +136,7 @@ blow_worm = {
 				// add bookmark
 				document.getElementById("button-add-bookmark").addEventListener("click", blow_worm.modals.create);
 				// settings
-				document.getElementById("button-settings").addEventListener("click", blow_worm.modals.settings);
+				document.getElementById("button-settings").addEventListener("click", blow_worm.modals.settings.main);
 				// admin settings
 				document.getElementById("button-admin-settings").addEventListener("click", blow_worm.modals.admin);
 				// update the search box as the user types
@@ -568,50 +568,83 @@ blow_worm = {
 		 *     |_| |_| |_|\___/ \__,_|\__,_|_|___/_/ |___/\___|\__|\__|_|_| |_|\__, |___/
 		 *                                              %modal/settings%       |___/     
 		 */
-		settings: function() {
-			return new Promise(function(resolve, reject) {
-				nanoModal(document.getElementById("modal-settings"), {
-					buttons: [{
-						text: "Save",
-						primary: true,
-						handler: function(modal) {
-							var boxes = {
-								oldpass: document.getElementById("settings-passchange-oldpass"),
-								newpass: document.getElementById("settings-passchange-newpass"),
-								newpassconf: document.getElementById("settings-passchange-newpassconf")
-							};
-							if(boxes.oldpass.value.length > 0 &&
-							   boxes.newpass.value.length > 0 &&
-							   boxes.newpassconf.value.length > 0)
+		settings: {
+			main: function() {
+				return new Promise(function(resolve, reject) {
+					nanoModal("<h2>Settings</h2>", {
+						autoRemove: true,
+						buttons: [
 							{
-								if(boxes.newpass.value !== boxes.newpassconf.value)
-								{
-									nanoModal("The passwords didn't match.", { autoRemove: true, buttons: [{ text: "Go Back", primary: true, handler: "hide" }] }).show();
-									return;
-								}
-								//the user want's to change their password
-								var data = {
-									key: "password",
-									value: boxes.newpass.value,
-									oldpass: boxes.oldpass.value
-								};
-								
-								post("api.php?action=usermod", postify(data)).then(function(response) {
-									// success!
-									console.log("[usermod] Usermod successful. Reloading page...");
-									
-									get("api.php?action=logout").then(function() {
-										window.location.reload();
-									});
-								}, blow_worm.actions.display_error);
+								text: "Change Password",
+								handler: blow_worm.modals.settings.changepass
+							},
+							{
+								text: "Export",
+								handler: blow_worm.modals.settings.export
+							},
+							{
+								text: "Cancel",
+								handler: "hide"
 							}
-						}
-					}, {
-						text: "Cancel",
-						handler: "hide"
-					}]
+						]
+					}).show();
+				});
+			},
+			changepass: function(modal) {
+				return new Promise(function(resolve, reject) {
+					modal.hide(); //hide the settings modal
+					nanoModal(document.getElementById("modal-settings-changepassword"), {
+						buttons: [{
+							text: "Save",
+							primary: true,
+							handler: function(modal) {
+								var boxes = {
+									oldpass: document.getElementById("settings-passchange-oldpass"),
+									newpass: document.getElementById("settings-passchange-newpass"),
+									newpassconf: document.getElementById("settings-passchange-newpassconf")
+								};
+								if(boxes.oldpass.value.length > 0 &&
+								   boxes.newpass.value.length > 0 &&
+								   boxes.newpassconf.value.length > 0)
+								{
+									if(boxes.newpass.value !== boxes.newpassconf.value)
+									{
+										nanoModal("The passwords didn't match.", { autoRemove: true, buttons: [{ text: "Go Back", primary: true, handler: "hide" }] }).show();
+										return;
+									}
+									//the user want's to change their password
+									var data = {
+										key: "password",
+										value: boxes.newpass.value,
+										oldpass: boxes.oldpass.value
+										};
+									
+									post("api.php?action=usermod", postify(data)).then(function(response) {
+										// success!
+										console.log("[usermod] Usermod successful. Reloading page...");
+										
+										get("api.php?action=logout").then(function() {
+											window.location.reload();
+											resolve();
+										});
+									}, blow_worm.actions.display_error);
+								}
+							}
+						}, {
+							text: "Cancel",
+							handler: "hide"
+						}]
+					}).show();
+				});
+			},
+			
+			export: function(modal) {
+				return new Promise(function(resolve, reject) {
+					modal.hide(); // hide the settings modal
+					window.open("api.php?action=export", "_blank");
+					resolve();
 				}).show();
-			});
+			}
 		},
 		
 		/***
