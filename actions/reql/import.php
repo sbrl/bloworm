@@ -8,6 +8,9 @@
  *             |_|                   
  */
 
+if(!in_array(strtolower($_SERVER['REQUEST_METHOD']), [ "put", "post" ]))
+	senderror(new api_error(400, 530, "The import action only takes PUT or POST requests."));
+
 if(isset($_GET["overwrite"]) and ($_GET["overwrite"] == "true" or $_GET["overwrite"] == "yes"))
 	$overwrite = true;
 else
@@ -19,20 +22,20 @@ header("content-type: application/json");
 var_dump($request_headers);
 
 if(!isset($request_headers["content-length"]))
-	senderror(new api_error(400, 530, "No content-length header was present in the request."));
+	senderror(new api_error(400, 531, "No content-length header was present in the request."));
 
 if($request_headers["content-length"] > 10e6)
-	senderror(new api_error(507, 531, "You tried to send too much data to the server. Please contact the administrator of this bloworm installation to tget your data imported manually."));
+	senderror(new api_error(507, 532, "You tried to send too much data to the server. Please contact the administrator of this bloworm installation to tget your data imported manually."));
 
 $data = file_get_contents("php://input");
 $data = gzdecode($data);
 if(!$data)
-	senderror(new api_error(400, 532, "An error occurred whilst trying to decompress the data you sent."));
+	senderror(new api_error(400, 533, "An error occurred whilst trying to decompress the data you sent."));
 
 try {
 	$to_import = json_decode($data);
 } catch(Exception $error) {
-	senderror(new api_error(400, 533, "An error occurred while parsing the data you sent."));
+	senderror(new api_error(400, 534, "An error occurred while parsing the data you sent."));
 }
 
 // todo unify this so that the list of files that a user has are in one master array
