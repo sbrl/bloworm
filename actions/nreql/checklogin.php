@@ -15,12 +15,14 @@ if($logged_in)
 	$response->user = $user;
 	$response->isadmin = user_isadmin($user);
 	$response->sessionkey = $_COOKIE[$cookie_names["session"]];
+	$response->publickey = trim(file_get_contents(user_dirname($user) . "publickey"));
 }
 else
 {
 	$response->user = false;
 	$response->isadmin = false;
 	$response->sessionkey = false;
+	$response->publickey = false;
 }
 sendjson($response);
 exit();
