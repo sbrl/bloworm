@@ -46,10 +46,14 @@ function follow_redirects($url, $maxdepth = 10, $depth = 0)
 
 	//download the headers from the url and make all the keys lowercase
 	try {
-		$headers = get_headers($url, true);
-	} catch (Exception $e) {
-		senderror(new api_error(502, 714, "Failed to fetch the headers from url: $url"));
+		$headers = @get_headers($url, true);
+	} catch (Exception $e) { // catch the errors
+		senderror(new api_error(502, 714, "Failed to fetch the headers from url: $url (error occurred)"));
 	}
+	// catch the warnings
+	if($headers === false)
+		senderror(new api_error(502, 714, "Failed to fetch the headers from url: $url (warning / other occurred)"));
+	
 	$headers = array_change_key_case($headers);
 	//we have a redirect if the `location` header is set
 	if(isset($headers["location"]))
@@ -172,7 +176,7 @@ function auto_find_favicon_url($url)
 		// todo guard against invalid urls
 		
 		$newfaviconurl = "$urlparts[1]://$urlparts[2]/favicon.ico";
-		$newfaviconurl = follow_redirects($faviconurl);
+		$newfaviconurl = follow_redirects($newfaviconurl);
 		
 		if(test_url_status($newfaviconurl))
 			return $newfaviconurl;
