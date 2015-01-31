@@ -171,13 +171,11 @@ function auto_find_favicon_url($url)
 		// we have not found the url of the favicon yet, parse the url
 		// todo guard against invalid urls
 		
-		$faviconurl = "$urlparts[1]://$urlparts[2]/favicon.ico";
-		$faviconurl = follow_redirects($faviconurl);
-		$favheaders = get_headers($faviconurl, true);
-		$favheaders = array_change_key_case($favheaders);
+		$newfaviconurl = "$urlparts[1]://$urlparts[2]/favicon.ico";
+		$newfaviconurl = follow_redirects($faviconurl);
 		
-		if(preg_match("/2\d{3}/i", $favheaders[0]) === 0)
-			return $faviconurl;
+		if(test_url_status($newfaviconurl))
+			return $newfaviconurl;
 	}
 	
 	return $faviconurl;
