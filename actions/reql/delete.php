@@ -58,7 +58,7 @@ if($deleted >= count($ids_to_delete))
 }
 else
 {
-	senderror(new api_error(400, 511, "One or more bookmark ids were not found.\nTotal bookmark ids: $total_ids\nDeleted: " . $deleted . "\nFailed: " . $total_ids - ($deleted)));
+	senderror(new api_error(400, 512, "One or more bookmark ids were not found.\nTotal bookmark ids: $total_ids\nDeleted: " . $deleted . "\nFailed: " . $total_ids - ($deleted)));
 }
 
 ?>
