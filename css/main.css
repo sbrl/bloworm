@@ -67,6 +67,11 @@ footer
 	width: 100%;
 }
 
+.nanoModal.nanoModalOverride
+{
+	position: fixed;
+}
+
 .icon
 {
 	max-width: 2rem;
