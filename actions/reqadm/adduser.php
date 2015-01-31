@@ -23,11 +23,18 @@ $password = base_convert(uniqid("", true), 10, 36);
 
 // create a the new user's directory tree
 create_tree([
+	// the user's directory
 	[ "type" => "folder", "mode" => 0700, "path" => "data/users/$newusername" ],
+	// the user's password
 	[ "type" => "file", "mode" => 0700 , "path" => "data/users/$newusername/password", "content" => hash_password($password)],
+	// file to store bookmarks in
 	[ "type" => "file", "mode" => 0700, "path" => "data/users/$newusername/bookmarks.json", "content" => "[]" ],
+	// whether the user is an admin
 	[ "type" => "file", "mode" => 0700, "path" => "data/users/$newusername/isadmin", "content" => "false" ],
-	[ "type" => "file", "mode" => 0700, "path" => "data/users/$newusername/tags.json", "content" => "{}" ]
+	// the tags cache
+	[ "type" => "file", "mode" => 0700, "path" => "data/users/$newusername/tags.json", "content" => "{}" ],
+	// the user's public api key, used in the js bookmarklet
+	[ "type" => "file", "mode" => 0700, "path" => "data/users/$newusername/publickey", "content" => hash("md5", microtime(true)) ]
 ]);
 
 // add the new username to the user list

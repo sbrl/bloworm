@@ -33,6 +33,19 @@ switch($key)
 		sendjson($response);
 		break;
 	
+	case "publickey":
+		if($_POST["value"] == "yes")
+		{
+			file_put_contents(user_dirname($user) . "publickey", hash("md5", microtime(true)));
+			$response = new api_response(201, 0, "usermod/publickey-regen/success");
+			sendjson($response);
+		}
+		else
+		{
+			senderror(new api_error(499, 512, "Set the POST paramter `value` to `yes` to regnerate your public api key."));
+		}
+		break;
+	
 	default:
 		senderror(new api_error(400, 510, "That user setting key was not found."));
 }
