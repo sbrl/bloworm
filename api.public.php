@@ -1,9 +1,25 @@
 <?php
+/*
+ *  ____        _     _ _           _    ____ ___ 
+ * |  _ \ _   _| |__ | (_) ___     / \  |  _ \_ _|
+ * | |_) | | | | '_ \| | |/ __|   / _ \ | |_) | | 
+ * |  __/| |_| | |_) | | | (__   / ___ \|  __/| | 
+ * |_|    \__,_|_.__/|_|_|\___| /_/   \_\_|  |___|
+ *                                                
+ */
+// ----------------------------------------------
+
 require_once("functions.core.php");
 require_once("functions.errors.php");
 require_once("functions.files.php");
 require_once("functions.network.php");
 require_once("functions.users.php");
+
+// ----------------------------------------------
+
+header("access-control-allow-origin: *");
+
+// ----------------------------------------------
 
 if(!isset($_GET["user"]))
 {
