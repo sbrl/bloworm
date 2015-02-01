@@ -33,6 +33,10 @@ function user_exists($user_to_check)
 
 /*
  * @summary Determines whether a user is an administrator.
+ * 
+ * @param $username - The username to check.
+ * 
+ * @returns Whether the user is an admin.
  */
 function user_isadmin($username)
 {
@@ -43,4 +47,15 @@ function user_isadmin($username)
 		return false;
 }
 
+/*
+ * @summary Get a user's public key.
+ * 
+ * @param $username = The username for which to fetch the public key.
+ * 
+ * @returns The given username's public key.
+ */
+function user_publickey($username)
+{
+	return trim(file_get_contents(user_dirname($username) . "publickey"));
+}
 ?>
