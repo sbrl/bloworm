@@ -142,6 +142,10 @@ blow_worm = {
 				// update the search box as the user types
 				document.getElementById("search-box").addEventListener("keyup", blow_worm.events.searchbox.keyup);
 				
+				// allow urls to be dropped onto the page
+				document.body.addEventListener("dragover", blow_worm.events.dragurls.dragover);
+				document.body.addEventListener("drop", blow_worm.events.dragurls.drop);
+				
 				if(blow_worm.env.loggedin)
 				{
 					console.info("[setup] Logged in with session key ", blow_worm.env.sessionkey);
@@ -356,7 +360,7 @@ blow_worm = {
 						// disable the button that the user clicked on
 						// we don't want them clicking it more than once :)
 						// https://github.com/kylepaulsen/NanoModal/issues/1
-						modal.event.target.setAttribute("disabled", "disabled");
+						// modal.event.target.setAttribute("disabled", "disabled");
 						
 						var progress_modal = nanoModal("Adding Bookmark...", { overlayClose: false, autoRemove: true, buttons: [] }).show();
 						
@@ -373,9 +377,11 @@ blow_worm = {
 							requrl += "&tags=" + encodeURIComponent(tagsbox.value);
 						
 						// hide and reset the input modal
+						modal.hide();
 						namebox.value  = "";
 						urlbox.value = "";
 						tagsbox.value = "";
+						
 						
 						get(requrl).then(function(response) {
 							var respjson = JSON.parse(response);
@@ -393,7 +399,6 @@ blow_worm = {
 							
 							// hide and reset the modal dialogs
 							modal.event.target.removeAttribute("disabled");
-							modal.hide();
 							progress_modal.hide();
 							
 							// resolve the promise
@@ -404,7 +409,7 @@ blow_worm = {
 						});
 						console.log("[create] request sent");
 					}
-				}] }).show();
+				}, { text: "Cancel", handler: "hide" }] }).show();
 			});
 		},
 		
@@ -737,6 +742,24 @@ blow_worm = {
 				clearInterval(blow_worm.env.next_update);
 				// schedule a new one to reset the timeout
 				blow_worm.env.next_update = setTimeout(blow_worm.actions.bookmarks.update, 300);
+			}
+		},
+		
+		dragurls: {
+			dragover: function(event) {
+				event.stopPropagation();
+				event.preventDefault();
+				return false;
+			},
+			drop: function(event) {
+				event.stopPropagation();
+				event.preventDefault();
+				console.log(event);
+				event.dataTransfer.items[0].getAsString(function(url) {
+					document.getElementById("create-url").value = url;
+					
+					blow_worm.modals.create();
+				});
 			}
 		}
 	}

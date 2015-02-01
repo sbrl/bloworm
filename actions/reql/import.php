@@ -22,10 +22,10 @@ header("content-type: application/json");
 var_dump($request_headers);
 
 if(!isset($request_headers["content-length"]))
-	senderror(new api_error(400, 531, "No content-length header was present in the request."));
+	senderror(new api_error(411, 531, "No content-length header was present in the request."));
 
 if($request_headers["content-length"] > 10e6)
-	senderror(new api_error(507, 532, "You tried to send too much data to the server. Please contact the administrator of this bloworm installation to tget your data imported manually."));
+	senderror(new api_error(413, 532, "You tried to send too much data to the server. Please contact the administrator of this bloworm installation to tget your data imported manually."));
 
 $data = file_get_contents("php://input");
 $data = gzdecode($data);
