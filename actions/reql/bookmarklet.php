@@ -16,7 +16,7 @@ $jscode = str_replace([
 	"{root}"	// the full url to your api.public.php
 ], [
 	$user,
-	user_getpublickey($user),
+	user_publickey($user),
 	// adapted from http://stackoverflow.com/a/1871778/1460422
 	"http".(!empty($_SERVER['HTTPS'])?"s":"").
 "://".$_SERVER['SERVER_NAME'].str_replace("api.php", "api.public.php", $_SERVER['REQUEST_URI']) 
