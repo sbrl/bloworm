@@ -1,2 +1,4 @@
 # the data directory contains sekrit stuff
 data/*
+# the user's custom settings
+settings.php

@@ -9,6 +9,10 @@
  */
 // ----------------------------------------------
 
+require_once("settings.default.php");
+if(file_exists("settings.php"))
+	require_once("settings.php");
+
 require_once("functions.core.php");
 require_once("functions.errors.php");
 require_once("functions.files.php");

@@ -21,9 +21,8 @@ This section contains a list of interesting libraries I have found that may or m
  - http://www.shayanderson.com/php/php-qr-code-generator-class.htm - A qr code generator
  - https://github.com/kylepaulsen/NanoModal - A cool looking modal dialog box controller
 
-### Still to find
- - website screenshot generator
-
+# Custom Settings
+If you want to change the settings, please create a new file called "settings.php". Don't change the values in `settings.default.php`, since they will get overwritten if you update.
 
 ## Notes
 This section contains a bunch of notes that I have made / will make while writing bloworm. Eventually, they will slowly disappear as the help pages are written properly or as I don't need them anymore.

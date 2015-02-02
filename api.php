@@ -42,12 +42,16 @@
 ////////////////////////////////////////////////////////
 ///////////////////// Requirements /////////////////////
 ////////////////////////////////////////////////////////
-require("functions.errors.php");
-require("settings.php");
-require("functions.core.php");
-require("functions.files.php");
-require("functions.users.php");
-require("functions.network.php");
+require_once("settings.default.php");
+if(file_exists("settings.php"))
+	require_once("settings.php");
+
+
+require_once("functions.errors.php");
+require_once("functions.core.php");
+require_once("functions.files.php");
+require_once("functions.users.php");
+require_once("functions.network.php");
 
 /////////////////////////////////////////////////////////
 ///////////////////////// Paths /////////////////////////
