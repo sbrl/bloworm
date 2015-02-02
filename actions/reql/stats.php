@@ -12,9 +12,9 @@ $response = new api_response(200, 0, "stats");
 
 $response->isadmin = user_isadmin($user);
 
+$bookmarks = getjson(user_dirname($user) . "bookmarks.json");
 $response->count = count($bookmarks);
 $response->datasize = filesize(user_dirname($user) . "bookmarks.json");
-$bookmarks = getjson(user_dirname($user) . "bookmarks.json");
 
 $response->publickey = trim(file_get_contents(user_dirname($user) . "publickey"));
 
