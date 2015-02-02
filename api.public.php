@@ -44,7 +44,7 @@ if(!isset($_GET["key"]))
 }
 $key = $_GET["key"];
 
-if(!file_exists(user_dirname($user)) or file_get_contents(user_dirname($user) . "publickey") !== $key)
+if(!file_exists(user_dirname($user)) or user_publickey($user) !== $key)
 {
 	http_response_code(401);
 	exit("Invalid 'user' or 'key'");
