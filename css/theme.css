@@ -51,14 +51,23 @@ footer
 	margin			: 0.4rem 0.5rem;
 	padding			: 0.4rem 0.5rem;
 	
-	background-color: #8142ca !important;
-	border			: 0.1rem solid #9d51d4 !important;
+/*	background-color: #8142ca !important;*/
+	background-color: #ac7be5 !important;
+/*	border			: 0.1rem solid #9d51d4 !important;*/
+	border			: 0.1rem solid #b878e7 !important;
 	border-radius	: 0.5rem;
+	
+	color			: #5a34bf;
 	
 	transition		: all 0.25s;
 }
 .nanoModal button:hover	{ background-color: #7236b6 !important; border-color: #893cc0 !important; }
 .nanoModal button:active{ background-color: #6024a3 !important; border-color: #7629ad !important; }
+
+.nanoModal .nanoModalBtnPrimary
+{
+	background-color: #945cd6 !important;
+}
 
 .nanoModalButtons
 {
