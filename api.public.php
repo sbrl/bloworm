@@ -27,12 +27,12 @@ if(!isset($_GET["user"]))
 	exit("No 'user' specified");
 }
 $user = $_GET["user"];
-//todo guard against bad chars
 if(preg_match("/[^a-z0-9-_ ]/i", $user))
 {
 	http_response_code(400);
 	exit("Invalid 'user'.");
 }
+
 if(!isset($_GET["key"]))
 {
 	http_response_code(449);
