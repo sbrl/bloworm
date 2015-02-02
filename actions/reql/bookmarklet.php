@@ -22,4 +22,7 @@ $jscode = str_replace([
 "://".$_SERVER['SERVER_NAME'].str_replace("api.php", "api.public.php", $_SERVER['REQUEST_URI']) 
 ], $jscode);
 
+echo("javascript:$jscode");
+exit();
+
 ?>
