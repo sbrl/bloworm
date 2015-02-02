@@ -588,6 +588,10 @@ blow_worm = {
 								handler: blow_worm.modals.settings.export
 							},
 							{
+								text: "Get Bookmarklet",
+								handler: blow_worm.modals.settings.bookmarklet
+							},
+							{
 								text: "Cancel",
 								handler: "hide"
 							}
@@ -595,6 +599,8 @@ blow_worm = {
 					}).show();
 				});
 			},
+			
+			
 			changepass: function(modal) {
 				return new Promise(function(resolve, reject) {
 					modal.hide(); //hide the settings modal
@@ -649,6 +655,22 @@ blow_worm = {
 					window.open("api.php?action=export", "_blank");
 					resolve();
 				}).show();
+			},
+			
+			bookmarklet: function(modal) {
+				return new Promise(function(resolve, reject) {
+					get("api.php?action=bookmarklet").then(function(response) {
+						modal.hide();
+						var modalhtml = document.createElement("div");
+						modalhtml.innerHTML = "<p>Drag the following link to your bookmarks bar:</p>" +
+							"<p><a class='add-js-bookmarklet'>Add to Bloworm</a></p>" +
+							"<p>Remember that anyone who gets hold of this bookmarklet can add bookmarks to your account without your password.</p>";
+						
+						modalhtml.querySelector(".add-js-bookmarklet").href = response;
+						
+						nanoModal(modalhtml, { autoRemove: true }).show();
+					});
+				});
 			}
 		},
 		
